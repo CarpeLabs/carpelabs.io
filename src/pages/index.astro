@@ -1,0 +1,89 @@
+---
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carpe Labs | Software House de IA</title>
+    <meta name="description" content="Transformamos ideias ambiciosas em soluções de IA prontas para produção.">
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Ambient Background -->
+    <div class="ambient">
+        <div class="grain"></div>
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Logo -->
+        <div class="logo-wrapper">
+            <img src="/logo.png" alt="Carpe Labs" class="logo">
+        </div>
+
+        <!-- Statement -->
+        <div class="content">
+            <h1 class="headline">
+                Construímos sistemas<br>
+                <em>inteligentes</em>
+            </h1>
+            <p class="subtext">
+                Transformamos ideias ambiciosas em soluções de IA prontas para produção.
+            </p>
+        </div>
+
+        <!-- CTA -->
+        <div class="actions">
+            <a href="mailto:contact@carpelabs.io" class="cta">
+                <span>Iniciar um projeto</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+
+        <!-- Footer Links -->
+        <footer class="footer">
+            <a href="https://github.com/CarpeLabs" target="_blank">GitHub</a>
+            <span class="divider"></span>
+            <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const glow1 = document.querySelector('.glow-1');
+            if (!glow1) return;
+
+            let targetX = 0;
+            let targetY = 0;
+            let currentX = 0;
+            let currentY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                targetX = (x - 0.5) * 50;
+                targetY = (y - 0.5) * 50;
+            });
+
+            function animate() {
+                currentX += (targetX - currentX) * 0.05;
+                currentY += (targetY - currentY) * 0.05;
+                (glow1 as HTMLElement).style.transform = `translate(${currentX}px, ${currentY}px)`;
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        });
+    </script>
+</body>
+</html>
