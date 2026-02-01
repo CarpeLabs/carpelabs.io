@@ -42,13 +42,40 @@ import '../styles/global.css';
 
         <!-- CTA -->
         <div class="actions">
-            <a href="mailto:contact@carpelabs.io" class="cta">
+            <button type="button" class="cta" id="open-modal-btn">
                 <span>Iniciar um projeto</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
-            </a>
+            </button>
         </div>
+
+        <!-- Contact Modal -->
+        <dialog id="contact-modal" class="modal">
+            <form id="contact-form" class="modal-content">
+                <button type="button" class="modal-close" id="close-modal-btn" aria-label="Fechar">&times;</button>
+                <h2 class="modal-title">Iniciar um projeto</h2>
+                <p class="modal-subtitle">Conte-nos sobre sua ideia</p>
+
+                <div class="form-group">
+                    <input type="text" name="name" id="form-name" placeholder="Seu nome" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" id="form-email" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="message" id="form-message" placeholder="Descreva seu projeto..." rows="4" required></textarea>
+                </div>
+
+                <button type="submit" class="cta cta-submit" id="submit-btn">
+                    <span id="submit-text">Enviar</span>
+                    <span id="submit-loading" class="hidden">Enviando...</span>
+                </button>
+
+                <p id="form-success" class="form-message success hidden">Mensagem enviada com sucesso!</p>
+                <p id="form-error" class="form-message error hidden">Erro ao enviar. Tente novamente.</p>
+            </form>
+        </dialog>
 
         <!-- Footer Links -->
         <footer class="footer">
@@ -60,29 +87,106 @@ import '../styles/global.css';
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Glow animation
             const glow1 = document.querySelector('.glow-1');
-            if (!glow1) return;
+            if (glow1) {
+                let targetX = 0;
+                let targetY = 0;
+                let currentX = 0;
+                let currentY = 0;
 
-            let targetX = 0;
-            let targetY = 0;
-            let currentX = 0;
-            let currentY = 0;
+                document.addEventListener('mousemove', (e) => {
+                    const x = e.clientX / window.innerWidth;
+                    const y = e.clientY / window.innerHeight;
+                    targetX = (x - 0.5) * 50;
+                    targetY = (y - 0.5) * 50;
+                });
 
-            document.addEventListener('mousemove', (e) => {
-                const x = e.clientX / window.innerWidth;
-                const y = e.clientY / window.innerHeight;
-                targetX = (x - 0.5) * 50;
-                targetY = (y - 0.5) * 50;
-            });
+                function animate() {
+                    currentX += (targetX - currentX) * 0.05;
+                    currentY += (targetY - currentY) * 0.05;
+                    (glow1 as HTMLElement).style.transform = `translate(${currentX}px, ${currentY}px)`;
+                    requestAnimationFrame(animate);
+                }
 
-            function animate() {
-                currentX += (targetX - currentX) * 0.05;
-                currentY += (targetY - currentY) * 0.05;
-                (glow1 as HTMLElement).style.transform = `translate(${currentX}px, ${currentY}px)`;
-                requestAnimationFrame(animate);
+                animate();
             }
 
-            animate();
+            // Modal functionality
+            const modal = document.getElementById('contact-modal') as HTMLDialogElement;
+            const openBtn = document.getElementById('open-modal-btn');
+            const closeBtn = document.getElementById('close-modal-btn');
+            const form = document.getElementById('contact-form') as HTMLFormElement;
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitLoading = document.getElementById('submit-loading');
+            const successMsg = document.getElementById('form-success');
+            const errorMsg = document.getElementById('form-error');
+
+            // Google Apps Script URL - substitua pela sua URL após deploy
+            const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+
+            openBtn?.addEventListener('click', () => {
+                modal?.showModal();
+            });
+
+            closeBtn?.addEventListener('click', () => {
+                modal?.close();
+            });
+
+            modal?.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.close();
+                }
+            });
+
+            form?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Reset messages
+                successMsg?.classList.add('hidden');
+                errorMsg?.classList.add('hidden');
+
+                // Show loading
+                submitText?.classList.add('hidden');
+                submitLoading?.classList.remove('hidden');
+                if (submitBtn) (submitBtn as HTMLButtonElement).disabled = true;
+
+                const formData = new FormData(form);
+                const data = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    message: formData.get('message')
+                };
+
+                try {
+                    const response = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    // no-cors mode doesn't return readable response, assume success
+                    successMsg?.classList.remove('hidden');
+                    form.reset();
+
+                    // Close modal after 2 seconds
+                    setTimeout(() => {
+                        modal?.close();
+                        successMsg?.classList.add('hidden');
+                    }, 2000);
+
+                } catch (error) {
+                    errorMsg?.classList.remove('hidden');
+                } finally {
+                    submitText?.classList.remove('hidden');
+                    submitLoading?.classList.add('hidden');
+                    if (submitBtn) (submitBtn as HTMLButtonElement).disabled = false;
+                }
+            });
         });
     </script>
 </body>
