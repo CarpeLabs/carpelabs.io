@@ -59,12 +59,24 @@ import '../styles/global.css';
 
                 <div class="form-group">
                     <input type="text" name="name" id="form-name" placeholder="Seu nome" required>
+                    <p class="field-error" id="name-error">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span>Informe seu nome</span>
+                    </p>
                 </div>
                 <div class="form-group">
                     <input type="email" name="email" id="form-email" placeholder="seu@email.com" required>
+                    <p class="field-error" id="email-error">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span>Informe um email válido</span>
+                    </p>
                 </div>
                 <div class="form-group">
                     <textarea name="message" id="form-message" placeholder="Descreva seu projeto..." rows="4" required></textarea>
+                    <p class="field-error" id="message-error">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span>Descreva seu projeto</span>
+                    </p>
                 </div>
 
                 <button type="submit" class="cta cta-submit" id="submit-btn">
@@ -120,6 +132,43 @@ import '../styles/global.css';
             const submitBtn = document.getElementById('submit-btn');
             const submitText = document.getElementById('submit-text');
             const submitLoading = document.getElementById('submit-loading');
+
+            // Form fields and errors
+            const nameInput = document.getElementById('form-name') as HTMLInputElement;
+            const emailInput = document.getElementById('form-email') as HTMLInputElement;
+            const messageInput = document.getElementById('form-message') as HTMLTextAreaElement;
+            const nameError = document.getElementById('name-error');
+            const emailError = document.getElementById('email-error');
+            const messageError = document.getElementById('message-error');
+
+            // Validation helpers
+            function validateField(input: HTMLInputElement | HTMLTextAreaElement, errorEl: HTMLElement | null) {
+                const isValid = input.validity.valid;
+                input.classList.toggle('invalid', !isValid);
+                errorEl?.classList.toggle('visible', !isValid);
+                return isValid;
+            }
+
+            function clearValidation(input: HTMLInputElement | HTMLTextAreaElement, errorEl: HTMLElement | null) {
+                input.classList.remove('invalid');
+                errorEl?.classList.remove('visible');
+            }
+
+            // Validate on blur (when leaving field)
+            nameInput?.addEventListener('blur', () => validateField(nameInput, nameError));
+            emailInput?.addEventListener('blur', () => validateField(emailInput, emailError));
+            messageInput?.addEventListener('blur', () => validateField(messageInput, messageError));
+
+            // Clear error on input
+            nameInput?.addEventListener('input', () => {
+                if (nameInput.validity.valid) clearValidation(nameInput, nameError);
+            });
+            emailInput?.addEventListener('input', () => {
+                if (emailInput.validity.valid) clearValidation(emailInput, emailError);
+            });
+            messageInput?.addEventListener('input', () => {
+                if (messageInput.validity.valid) clearValidation(messageInput, messageError);
+            });
             const successMsg = document.getElementById('form-success');
             const errorMsg = document.getElementById('form-error');
 
@@ -127,6 +176,10 @@ import '../styles/global.css';
             const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfgUPxzTrOu9FcKVRSH1xt9ebaGhS5grNfz0UPrIMYWXm1gGH5IfM0l8fj5GsHzKufGg/exec';
 
             openBtn?.addEventListener('click', () => {
+                // Reset validation state
+                clearValidation(nameInput, nameError);
+                clearValidation(emailInput, emailError);
+                clearValidation(messageInput, messageError);
                 modal?.showModal();
             });
 
@@ -142,6 +195,19 @@ import '../styles/global.css';
 
             form?.addEventListener('submit', async (e) => {
                 e.preventDefault();
+
+                // Validate all fields
+                const isNameValid = validateField(nameInput, nameError);
+                const isEmailValid = validateField(emailInput, emailError);
+                const isMessageValid = validateField(messageInput, messageError);
+
+                if (!isNameValid || !isEmailValid || !isMessageValid) {
+                    // Focus first invalid field
+                    if (!isNameValid) nameInput?.focus();
+                    else if (!isEmailValid) emailInput?.focus();
+                    else messageInput?.focus();
+                    return;
+                }
 
                 // Reset messages
                 successMsg?.classList.add('hidden');

@@ -352,6 +352,40 @@ a {
     background: rgba(0, 212, 170, 0.03);
 }
 
+/* Validation styles */
+.form-group input:user-invalid,
+.form-group textarea:user-invalid,
+.form-group input.invalid,
+.form-group textarea.invalid {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.form-group input:user-invalid:focus,
+.form-group textarea:user-invalid:focus,
+.form-group input.invalid:focus,
+.form-group textarea.invalid:focus {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.field-error {
+    color: #ef4444;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    display: none;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.field-error.visible {
+    display: flex;
+}
+
+.field-error svg {
+    flex-shrink: 0;
+}
+
 .form-group textarea {
     resize: vertical;
     min-height: 100px;
