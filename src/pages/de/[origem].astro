@@ -1,0 +1,31 @@
+---
+/* Rotas de origem: `/de/<ferramenta>`.
+ *
+ * Servem a MESMA landing da raiz. Existem por um motivo medido, e não por SEO ou conteúdo: o
+ * Cloudflare Web Analytics conta por `Path` e **não tem dimensão de query string** — as dimensões
+ * são Country, Host, Path, Referer, dispositivo, navegador e SO. Um link só com `?utm_source=`
+ * apareceria no relatório com a origem descartada.
+ *
+ * `Referer` também não resolveria: as ferramentas do monorepo `nipo_projects` declaram
+ * `Referrer-Policy: same-origin` (compras e produtividade), então elas não mandam origem nenhuma
+ * para fora. O caminho é a única via que funciona nas cinco.
+ *
+ * ⚠️ Esta lista tem de acompanhar o `origemAssinatura` do `nipo-ui/consumers.json`, no outro
+ * repositório. Origem que existir lá e não aqui vira **404 para quem clicou** — e o link fica no
+ * rodapé de toda tela. É o modo de falha mais caro desta rota, e não há guarda automático
+ * atravessando os dois repositórios.
+ */
+export function getStaticPaths() {
+  return [
+    { params: { origem: 'nipo-fotos' } },
+    { params: { origem: 'nipo-produtividade' } },
+    { params: { origem: 'nipo-compras' } },
+    { params: { origem: 'nipo-painel' } },
+    { params: { origem: 'nipo-entregas' } },
+  ];
+}
+
+import Landing from '../../layouts/Landing.astro';
+---
+
+<Landing noindex />
