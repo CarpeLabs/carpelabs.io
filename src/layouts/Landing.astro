@@ -28,6 +28,7 @@ const { noindex = false } = Astro.props;
     <meta name="description" content="Transformamos ideias ambiciosas em soluções de IA prontas para produção.">
     <link rel="icon" type="image/png" href="/logo.png">
     <link rel="canonical" href="https://carpelabs.io/">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -97,6 +98,8 @@ const { noindex = false } = Astro.props;
                         <span>Descreva seu projeto</span>
                     </p>
                 </div>
+
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="dark"></div>
 
                 <button type="submit" class="cta cta-submit" id="submit-btn">
                     <span id="submit-text">Enviar</span>
@@ -239,10 +242,13 @@ const { noindex = false } = Astro.props;
                 if (submitBtn) (submitBtn as HTMLButtonElement).disabled = true;
 
                 const formData = new FormData(form);
-                const data = {
+                const data: Record<string, unknown> = {
                     name: formData.get('name'),
                     email: formData.get('email'),
-                    message: formData.get('message')
+                    message: formData.get('message'),
+                    // O widget insere este campo no próprio form. Sem ele o endpoint devolve 403,
+                    // e é isso que se quer: sem prova, sem gravação.
+                    'cf-turnstile-response': formData.get('cf-turnstile-response')
                 };
 
                 // A origem da visita (`/de/<ferramenta>`) viaja junto: é o que responde
@@ -282,6 +288,11 @@ const { noindex = false } = Astro.props;
                         : 'Erro ao enviar. Tente novamente.';
                     errorMsg?.classList.remove('hidden');
                 } finally {
+                    // 🔴 Token do Turnstile é de USO ÚNICO. O modal continua aberto depois de um
+                    // erro, então sem rearmar o widget a segunda tentativa mandaria um token já
+                    // gasto — e a pessoa levaria 403 por um problema que não é dela.
+                    // Há um único widget na página, então `reset()` sem argumento é inequívoco.
+                    (window as { turnstile?: { reset(): void } }).turnstile?.reset();
                     submitText?.classList.remove('hidden');
                     submitLoading?.classList.add('hidden');
                     if (submitBtn) (submitBtn as HTMLButtonElement).disabled = false;

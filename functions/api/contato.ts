@@ -27,7 +27,17 @@ interface Env {
   RESEND_API_KEY?: string;
   /** Remetente. Precisa ser de um domínio verificado no Resend. */
   RESEND_FROM_EMAIL?: string;
+  /** Turnstile. Sem ele o endpoint recusa tudo — fail closed, ver `verificarTurnstile`. */
+  TURNSTILE_SECRET?: string;
+  /**
+   * Hostnames que o siteverify pode devolver, separados por vírgula.
+   * ⚠️ Em produção NÃO inclui `localhost` nem `127.0.0.1`: o widget aceita os três para
+   * desenvolvimento, e sem essa separação qualquer um forjaria a origem de um token local.
+   */
+  TURNSTILE_HOSTNAMES?: string;
 }
+
+const ACAO = "contato";
 
 const LIMITES = { nome: 120, email: 200, mensagem: 5000 } as const;
 
@@ -41,6 +51,52 @@ function validar(c: { nome: string; email: string; mensagem: string }): string |
   if (!c.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c.email)) return "Informe um email válido";
   if (!c.mensagem) return "Descreva seu projeto";
   return null;
+}
+
+/**
+ * Verifica o token do Turnstile. Devolve `true` só quando tudo confere.
+ *
+ * 🔴 FAIL CLOSED em todo caminho de dúvida: sem secret, sem hostnames declarados, rede fora,
+ * resposta não-2xx ou corpo não-JSON, tudo recusa. Um verificador que libera quando não
+ * consegue verificar não protege de nada — e é o modo de falha que passa despercebido, porque
+ * o formulário continua funcionando.
+ *
+ * Três checagens, não uma. `success` sozinho não basta:
+ *  - `action` impede que um token obtido noutra superfície do site valha aqui;
+ *  - `hostname` impede que um token gerado em `localhost` (o widget aceita os três domínios)
+ *    seja gasto contra produção.
+ */
+async function verificarTurnstile(env: Env, token: unknown, ip: string | null): Promise<boolean> {
+  const permitidos = new Set(
+    (env.TURNSTILE_HOSTNAMES ?? "").split(",").map((h) => h.trim()).filter(Boolean),
+  );
+  if (!env.TURNSTILE_SECRET || permitidos.size === 0) return false;
+  if (typeof token !== "string" || token.length === 0 || token.length > 2048) return false;
+
+  let r: Response;
+  try {
+    r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      signal: AbortSignal.timeout(10_000),
+      body: new URLSearchParams({
+        secret: env.TURNSTILE_SECRET,
+        response: token,
+        ...(ip ? { remoteip: ip } : {}),
+      }),
+    });
+    if (!r.ok) return false;
+  } catch {
+    return false;
+  }
+
+  let dados: { success?: boolean; action?: string; hostname?: string };
+  try {
+    dados = await r.json();
+  } catch {
+    return false;
+  }
+  return dados.success === true && dados.action === ACAO && permitidos.has(dados.hostname ?? "");
 }
 
 /** Escapa o que veio de fora antes de virar HTML no e-mail — o corpo é texto de estranho. */
@@ -105,6 +161,17 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const invalido = validar(contato);
   if (invalido) return responder({ erro: invalido }, 400);
+
+  // 0. PROVA que é gente, antes de qualquer coisa. Vem antes da gravação de propósito: validar
+  //    depois encheria o banco de spam e só evitaria o e-mail, que é a metade barata do custo.
+  const humano = await verificarTurnstile(
+    env,
+    bruto["cf-turnstile-response"],
+    request.headers.get("cf-connecting-ip"),
+  );
+  if (!humano) {
+    return responder({ erro: "Não foi possível confirmar que você não é um robô. Recarregue a página e tente de novo." }, 403);
+  }
 
   // 1. GRAVA. A partir daqui a mensagem não se perde, aconteça o que acontecer com os avisos.
   let id: number;
