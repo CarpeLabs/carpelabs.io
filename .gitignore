@@ -28,3 +28,6 @@ bun.lockb
 
 # wrangler (estado local do miniflare, D1 local, cache de build)
 .wrangler/
+
+# variáveis locais do Pages (contêm secrets — nunca commitar)
+.dev.vars

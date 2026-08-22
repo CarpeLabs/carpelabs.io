@@ -20,8 +20,15 @@ interface Env {
   DISCORD_WEBHOOK_URL?: string;
   /** Para onde avisar. Sem ele, o e-mail não é tentado. */
   CONTATO_EMAIL_DESTINO?: string;
-  /** Binding do Email Sending. Só existe depois de o domínio ser onboardado. */
-  EMAIL?: { send(m: unknown): Promise<unknown> };
+  /**
+   * Resend, e não o Email Sending da Cloudflare: com o mesmo token e a mesma conta, a API de
+   * Email Sending responde `Unauthorized [code: 2036]` enquanto a de Email Routing funciona —
+   * o produto é beta e não está habilitado. O Resend já tem `carpelabs.io` verificado, então
+   * envia hoje. Trocar depois é mudar esta função e nada mais.
+   */
+  RESEND_API_KEY?: string;
+  /** Remetente. Precisa ser de um domínio verificado no Resend. */
+  RESEND_FROM_EMAIL?: string;
 }
 
 const LIMITES = { nome: 120, email: 200, mensagem: 5000 } as const;
@@ -59,20 +66,42 @@ async function avisarDiscord(env: Env, m: { nome: string; email: string; mensage
   return r.ok ? null : `discord respondeu ${r.status}`;
 }
 
+/** Escapa o que veio de fora antes de virar HTML no e-mail — o corpo é texto de estranho. */
+function escapar(s: string): string {
+  return s.replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+}
+
 async function avisarEmail(env: Env, m: { nome: string; email: string; mensagem: string; origem: string }) {
-  if (!env.EMAIL) return "Email Sending não configurado (domínio não onboardado)";
+  if (!env.RESEND_API_KEY) return "RESEND_API_KEY não configurada";
   if (!env.CONTATO_EMAIL_DESTINO) return "destino não configurado";
-  const texto = `${m.nome} <${m.email}>\nVeio de: ${m.origem || "site (direto)"}\n\n${m.mensagem}`;
-  await env.EMAIL.send({
-    to: env.CONTATO_EMAIL_DESTINO,
-    from: { email: "contato@carpelabs.io", name: "Carpe Labs — site" },
-    // `replyTo` é o que torna o aviso útil: responder no cliente de e-mail fala com a pessoa,
-    // não com o remetente automático.
-    replyTo: { email: m.email, name: m.nome },
-    subject: `Contato de ${m.nome}`,
-    text: texto,
-    html: `<p><strong>${m.nome}</strong> &lt;${m.email}&gt;<br>Veio de: ${m.origem || "site (direto)"}</p><p>${m.mensagem.replace(/\n/g, "<br>")}</p>`,
+
+  const de = env.RESEND_FROM_EMAIL || "noreply@carpelabs.io";
+  const veio = m.origem || "site (direto)";
+  const r = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: `Carpe Labs — site <${de}>`,
+      to: [env.CONTATO_EMAIL_DESTINO],
+      // O que torna o aviso útil: responder no cliente de e-mail fala com a PESSOA, não com o
+      // remetente automático. Sem isto, todo contato exigiria copiar o endereço à mão.
+      reply_to: m.email,
+      subject: `Contato de ${m.nome}`,
+      text: `${m.nome} <${m.email}>\nVeio de: ${veio}\n\n${m.mensagem}`,
+      html: `<p><strong>${escapar(m.nome)}</strong> &lt;${escapar(m.email)}&gt;<br>Veio de: ${escapar(veio)}</p><p>${escapar(m.mensagem).replace(/\n/g, "<br>")}</p>`,
+    }),
   });
+
+  if (!r.ok) {
+    // O corpo do erro do Resend diz o motivo (domínio não verificado, chave inválida, limite).
+    // Guardar o motivo é o que separa "não avisou" de "não avisou por isto".
+    const corpo = await r.text().catch(() => "");
+    return `resend respondeu ${r.status}: ${corpo.slice(0, 200)}`;
+  }
   return null;
 }
 
