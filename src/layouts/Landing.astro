@@ -61,52 +61,14 @@ const { noindex = false } = Astro.props;
 
         <!-- CTA -->
         <div class="actions">
-            <button type="button" class="cta" id="open-modal-btn">
+            <a class="cta" href="mailto:contact@carpelabs.io?subject=Quero%20iniciar%20um%20projeto">
                 <span>Iniciar um projeto</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
-            </button>
+            </a>
         </div>
 
-        <!-- Contact Modal -->
-        <dialog id="contact-modal" class="modal">
-            <form id="contact-form" class="modal-content">
-                <button type="button" class="modal-close" id="close-modal-btn" aria-label="Fechar">&times;</button>
-                <h2 class="modal-title">Iniciar um projeto</h2>
-                <p class="modal-subtitle">Conte-nos sobre sua ideia</p>
-
-                <div class="form-group">
-                    <input type="text" name="name" id="form-name" placeholder="Seu nome" required>
-                    <p class="field-error" id="name-error">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        <span>Informe seu nome</span>
-                    </p>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" id="form-email" placeholder="seu@email.com" required>
-                    <p class="field-error" id="email-error">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        <span>Informe um email válido</span>
-                    </p>
-                </div>
-                <div class="form-group">
-                    <textarea name="message" id="form-message" placeholder="Descreva seu projeto..." rows="4" required></textarea>
-                    <p class="field-error" id="message-error">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        <span>Descreva seu projeto</span>
-                    </p>
-                </div>
-
-                <button type="submit" class="cta cta-submit" id="submit-btn">
-                    <span id="submit-text">Enviar</span>
-                    <span id="submit-loading" class="hidden">Enviando...</span>
-                </button>
-
-                <p id="form-success" class="form-message success hidden">Mensagem enviada com sucesso!</p>
-                <p id="form-error" class="form-message error hidden">Erro ao enviar. Tente novamente.</p>
-            </form>
-        </dialog>
 
         <!-- Footer Links -->
         <footer class="footer">
@@ -143,135 +105,6 @@ const { noindex = false } = Astro.props;
                 animate();
             }
 
-            // Modal functionality
-            const modal = document.getElementById('contact-modal') as HTMLDialogElement;
-            const openBtn = document.getElementById('open-modal-btn');
-            const closeBtn = document.getElementById('close-modal-btn');
-            const form = document.getElementById('contact-form') as HTMLFormElement;
-            const submitBtn = document.getElementById('submit-btn');
-            const submitText = document.getElementById('submit-text');
-            const submitLoading = document.getElementById('submit-loading');
-
-            // Form fields and errors
-            const nameInput = document.getElementById('form-name') as HTMLInputElement;
-            const emailInput = document.getElementById('form-email') as HTMLInputElement;
-            const messageInput = document.getElementById('form-message') as HTMLTextAreaElement;
-            const nameError = document.getElementById('name-error');
-            const emailError = document.getElementById('email-error');
-            const messageError = document.getElementById('message-error');
-
-            // Validation helpers
-            function validateField(input: HTMLInputElement | HTMLTextAreaElement, errorEl: HTMLElement | null) {
-                const isValid = input.validity.valid;
-                input.classList.toggle('invalid', !isValid);
-                errorEl?.classList.toggle('visible', !isValid);
-                return isValid;
-            }
-
-            function clearValidation(input: HTMLInputElement | HTMLTextAreaElement, errorEl: HTMLElement | null) {
-                input.classList.remove('invalid');
-                errorEl?.classList.remove('visible');
-            }
-
-            // Validate on blur (when leaving field)
-            nameInput?.addEventListener('blur', () => validateField(nameInput, nameError));
-            emailInput?.addEventListener('blur', () => validateField(emailInput, emailError));
-            messageInput?.addEventListener('blur', () => validateField(messageInput, messageError));
-
-            // Clear error on input
-            nameInput?.addEventListener('input', () => {
-                if (nameInput.validity.valid) clearValidation(nameInput, nameError);
-            });
-            emailInput?.addEventListener('input', () => {
-                if (emailInput.validity.valid) clearValidation(emailInput, emailError);
-            });
-            messageInput?.addEventListener('input', () => {
-                if (messageInput.validity.valid) clearValidation(messageInput, messageError);
-            });
-            const successMsg = document.getElementById('form-success');
-            const errorMsg = document.getElementById('form-error');
-
-            // Google Apps Script URL - substitua pela sua URL após deploy
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfgUPxzTrOu9FcKVRSH1xt9ebaGhS5grNfz0UPrIMYWXm1gGH5IfM0l8fj5GsHzKufGg/exec';
-
-            openBtn?.addEventListener('click', () => {
-                // Reset validation state
-                clearValidation(nameInput, nameError);
-                clearValidation(emailInput, emailError);
-                clearValidation(messageInput, messageError);
-                modal?.showModal();
-            });
-
-            closeBtn?.addEventListener('click', () => {
-                modal?.close();
-            });
-
-            modal?.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.close();
-                }
-            });
-
-            form?.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                // Validate all fields
-                const isNameValid = validateField(nameInput, nameError);
-                const isEmailValid = validateField(emailInput, emailError);
-                const isMessageValid = validateField(messageInput, messageError);
-
-                if (!isNameValid || !isEmailValid || !isMessageValid) {
-                    // Focus first invalid field
-                    if (!isNameValid) nameInput?.focus();
-                    else if (!isEmailValid) emailInput?.focus();
-                    else messageInput?.focus();
-                    return;
-                }
-
-                // Reset messages
-                successMsg?.classList.add('hidden');
-                errorMsg?.classList.add('hidden');
-
-                // Show loading
-                submitText?.classList.add('hidden');
-                submitLoading?.classList.remove('hidden');
-                if (submitBtn) (submitBtn as HTMLButtonElement).disabled = true;
-
-                const formData = new FormData(form);
-                const data = {
-                    name: formData.get('name'),
-                    email: formData.get('email'),
-                    message: formData.get('message')
-                };
-
-                try {
-                    const response = await fetch(SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data)
-                    });
-
-                    // no-cors mode doesn't return readable response, assume success
-                    successMsg?.classList.remove('hidden');
-                    form.reset();
-
-                    // Close modal after 2 seconds
-                    setTimeout(() => {
-                        modal?.close();
-                        successMsg?.classList.add('hidden');
-                    }, 2000);
-
-                } catch (error) {
-                    errorMsg?.classList.remove('hidden');
-                } finally {
-                    submitText?.classList.remove('hidden');
-                    submitLoading?.classList.add('hidden');
-                    if (submitBtn) (submitBtn as HTMLButtonElement).disabled = false;
-                }
-            });
         });
     </script>
 </body>
