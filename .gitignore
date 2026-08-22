@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # bun
 bun.lockb
+
+# wrangler (estado local do miniflare, D1 local, cache de build)
+.wrangler/

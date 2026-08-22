@@ -1,0 +1,27 @@
+# Configuração do projeto Pages `carpelabs-io`.
+#
+# ⚠️ Este arquivo é a FONTE DA VERDADE: a partir dele, os campos aqui declarados deixam de ser
+# editáveis pelo dashboard (só visíveis). Foi gerado por `wrangler pages download config
+# carpelabs-io`, a partir do que já estava configurado — não inventado.
+#
+# `pages_build_output_dir` fica versionado de propósito. Até 22/08/2026 o site publicado era o
+# `index.html` da raiz, de antes do Astro, e nenhum commit desde fevereiro tinha aparecido —
+# um estado que só existia na configuração e que ninguém conseguia ver pelo repositório.
+
+name = "carpelabs-io"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-02-01"
+
+# Mensagens do formulário de contato. O endpoint grava aqui ANTES de notificar, para que falha
+# de aviso não vire mensagem perdida — ver `functions/api/contato.ts`.
+[[d1_databases]]
+binding = "DB"
+database_name = "carpelabs-contato"
+database_id = "bf84a0d2-3f26-4fdc-b3f1-ea2d3a8eee95"
+
+[env.production]
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "carpelabs-contato"
+database_id = "bf84a0d2-3f26-4fdc-b3f1-ea2d3a8eee95"
