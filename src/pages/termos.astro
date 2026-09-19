@@ -1,0 +1,197 @@
+---
+import Documento from '../layouts/Documento.astro';
+---
+
+<Documento
+    title="Termos de Serviço"
+    description="Condições de uso dos serviços e aplicações da Carpe Labs, incluindo o aplicativo de WhatsApp Nipo Pedidos."
+    vigencia="19 de setembro de 2026"
+    path="/termos"
+>
+    <p class="doc-lead">
+        Estes termos regem o uso do site carpelabs.io e das aplicações que a Carpe Labs desenvolve e
+        opera, entre elas o aplicativo de WhatsApp <strong>Nipo Pedidos</strong>. Ao usar qualquer um
+        deles, você concorda com o que está escrito aqui.
+    </p>
+
+    <h2>1. Quem fala com quem</h2>
+
+    <p>Três partes aparecem nestes termos, e elas têm obrigações diferentes:</p>
+
+    <div class="doc-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Parte</th>
+                    <th>Quem é</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Carpe Labs</strong></td>
+                    <td>quem desenvolve e opera o software</td>
+                </tr>
+                <tr>
+                    <td><strong>Empresa contratante</strong></td>
+                    <td>a empresa que contratou a Carpe Labs e em nome de quem o sistema fala — a Nipo Center, no caso do Nipo Pedidos</td>
+                </tr>
+                <tr>
+                    <td><strong>Destinatário</strong></td>
+                    <td>a pessoa que recebe ou envia mensagens pelo WhatsApp, normalmente cliente da empresa contratante</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>2. O que a Carpe Labs oferece</h2>
+
+    <p>
+        A Carpe Labs desenvolve e opera software sob encomenda: integrações com sistemas de gestão,
+        painéis operacionais e aplicações que conversam com pessoas pelo WhatsApp usando a WhatsApp
+        Business Cloud API da Meta.
+    </p>
+
+    <p>
+        O aplicativo <strong>Nipo Pedidos</strong> é a identidade técnica dessas aplicações junto à
+        Meta. Hoje ele atende o rastreio de entregas da Nipo Center; serviços de roteirização
+        logística poderão ser publicados sob o mesmo aplicativo, sujeitos a estes mesmos termos.
+    </p>
+
+    <h2>3. Estes termos não substituem o contrato</h2>
+
+    <p>
+        A prestação de serviço a uma empresa contratante é regida por <strong>contrato próprio</strong>,
+        que define escopo, prazos, preço, níveis de serviço e obrigações de tratamento de dados. Estes
+        termos são a camada pública: valem para o site, para quem recebe mensagens dos nossos sistemas
+        e para tudo o que o contrato não tiver disciplinado de modo diverso.
+    </p>
+
+    <p>Havendo conflito, o contrato assinado prevalece sobre estes termos perante a empresa contratante.</p>
+
+    <h2>4. Uso pelo destinatário das mensagens</h2>
+
+    <p>
+        Se você recebe mensagens de um sistema que operamos, não precisa se cadastrar em nada nem
+        pagar por nada. O serviço é oferecido pela empresa com quem você tem relação comercial.
+    </p>
+
+    <div class="doc-callout">
+        <p>
+            <strong>Você pode encerrar a qualquer momento.</strong> Responda na conversa pedindo para
+            não receber mais mensagens, ou bloqueie o número no WhatsApp. Não condicionamos isso a
+            nada nem exigimos justificativa.
+        </p>
+    </div>
+
+    <p>
+        As informações que o sistema envia — situação de um pedido, previsão de entrega, dados de nota
+        fiscal — vêm do sistema de gestão da empresa contratante. Nós transmitimos o que está lá.
+        Divergência sobre o conteúdo é assunto para a empresa contratante resolver.
+    </p>
+
+    <h2>5. Conduta vedada</h2>
+
+    <p>Ao usar nossos serviços, você não pode:</p>
+
+    <ul>
+        <li>tentar obter acesso não autorizado a sistemas, contas ou dados que não sejam seus;</li>
+        <li>usar o canal para enviar conteúdo ilícito, fraudulento, ofensivo ou que viole direito de terceiro;</li>
+        <li>automatizar interações de modo a sobrecarregar ou degradar o serviço;</li>
+        <li>fazer engenharia reversa, copiar ou redistribuir o software sem autorização escrita;</li>
+        <li>usar o serviço em violação às políticas da Meta para a WhatsApp Business Platform.</li>
+    </ul>
+
+    <p>
+        Podemos suspender o acesso de quem descumprir esta seção, sem aviso prévio quando a conduta
+        ameaçar a integridade do serviço ou de terceiros.
+    </p>
+
+    <h2>6. Privacidade</h2>
+
+    <p>
+        O tratamento de dados pessoais está descrito na
+        <a href="/privacidade">Política de Privacidade</a>, que é parte integrante destes termos.
+        Vale destacar dali o ponto que mais gera confusão: nos sistemas de WhatsApp, a Carpe Labs atua
+        como <strong>operadora</strong> e a empresa contratante como <strong>controladora</strong> dos
+        dados dos clientes dela.
+    </p>
+
+    <h2>7. Disponibilidade e limites do que garantimos</h2>
+
+    <p>
+        Trabalhamos para manter os serviços disponíveis, mas <strong>não garantimos operação
+        ininterrupta ou livre de erros</strong>. Interrupções acontecem por manutenção, por falha de
+        terceiros dos quais dependemos — Meta, Cloudflare, Railway, provedores de rede — e por
+        indisponibilidade dos sistemas de origem da empresa contratante.
+    </p>
+
+    <p>
+        Também não garantimos a <strong>exatidão dos dados de origem</strong>. Prazos, situações de
+        entrega e números de documento são espelho do sistema de gestão da empresa contratante: se o
+        dado está errado ou desatualizado lá, ele chega assim na mensagem.
+    </p>
+
+    <p>Níveis de serviço com compromisso contratual, quando existirem, constam do contrato específico.</p>
+
+    <h2>8. Propriedade intelectual</h2>
+
+    <p>
+        O código-fonte, a arquitetura, a documentação, as marcas e os elementos visuais dos serviços
+        pertencem à Carpe Labs, ressalvado o que o contrato com a empresa contratante atribuir a ela.
+    </p>
+
+    <p>
+        Os <strong>dados da empresa contratante</strong> permanecem dela. Não adquirimos direito sobre
+        eles pelo fato de os processarmos, e os devolvemos ou eliminamos ao término da relação,
+        conforme o contrato.
+    </p>
+
+    <h2>9. Limitação de responsabilidade</h2>
+
+    <p>
+        Na máxima extensão permitida pela lei brasileira, a Carpe Labs não responde por lucros
+        cessantes, perda de oportunidade comercial ou danos indiretos decorrentes do uso ou da
+        impossibilidade de uso dos serviços.
+    </p>
+
+    <p>
+        Esta limitação <strong>não se aplica</strong> a dolo, culpa grave, violação de direitos de
+        personalidade ou a qualquer hipótese em que a lei — em especial o Código de Defesa do
+        Consumidor e a LGPD — vede a exclusão de responsabilidade.
+    </p>
+
+    <h2>10. Vigência, suspensão e encerramento</h2>
+
+    <p>
+        Estes termos valem enquanto você usar os serviços. A relação com uma empresa contratante
+        começa e termina conforme o contrato dela.
+    </p>
+
+    <p>
+        Podemos suspender ou encerrar o acesso em caso de descumprimento destes termos, de exigência
+        legal ou de determinação da Meta quanto ao uso da WhatsApp Business Platform.
+    </p>
+
+    <h2>11. Alterações</h2>
+
+    <p>
+        Podemos revisar estes termos. A versão nova é publicada nesta página com data de vigência
+        atualizada, e mudança material é comunicada às empresas contratantes antes de entrar em vigor.
+        Continuar usando os serviços depois da vigência significa aceitar a versão revisada.
+    </p>
+
+    <h2>12. Lei aplicável e foro</h2>
+
+    <p>
+        Estes termos são regidos pela lei brasileira. Fica eleito o foro da Comarca de São Paulo,
+        Estado de São Paulo, para dirimir controvérsias, ressalvado o direito do consumidor de
+        demandar no foro do seu domicílio.
+    </p>
+
+    <h2>13. Contato</h2>
+
+    <p>
+        Dúvidas sobre estes termos:
+        <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>.
+    </p>
+</Documento>

@@ -1,0 +1,73 @@
+---
+/* Casca dos documentos legais — política de privacidade, termos e exclusão de dados.
+ *
+ * Deliberadamente separada de `Landing.astro`: a landing é uma tela só, com `overflow: hidden` no
+ * body e fundo animado. Documento é texto que rola. Compartilhar o layout obrigaria a landing a
+ * abrir exceções para um caso que não é o dela.
+ *
+ * As três páginas existem porque a Meta exige três URLs distintas no cadastro do aplicativo
+ * WhatsApp (privacidade, termos e instruções de exclusão de dados). Mudar estes caminhos quebra o
+ * cadastro do app `Nipo Pedidos` no painel da Meta — se mexer, atualize lá também.
+ */
+import '../styles/documento.css';
+
+interface Props {
+  /** Vai para `<title>` e para o `<h1>` — os documentos não têm título divergente. */
+  title: string;
+  description: string;
+  /** Data de vigência, por extenso, como aparece sob o título. */
+  vigencia: string;
+  /** Caminho canônico desta página, ex. `/privacidade`. */
+  path: string;
+}
+
+const { title, description, vigencia, path } = Astro.props;
+
+const paginas = [
+  { href: '/privacidade', rotulo: 'Privacidade' },
+  { href: '/termos', rotulo: 'Termos' },
+  { href: '/exclusao-de-dados', rotulo: 'Exclusão de dados' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title} | Carpe Labs</title>
+    <meta name="description" content={description}>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="canonical" href={`https://carpelabs.io${path}`}>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <article class="doc">
+        <nav class="doc-nav">
+            <a href="/" aria-label="Carpe Labs — página inicial">
+                <img src="/logo.png" alt="Carpe Labs">
+            </a>
+            <div class="doc-nav-links">
+                {paginas.map((pagina) => (
+                    <a href={pagina.href} aria-current={pagina.href === path ? 'page' : undefined}>
+                        {pagina.rotulo}
+                    </a>
+                ))}
+            </div>
+        </nav>
+
+        <h1>{title}</h1>
+        <p class="doc-meta">Vigente desde {vigencia}.</p>
+
+        <slot />
+
+        <footer class="doc-footer">
+            <a href="/">carpelabs.io</a>
+            <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>
+            <a href="https://github.com/CarpeLabs" target="_blank" rel="noopener">GitHub</a>
+        </footer>
+    </article>
+</body>
+</html>

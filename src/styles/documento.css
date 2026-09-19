@@ -1,0 +1,252 @@
+/* ========================================
+   Carpe Labs — documentos legais
+   ========================================
+
+   Stylesheet próprio, e não `global.css`: a landing declara `body { overflow: hidden }` porque é
+   uma tela só, e documento longo que importasse aquele arquivo nasceria sem scroll. Os tokens
+   abaixo são os mesmos da landing, repetidos de propósito — dez linhas duplicadas custam menos
+   que adaptar o CSS da landing para acomodar página de texto.
+   ======================================== */
+
+:root {
+    --bg: #0a0a0b;
+    --text: #fafafa;
+    --text-muted: #71717a;
+    --text-dim: #a1a1aa;
+    --line: rgba(250, 250, 250, 0.08);
+    --accent: #00d4aa;
+
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-body: 'Geist', -apple-system, sans-serif;
+
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text-dim);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.2s var(--ease);
+}
+
+a:hover {
+    opacity: 0.7;
+}
+
+/* ========================================
+   Estrutura
+   ======================================== */
+
+.doc {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+}
+
+.doc-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.doc-nav img {
+    width: 130px;
+    height: auto;
+    display: block;
+    /* O logo do arquivo e escuro; a landing faz o mesmo para desenha-lo sobre o fundo preto. */
+    filter: brightness(0) invert(1);
+    opacity: 0.85;
+    transition: opacity 0.2s var(--ease);
+}
+
+.doc-nav img:hover {
+    opacity: 1;
+}
+
+.doc-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    font-size: 0.85rem;
+}
+
+.doc-nav-links a {
+    color: var(--text-muted);
+}
+
+.doc-nav-links a:hover {
+    color: var(--text);
+    opacity: 1;
+}
+
+.doc-nav-links a[aria-current='page'] {
+    color: var(--text);
+}
+
+/* ========================================
+   Tipografia
+   ======================================== */
+
+.doc h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.25rem, 6vw, 3rem);
+    line-height: 1.1;
+    color: var(--text);
+    margin-top: 3.5rem;
+}
+
+.doc-meta {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.doc-lead {
+    margin-top: 2rem;
+    font-size: 1.05rem;
+    color: var(--text);
+}
+
+.doc h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.25;
+    color: var(--text);
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+}
+
+.doc h3 {
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--text);
+    margin-top: 2rem;
+}
+
+.doc p,
+.doc ul,
+.doc ol {
+    margin-top: 1rem;
+}
+
+.doc ul,
+.doc ol {
+    padding-left: 1.25rem;
+}
+
+.doc li {
+    margin-top: 0.5rem;
+}
+
+.doc li::marker {
+    color: var(--text-muted);
+}
+
+.doc strong {
+    font-weight: 500;
+    color: var(--text);
+}
+
+/* ========================================
+   Tabelas — rolam na horizontal no celular em vez de estourar a página
+   ======================================== */
+
+.doc-table {
+    margin-top: 1.5rem;
+    overflow-x: auto;
+}
+
+.doc-table table {
+    width: 100%;
+    min-width: 30rem;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.doc-table th,
+.doc-table td {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.75rem 1rem 0.75rem 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.doc-table th {
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+/* ========================================
+   Destaque — o bloco que responde "e eu, o que faço?"
+   ======================================== */
+
+.doc-callout {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--accent);
+    border-radius: 4px;
+    background: rgba(250, 250, 250, 0.02);
+}
+
+.doc-callout > :first-child {
+    margin-top: 0;
+}
+
+/* ========================================
+   Rodapé
+   ======================================== */
+
+.doc-footer {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.doc-footer a {
+    color: var(--text-muted);
+}
+
+.doc-footer a:hover {
+    color: var(--text);
+    opacity: 1;
+}
+
+@media (max-width: 600px) {
+    .doc {
+        padding: 2rem 1.25rem 4rem;
+    }
+
+    .doc-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
