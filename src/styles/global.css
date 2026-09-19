@@ -447,9 +447,13 @@ a {
         font-size: 1rem;
     }
 
+    /* Linha que quebra, e não coluna: com quatro links empilhados o rodape cresceria para dentro
+       do conteudo, e o `overflow: hidden` do body nao deixaria rolar para alcanca-lo. */
     .footer {
-        flex-direction: column;
-        gap: 0.75rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem 1rem;
+        padding: 0 1rem;
     }
 
     .divider {
