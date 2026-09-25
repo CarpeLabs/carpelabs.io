@@ -31,3 +31,7 @@ bun.lockb
 
 # variáveis locais do Pages (contêm secrets — nunca commitar)
 .dev.vars
+
+# impeccable: capturas e logs locais; o brief da superfície (.impeccable/surfaces) é versionado
+.impeccable/review/
+.impeccable/questions/
