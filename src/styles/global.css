@@ -5,7 +5,7 @@
 :root {
     --bg: #0a0a0b;
     --text: #fafafa;
-    --text-muted: #71717a;
+    --text-muted: #84848d;
     --accent: #00d4aa;
     --accent-glow: rgba(0, 212, 170, 0.12);
 
@@ -30,7 +30,6 @@ body {
     background: var(--bg);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
-    overflow: hidden;
 }
 
 a {
@@ -93,7 +92,10 @@ a {
 .container {
     position: relative;
     z-index: 1;
-    height: 100vh;
+    /* Altura mínima, e não fixa: em tela baixa (notebook de 1536×791) o conteúdo passa da dobra,
+       e com altura fixa o CTA ficava por cima do rodapé sem ter como rolar. */
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -107,6 +109,7 @@ a {
    ======================================== */
 
 .logo-wrapper {
+    margin-top: auto;
     margin-bottom: 4rem;
     animation: fadeUp 1s var(--ease) 0.1s both;
 }
@@ -221,8 +224,10 @@ a {
    ======================================== */
 
 .footer {
-    position: absolute;
-    bottom: 2.5rem;
+    /* No fluxo, e não `absolute`: a margem automática o encosta no pé quando sobra altura, e
+       vira zero quando não sobra — aí a página rola em vez de sobrepor. */
+    margin-top: auto;
+    padding-top: 2.5rem;
     display: flex;
     align-items: center;
     gap: 1.5rem;
@@ -447,8 +452,7 @@ a {
         font-size: 1rem;
     }
 
-    /* Linha que quebra, e não coluna: com quatro links empilhados o rodape cresceria para dentro
-       do conteudo, e o `overflow: hidden` do body nao deixaria rolar para alcanca-lo. */
+    /* Linha que quebra, e não coluna: quatro links empilhados deixariam o rodapé alto demais. */
     .footer {
         flex-wrap: wrap;
         justify-content: center;

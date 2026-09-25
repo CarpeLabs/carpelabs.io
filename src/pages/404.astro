@@ -1,0 +1,9 @@
+---
+/* Sem esta página, o Cloudflare Pages cai no modo SPA e responde 200 com o `index.html` para
+ * qualquer caminho — inclusive `/robots.txt` e `/de/<origem>` que não existe. A visita de uma
+ * origem esquecida continua vendo a landing, mas agora com 404, que o Web Analytics distingue.
+ */
+import Landing from '../layouts/Landing.astro';
+---
+
+<Landing noindex />
