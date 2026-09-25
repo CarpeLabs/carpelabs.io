@@ -37,8 +37,17 @@ const paginas = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title} | Carpe Labs</title>
     <meta name="description" content={description}>
-    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="canonical" href={`https://carpelabs.io${path}`}>
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="carpe labs">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:url" content={`https://carpelabs.io${path}`}>
+    <meta property="og:title" content={`${title} | Carpe Labs`}>
+    <meta property="og:description" content={description}>
+    <meta property="og:image" content="https://carpelabs.io/og.png">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">

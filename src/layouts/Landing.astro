@@ -76,6 +76,64 @@ const semTela = [
   { sistema: 'Atendimento no WhatsApp', situacao: 'homologacao', origens: ['nipo-atendimento'], texto: 'Autoatendimento para o cliente e console para o atendente.' },
 ];
 
+/* Perguntas que o comprador faz. Só entra o que é verdade hoje: preço, contratação e prazo
+ * continuam fora até serem decididos (PRODUCT.md). O mesmo texto vai para a página e para o
+ * FAQPage do JSON-LD, então não há como um divergir do outro. */
+const perguntas = [
+  { p: 'Preciso trocar o meu ERP?', r: 'Não. Os sistemas são construídos em cima do ERP que a empresa já usa, e ele continua sendo o sistema principal. Nada é migrado nem substituído.' },
+  { p: 'Funciona com qualquer ERP?', r: 'Sim. O caso publicado é sobre o Sankhya, mas o trabalho parte dos dados que o seu ERP já guarda, qualquer que seja ele. A primeira conversa define como esses dados vão ser lidos com segurança.' },
+  { p: 'Os sistemas mexem nos dados do ERP?', r: 'Na Nipo Center, os portais leem o ERP em modo somente leitura, e cada consulta nova é medida antes de ir para produção. Escrever no ERP só acontece com autorização explícita.' },
+  { p: 'Onde entra a IA?', r: 'Depois dos dados. Primeiro os portais deixam os dados organizados e confiáveis; depois assistentes como Claude e ChatGPT passam a consultá-los, com limite e registro de cada consulta.' },
+  { p: 'Como uma versão nova chega a quem usa?', r: 'Cada versão roda antes num ambiente de homologação com uma cópia dos dados reais. Só depois do aceite ela vai para produção, com uma nota do que mudou.' },
+  { p: 'Vocês atendem fora de São Paulo?', r: 'Sim. A carpe labs fica em São Paulo (SP) e atende remotamente empresas de qualquer cidade ou estado do Brasil.' },
+  { p: 'Como começa um projeto?', r: 'Pelo formulário desta página ou pelo e-mail contact@carpelabs.io. Conte o que a sua operação precisa e qual ERP ela usa; a resposta vem pelo e-mail informado.' },
+];
+
+const SITE = 'https://carpelabs.io';
+const descricao = 'Portais, integrações e IA aplicada à operação, construídos em cima do ERP que a empresa já usa, qualquer que seja ele. O caso Nipo Center, com as telas em uso.';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE}/#org`,
+      name: 'carpe labs',
+      alternateName: 'Carpe Labs',
+      url: `${SITE}/`,
+      logo: `${SITE}/icon-512.png`,
+      email: 'contact@carpelabs.io',
+      description: 'Constrói portais, integrações e IA aplicada à operação sobre o ERP que a empresa já usa.',
+      address: { '@type': 'PostalAddress', addressRegion: 'SP', addressCountry: 'BR' },
+      areaServed: { '@type': 'Country', name: 'Brasil' },
+      sameAs: ['https://github.com/CarpeLabs'],
+      contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'contact@carpelabs.io', availableLanguage: ['pt-BR'] },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE}/#site`,
+      url: `${SITE}/`,
+      name: 'carpe labs',
+      inLanguage: 'pt-BR',
+      publisher: { '@id': `${SITE}/#org` },
+    },
+    {
+      '@type': 'Service',
+      '@id': `${SITE}/#servico`,
+      name: 'Sistemas sobre o ERP existente',
+      serviceType: 'Desenvolvimento de portais, integrações e IA aplicada à operação sobre ERP',
+      description: descricao,
+      provider: { '@id': `${SITE}/#org` },
+      areaServed: { '@type': 'Country', name: 'Brasil' },
+      availableChannel: { '@type': 'ServiceChannel', serviceUrl: `${SITE}/#contato`, availableLanguage: 'pt-BR' },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${SITE}/#perguntas`,
+      mainEntity: perguntas.map((q) => ({ '@type': 'Question', name: q.p, acceptedAnswer: { '@type': 'Answer', text: q.r } })),
+    },
+  ],
+};
+
 const rotulo = (s: string) => (s === 'producao' ? 'Em produção' : 'Em homologação');
 const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1600.webp 1600w`;
 ---
@@ -86,9 +144,22 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>carpe labs · sistemas sobre o ERP que sua empresa já tem</title>
-    <meta name="description" content="Portais, integrações e IA aplicada à operação, construídos em cima do ERP que a empresa já usa. O caso Nipo Center, com as telas em uso.">
-    <link rel="icon" type="image/png" href="/logo.png">
+    <meta name="description" content={descricao}>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="canonical" href="https://carpelabs.io/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="carpe labs">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:url" content="https://carpelabs.io/">
+    <meta property="og:title" content="carpe labs · sistemas sobre o ERP que sua empresa já tem">
+    <meta property="og:description" content={descricao}>
+    <meta property="og:image" content="https://carpelabs.io/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Sistemas sobre o ERP que sua empresa já tem, com a tela de produtividade do painel de Logística da Nipo Center.">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <meta name="theme-color" content="#fafaf9">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     {noindex && <meta name="robots" content="noindex, follow" />}
@@ -157,7 +228,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 <h1 id="abertura-titulo">Sistemas sobre o ERP que sua empresa já tem.</h1>
                 <p class="abertura-apoio">
                     Portais, integrações e IA aplicada à operação, construídos em cima dos seus dados.
-                    Sem trocar o ERP e sem arriscar a produção.
+                    Sem trocar o ERP, qualquer que seja ele, e sem arriscar a produção.
                 </p>
                 <div class="abertura-acoes">
                     <a class="botao" href="#contato"><span>Iniciar um projeto</span><svg class="seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -287,6 +358,18 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             </div>
         </section>
 
+        <section id="perguntas" class="perguntas" aria-labelledby="perguntas-titulo">
+            <h2 id="perguntas-titulo" data-anima="titulo">Perguntas frequentes</h2>
+            <div class="perguntas-lista" data-anima="lista">
+                {perguntas.map((q) => (
+                    <details>
+                        <summary>{q.p}</summary>
+                        <p>{q.r}</p>
+                    </details>
+                ))}
+            </div>
+        </section>
+
         <section id="contato" class="contato" data-rolagem="secao" aria-labelledby="contato-titulo">
           <div class="contato-grade">
             <div class="contato-intro">
@@ -321,14 +404,17 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 </div>
 
                 <p id="form-success" class="form-message success hidden" role="status">Mensagem recebida. A resposta vai para o seu e-mail.</p>
-                <p id="form-error" class="form-message error hidden" role="alert">Não foi possível enviar. Tente de novo em instantes.</p>
+                <p id="form-error" class="form-message error hidden" role="alert">Não foi possível enviar agora. Tente de novo em instantes ou escreva para contact@carpelabs.io.</p>
             </form>
           </div>
         </section>
     </main>
 
     <footer class="rodape">
-        <img src="/logo-papel.png" alt="carpe labs" width="720" height="531" class="rodape-marca">
+        <div class="rodape-entidade">
+            <img src="/logo-papel.png" alt="carpe labs" width="720" height="531" class="rodape-marca">
+            <p>A carpe labs constrói portais, integrações e IA aplicada à operação sobre o ERP que a empresa já usa, qualquer que seja ele. Fica em São Paulo (SP) e atende remotamente todo o Brasil. O caso publicado é a Nipo Center, importadora de São Paulo que roda sobre o Sankhya.</p>
+        </div>
         <nav aria-label="Links do rodapé">
             <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>
             <a href="https://github.com/CarpeLabs" target="_blank" rel="noopener">GitHub</a>
@@ -425,8 +511,12 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 // sucesso — foi assim que um 403 do endpoint virou "enviada com sucesso" na
                 // tela por meses, sem ninguém saber quantas mensagens sumiram.
                 if (!response.ok) {
+                    // 400 traz a validação em português, feita para a pessoa ler. O resto (403 do
+                    // Turnstile, 5xx) não diz nada a quem está do outro lado: vira a mensagem
+                    // padrão, com o e-mail como saída.
                     const corpo = await response.json().catch(() => ({}));
-                    throw new Error((corpo as { erro?: string }).erro || `Erro ${response.status}`);
+                    const erro = (corpo as { erro?: string }).erro;
+                    throw new Error(response.status === 400 && erro ? erro : '');
                 }
 
                 successMsg?.classList.remove('hidden');
@@ -434,7 +524,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             } catch (error) {
                 if (errorMsg) errorMsg.textContent = error instanceof Error && error.message
                     ? error.message
-                    : 'Não foi possível enviar. Tente de novo em instantes.';
+                    : 'Não foi possível enviar agora. Tente de novo em instantes ou escreva para contact@carpelabs.io.';
                 errorMsg?.classList.remove('hidden');
             } finally {
                 // 🔴 Token do Turnstile é de USO ÚNICO. O formulário continua na tela depois de um

@@ -132,6 +132,8 @@ Raio de 6px em telas, botões, campos e mensagens. Pílula só na marca "Você v
   - Nunca usar `clip-path` zerado no elemento observado (o observador não o vê) nem transicionar recorte para `none` (salta).
   - Microinterações: seta do botão anda 4px no hover, botão comprime a 0,97 no clique, topo fixo ganha régua e encolhe a marca ao rolar.
   - Movimento reduzido: só opacidade em 300ms, sem deslocamento, recorte ou desfoque.
+- **Perguntas frequentes:** `details`/`summary` nativos entre régua; título à esquerda a partir de 64rem; "+" que gira meia volta e vira "−"; altura animada por `::details-content` onde o navegador suporta. O texto é o mesmo do `FAQPage` do JSON-LD.
+- **Rodapé:** parágrafo de entidade (quem é, onde fica, o que faz, caso publicado) ao lado do símbolo; é o texto que buscadores e IAs citam.
 - **Superfícies do navegador:** seleção em acento, `caret-color` acento, foco visível em anel sólido de 2px, `scrollbar-color` da paleta, sublinhado com offset 0,22em.
 
 ## Do's and Don'ts

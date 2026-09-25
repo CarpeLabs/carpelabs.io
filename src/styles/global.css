@@ -652,6 +652,83 @@ figcaption {
     .metodo-itens { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; }
 }
 
+/* ---------- Perguntas frequentes ---------- */
+
+.perguntas {
+    display: grid;
+    gap: 2rem;
+    max-width: var(--largura);
+    margin: 0 auto;
+    padding: clamp(4rem, 8vw, 7rem) var(--gutter);
+}
+
+.perguntas h2 { font-size: clamp(2.25rem, 4.4vw, 3.75rem); letter-spacing: -0.03em; }
+
+@media (min-width: 64rem) {
+    .perguntas {
+        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+        gap: clamp(2.5rem, 5vw, 5rem);
+        align-items: start;
+    }
+}
+
+.perguntas-lista { border-top: 1px solid var(--regua); }
+
+.perguntas details {
+    border-bottom: 1px solid var(--regua);
+    interpolate-size: allow-keywords;
+}
+
+.perguntas summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.375rem 0;
+    font-size: 1.1875rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    list-style: none;
+    transition: color 150ms var(--ease);
+}
+
+.perguntas summary::-webkit-details-marker { display: none; }
+.perguntas summary:hover { color: var(--acento); }
+
+/* O "+" vira "−": gira meia volta enquanto a barra vertical encolhe. */
+.perguntas summary::after {
+    content: "";
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    background:
+        linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat,
+        linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat;
+    transition: transform 300ms var(--ease), background-size 300ms var(--ease);
+}
+
+.perguntas details[open] summary::after { transform: rotate(180deg); background-size: 100% 2px, 2px 0; }
+
+.perguntas details p {
+    padding: 0 3rem 1.5rem 0;
+    color: var(--tinta-2);
+    max-width: 44rem;
+}
+
+/* Abre e fecha com altura animada onde o navegador sabe (::details-content); nos outros, abre direto. */
+.perguntas details::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size 350ms var(--ease), content-visibility 350ms allow-discrete;
+}
+
+.perguntas details[open]::details-content { block-size: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+    .perguntas details::details-content { transition: none; }
+}
+
 /* ---------- Contato: o fechamento ---------- */
 
 .contato {
@@ -776,7 +853,20 @@ figcaption {
     padding: 2rem var(--gutter) 2.5rem;
 }
 
-.rodape-marca { width: 4.5rem; }
+.rodape-entidade {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    max-width: 40rem;
+}
+
+.rodape-entidade p {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--tinta-3);
+}
+
+.rodape-marca { width: 4.5rem; flex: none; }
 
 .rodape nav {
     display: flex;
