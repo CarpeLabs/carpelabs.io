@@ -22,6 +22,9 @@ interface Props {
 }
 
 const { title, description, vigencia, path } = Astro.props;
+// O Pages serve estas páginas com barra final (`/termos` → 308 → `/termos/`): o endereço
+// canônico é o que responde 200, não o que redireciona.
+const canonica = `https://carpelabs.io${path}/`;
 
 const paginas = [
   { href: '/privacidade', rotulo: 'Privacidade' },
@@ -39,11 +42,11 @@ const paginas = [
     <meta name="description" content={description}>
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="canonical" href={`https://carpelabs.io${path}`}>
+    <link rel="canonical" href={canonica}>
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="carpe labs">
     <meta property="og:locale" content="pt_BR">
-    <meta property="og:url" content={`https://carpelabs.io${path}`}>
+    <meta property="og:url" content={canonica}>
     <meta property="og:title" content={`${title} | Carpe Labs`}>
     <meta property="og:description" content={description}>
     <meta property="og:image" content="https://carpelabs.io/og.png">
