@@ -117,13 +117,19 @@ Raio de 6px em telas, botões, campos e mensagens. Pílula só na marca "Você v
 ## Components
 
 - **Palco:** painel de Superfície com raio 14px; na abertura sangra para a direita e sobrepõe duas telas reais (a de trás a 55% de opacidade e dessaturada).
-- **Marcador e notas:** círculo de acento com número, posicionado em % sobre a tela, no canto do elemento que anota (nunca em cima do dado). A legenda ao lado repete o número; passar o mouse na legenda acende o marcador. Único movimento da página: os marcadores entram em sequência (140ms entre eles) quando a tela aparece.
+- **Marcador e notas:** círculo de acento com número, posicionado em % sobre a tela, no canto do elemento que anota (nunca em cima do dado). A legenda ao lado repete o número; passar o mouse na legenda acende o marcador. Os marcadores entram em sequência (140ms entre eles) depois da cortina da tela.
 - **Camadas:** três blocos empilhados (IA, portais, ERP) ligados por linha vertical com o verbo da relação ("consulta", "lê, sem escrever").
 - **Tela (figure):** imagem real em WebP 960/1600 com `srcset`, borda 1px Régua, raio 6px, legenda abaixo dizendo o que é e o que foi tarjado. Toda tela nova é captura real, mascarada e conferida pelo José antes de publicar.
 - **Botão primário:** acento, 3rem de altura; hover escurece; desabilitado vai para Tinta 3 com `cursor: progress`.
 - **Situação:** texto 0,875rem peso 550 com ponto à esquerda.
 - **Marca de origem:** pílula Acento Fundo / Acento, inserida por script quando a visita vem de `/de/<ferramenta>`; na lista, a linha inteira ganha o Acento Fundo.
 - **Formulário:** campos brancos com borda `#8a938f`, foco em anel de 2px no acento, erro por campo abaixo do input; Turnstile no tema claro.
+- **Movimento** (`global.css`, seção Movimento; tudo condicionado a `.anima`, posta pelo script inline do `<head>`, então sem JS nada some):
+  - Chegada: `em-uso` esmaece; h1, apoio e ações sobem 1,25rem em 800ms com 60/160/240ms de atraso; o palco abre por `clip-path` da direita (900ms); a tela da frente sai de `blur(8px)` e sobe (360ms de atraso); a de trás desliza por último.
+  - Ao rolar (IntersectionObserver, limiar 0,2): títulos sobem com desfoque; camadas de baixo para cima (ERP 0ms, linha 380ms, portais 620ms, linha 1000ms, IA 1240ms); telas em cortina esquerda→direita (1s) e depois os marcadores com onda única; listas com 70ms entre itens; a régua do método se desenha.
+  - Nunca usar `clip-path` zerado no elemento observado (o observador não o vê) nem transicionar recorte para `none` (salta).
+  - Microinterações: seta do botão anda 4px no hover, botão comprime a 0,97 no clique, topo fixo ganha régua e encolhe a marca ao rolar.
+  - Movimento reduzido: só opacidade em 300ms, sem deslocamento, recorte ou desfoque.
 - **Superfícies do navegador:** seleção em acento, `caret-color` acento, foco visível em anel sólido de 2px, `scrollbar-color` da paleta, sublinhado com offset 0,22em.
 
 ## Do's and Don'ts

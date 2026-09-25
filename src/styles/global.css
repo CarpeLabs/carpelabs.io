@@ -28,6 +28,7 @@
     --raio: 6px;
     --raio-palco: 14px;
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-saida: cubic-bezier(0.4, 0, 1, 1);
 }
 
 *, *::before, *::after {
@@ -39,6 +40,7 @@
 html {
     background: var(--papel);
     scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
     scrollbar-color: #b9c1bd var(--papel);
 }
 
@@ -87,12 +89,17 @@ h1, h2, h3 {
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after { transition: none !important; }
 }
 
 /* ---------- Topo ---------- */
 
 .topo {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--papel);
+    box-shadow: 0 1px 0 transparent;
+    transition: box-shadow 250ms var(--ease), padding 250ms var(--ease);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -102,9 +109,19 @@ h1, h2, h3 {
     padding: 1.25rem var(--gutter);
 }
 
+.topo.rolou { box-shadow: 0 1px 0 var(--regua); padding-top: 0.625rem; padding-bottom: 0.625rem; }
+
+/* O topo fixo ocupa a largura toda; o conteúdo dele segue a coluna. */
+@media (min-width: 90rem) {
+    .topo { max-width: none; padding-left: calc((100vw - var(--largura)) / 2 + var(--gutter)); padding-right: calc((100vw - var(--largura)) / 2 + var(--gutter)); }
+}
+
 .marca img {
     width: 5.5rem;
+    transition: width 250ms var(--ease);
 }
+
+.topo.rolou .marca img { width: 4.25rem; }
 
 .topo-link {
     font-size: 0.9375rem;
@@ -133,8 +150,14 @@ h1, h2, h3 {
     font-size: 1rem;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color 180ms var(--ease);
+    gap: 0.625rem;
+    transition: background-color 180ms var(--ease), scale 120ms var(--ease);
 }
+
+.botao:active { scale: 0.97; }
+
+.seta { flex: none; transition: translate 220ms var(--ease); }
+.botao:hover .seta { translate: 4px 0; }
 
 .botao:hover { background: var(--acento-escuro); }
 
@@ -144,9 +167,15 @@ h1, h2, h3 {
 }
 
 .link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
     font-weight: 550;
     color: var(--tinta);
+    transition: color 150ms var(--ease);
 }
+
+.link:hover .seta-baixo { translate: 0 3px; }
 
 .link:hover { color: var(--acento); }
 
@@ -483,16 +512,6 @@ figcaption {
 .notas li { transition: color 150ms var(--ease); }
 .notas li:hover { color: var(--acento); }
 
-/* O único movimento: marcadores aparecem em sequência quando a tela entra na vista. */
-.marcadores-animam .tela:not(.visto) .marcador {
-    opacity: 0;
-    scale: 0.4;
-}
-
-.marcadores-animam .tela.visto .marcador {
-    transition-delay: calc(var(--ordem) * 140ms);
-}
-
 .sistema-telas figcaption { margin-top: 1rem; }
 
 @media (min-width: 64rem) {
@@ -609,8 +628,17 @@ figcaption {
 }
 
 .metodo-itens > div {
+    position: relative;
     padding-top: 1.25rem;
-    border-top: 2px solid var(--acento);
+}
+
+.metodo-itens > div::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: var(--acento);
+    transform-origin: left;
 }
 
 .metodo-itens h3 { font-size: 1.375rem; }
@@ -765,3 +793,184 @@ figcaption {
 }
 
 .rodape a:hover { color: var(--acento); text-decoration: underline; }
+
+/* ========================================
+   Movimento
+   Tudo aqui depende de `.anima` no <html>, que o script do <head> põe. Sem ele, nada some.
+   ======================================== */
+
+/* ---- Chegada: o momento principal ---- */
+
+@keyframes sobe {
+    from { opacity: 0; transform: translateY(1.25rem); }
+}
+
+@keyframes some-entra {
+    from { opacity: 0; }
+}
+
+@keyframes palco-abre {
+    from { clip-path: inset(0 0 0 100% round var(--raio-palco) 0 0 var(--raio-palco)); }
+    to { clip-path: inset(0 0 0 0 round var(--raio-palco) 0 0 var(--raio-palco)); }
+}
+
+@keyframes tela-foca {
+    from { opacity: 0; transform: translateY(1.75rem) scale(0.985); filter: blur(8px); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes fundo-entra {
+    from { opacity: 0; transform: translate(1.5rem, -0.75rem); }
+}
+
+.anima .em-uso { animation: some-entra 600ms var(--ease) both; }
+.anima .abertura h1 { animation: sobe 800ms var(--ease) 60ms both; }
+.anima .abertura-apoio { animation: sobe 800ms var(--ease) 160ms both; }
+.anima .abertura-acoes { animation: sobe 800ms var(--ease) 240ms both; }
+.anima .palco-telas { animation: palco-abre 900ms var(--ease) 120ms both; }
+.anima .palco-fundo { animation: fundo-entra 900ms var(--ease) 520ms both; }
+.anima .palco-frente { animation: tela-foca 900ms var(--ease) 360ms both; }
+.anima .palco figcaption { animation: some-entra 600ms var(--ease) 900ms both; }
+
+/* ---- Ao rolar ---- */
+
+[data-anima] { --t: 700ms; }
+
+/* Títulos de seção: sobem e ganham foco. Sem clip-path aqui: recorte zerado faz o
+   IntersectionObserver nunca ver o elemento, e o título ficaria invisível para sempre. */
+.anima [data-anima="titulo"] {
+    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease), filter var(--t) var(--ease);
+}
+
+.anima [data-anima="titulo"]:not(.visto) {
+    opacity: 0;
+    transform: translateY(0.5em);
+    filter: blur(6px);
+}
+
+/* Camadas: a arquitetura se monta de baixo para cima, do ERP à IA. */
+.anima .camadas > * {
+    transition: opacity 600ms var(--ease), transform 600ms var(--ease), clip-path 450ms var(--ease);
+}
+
+.anima .camadas:not(.visto) > .camada { opacity: 0; transform: translateY(1rem); }
+.anima .camadas:not(.visto) > .camada-liga { clip-path: inset(100% 0 0 0); }
+/* Estado final explícito: de um recorte para `none` a transição é discreta e salta. */
+.anima .camadas.visto > .camada-liga { clip-path: inset(0 0 0 0); }
+
+.anima .camadas.visto > .camada-erp { transition-delay: 0ms; }
+.anima .camadas.visto > .camada-liga:nth-of-type(2) { transition-delay: 380ms; }
+.anima .camadas.visto > .camada-portais { transition-delay: 620ms; }
+.anima .camadas.visto > .camada-liga:nth-of-type(1) { transition-delay: 1000ms; }
+.anima .camadas.visto > .camada-ia { transition-delay: 1240ms; }
+
+/* Texto do sistema e a legenda numerada, em sequência. */
+.anima [data-anima="texto"] > *,
+.anima [data-anima="texto"] .notas li {
+    transition: opacity 600ms var(--ease), transform 600ms var(--ease), color 150ms var(--ease);
+}
+
+.anima [data-anima="texto"]:not(.visto) > :not(.notas),
+.anima [data-anima="texto"]:not(.visto) .notas li {
+    opacity: 0;
+    transform: translateY(0.75rem);
+}
+
+.anima [data-anima="texto"].visto > :nth-child(2) { transition-delay: 80ms; }
+.anima [data-anima="texto"].visto > :nth-child(3) { transition-delay: 160ms; }
+.anima [data-anima="texto"].visto .notas li:nth-child(1) { transition-delay: 320ms; }
+.anima [data-anima="texto"].visto .notas li:nth-child(2) { transition-delay: 400ms; }
+.anima [data-anima="texto"].visto .notas li:nth-child(3) { transition-delay: 480ms; }
+.anima [data-anima="texto"].visto .notas li:nth-child(4) { transition-delay: 560ms; }
+
+/* Telas: cortina da esquerda para a direita; depois os marcadores. */
+.anima .tela img {
+    transition: clip-path 1000ms var(--ease), filter 1000ms var(--ease);
+}
+
+.anima .tela:not(.visto) img {
+    clip-path: inset(0 100% 0 0 round var(--raio));
+    filter: saturate(0.3);
+}
+
+.anima .tela.visto img { clip-path: inset(0 0 0 0 round var(--raio)); }
+
+.anima .tela:not(.visto) .marcador { opacity: 0; scale: 0.4; }
+.anima .tela.visto .marcador { transition-delay: calc(700ms + var(--ordem) * 140ms); }
+
+/* O marcador chega com uma onda, uma vez só. */
+.marcador::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--acento);
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes onda {
+    from { opacity: 0.7; transform: scale(1); }
+    to { opacity: 0; transform: scale(2.4); }
+}
+
+.anima .tela.visto .marcador::after {
+    animation: onda 900ms var(--ease) both;
+    animation-delay: calc(900ms + var(--ordem) * 140ms);
+}
+
+/* Passar o olho na legenda repete a onda no marcador. */
+.sistema:has(.notas li[data-n="1"]:hover) .marcador[data-n="1"]::after,
+.sistema:has(.notas li[data-n="2"]:hover) .marcador[data-n="2"]::after,
+.sistema:has(.notas li[data-n="3"]:hover) .marcador[data-n="3"]::after,
+.sistema:has(.notas li[data-n="4"]:hover) .marcador[data-n="4"]::after {
+    animation: onda 800ms var(--ease) infinite;
+}
+
+/* Listas: entram como lista, com atraso total limitado. */
+.anima [data-anima="lista"] > * {
+    transition: opacity 600ms var(--ease), transform 600ms var(--ease), background-color 200ms var(--ease);
+}
+
+.anima [data-anima="lista"]:not(.visto) > * { opacity: 0; transform: translateY(1rem); }
+.anima [data-anima="lista"].visto > :nth-child(2) { transition-delay: 70ms; }
+.anima [data-anima="lista"].visto > :nth-child(3) { transition-delay: 140ms; }
+.anima [data-anima="lista"].visto > :nth-child(4) { transition-delay: 210ms; }
+.anima [data-anima="lista"].visto > :nth-child(5) { transition-delay: 280ms; }
+
+/* No método, a régua verde se desenha depois do texto. */
+.anima .metodo-itens > div::before { transition: transform 800ms var(--ease); }
+.anima .metodo-itens:not(.visto) > div::before { transform: scaleX(0); }
+.anima .metodo-itens.visto > :nth-child(1)::before { transition-delay: 200ms; }
+.anima .metodo-itens.visto > :nth-child(2)::before { transition-delay: 300ms; }
+.anima .metodo-itens.visto > :nth-child(3)::before { transition-delay: 400ms; }
+
+/* Linha de "Também entregues": destaque ao passar. */
+.outros li:not(.origem):hover { background: rgba(231, 236, 233, 0.6); }
+.outros li { transition: background-color 200ms var(--ease); }
+
+/* Resposta do formulário. */
+.form-message:not(.hidden) { animation: sobe 400ms var(--ease) both; }
+
+/* ---- Movimento reduzido: só esmaecimento, sem deslocamento, sem desfoque ---- */
+
+@media (prefers-reduced-motion: reduce) {
+    .anima .em-uso, .anima .abertura h1, .anima .abertura-apoio, .anima .abertura-acoes,
+    .anima .palco-telas, .anima .palco-fundo, .anima .palco-frente, .anima .palco figcaption,
+    .form-message:not(.hidden) {
+        animation: some-entra 300ms linear both;
+    }
+
+    .anima [data-anima] *, .anima [data-anima], .anima .tela img, .anima .marcador {
+        transform: none !important;
+        clip-path: none !important;
+        filter: none !important;
+        scale: none !important;
+        transition: opacity 300ms linear !important;
+        transition-delay: 0ms !important;
+    }
+
+    .marcador::after { animation: none !important; }
+    .anima .metodo-itens > div::before { transform: none !important; }
+    .seta, .botao { transition: none; }
+}

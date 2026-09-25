@@ -92,6 +92,30 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
     <meta name="theme-color" content="#fafaf9">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     {noindex && <meta name="robots" content="noindex, follow" />}
+    <script is:inline>
+        // Movimento de entrada. Fica no <head> e não no bundle de propósito: o CSS só esconde
+        // o que vai animar quando `anima` está no <html>, e quem põe a classe é o mesmo script
+        // que depois revela. Se ele não rodar, nada fica escondido.
+        (function () {
+            var d = document.documentElement;
+            if (!('IntersectionObserver' in window)) return;
+            d.classList.add('anima');
+            document.addEventListener('DOMContentLoaded', function () {
+                var olho = new IntersectionObserver(function (entradas) {
+                    entradas.forEach(function (e) {
+                        if (e.isIntersecting) { e.target.classList.add('visto'); olho.unobserve(e.target); }
+                    });
+                }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+                document.querySelectorAll('[data-anima]').forEach(function (el) { olho.observe(el); });
+
+                // O topo fica fixo e ganha a régua quando a página sai do começo.
+                var topo = document.querySelector('.topo');
+                var marcar = function () { topo && topo.classList.toggle('rolou', scrollY > 8); };
+                addEventListener('scroll', marcar, { passive: true });
+                marcar();
+            });
+        })();
+    </script>
 </head>
 <body>
     <header class="topo">
@@ -111,8 +135,8 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                     Sem trocar o ERP e sem arriscar a produção.
                 </p>
                 <div class="abertura-acoes">
-                    <a class="botao" href="#contato">Iniciar um projeto</a>
-                    <a class="link" href="#caso">Ver o caso Nipo Center</a>
+                    <a class="botao" href="#contato"><span>Iniciar um projeto</span><svg class="seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                    <a class="link" href="#caso"><span>Ver o caso Nipo Center</span><svg class="seta seta-baixo" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
                 </div>
             </div>
             <figure class="palco">
@@ -138,7 +162,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
         <section id="caso" class="caso" aria-labelledby="caso-titulo">
             <div class="caso-intro">
                 <div class="caso-intro-texto">
-                    <h2 id="caso-titulo">O caso Nipo Center</h2>
+                    <h2 id="caso-titulo" data-anima="titulo">O caso Nipo Center</h2>
                     <p>
                         A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Em vez de
                         trocar o sistema, ela ganhou portais que leem o ERP em modo somente leitura e
@@ -147,7 +171,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                     </p>
                 </div>
 
-                <figure class="camadas" aria-label="As duas camadas construídas sobre o ERP">
+                <figure class="camadas" data-anima="camadas" aria-label="As duas camadas construídas sobre o ERP">
                     <div class="camada camada-ia">
                         <p class="camada-nome">IA aplicada à operação</p>
                         <p class="camada-desc">Claude e ChatGPT consultam os dados, com limite e registro.</p>
@@ -169,7 +193,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
 
             {numerados.map((s) => (
                 <article class="sistema" data-origens={s.origens.join(' ')}>
-                    <div class="sistema-texto">
+                    <div class="sistema-texto" data-anima="texto">
                         <h3>{s.sistema}</h3>
                         <p class={`situacao situacao-${s.situacao}`}>{rotulo(s.situacao)}</p>
                         <p class="sistema-uso">{s.texto}</p>
@@ -182,7 +206,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                     <div class="sistema-telas">
                         {s.telas.map((t) => (
                             <figure>
-                                <div class="tela">
+                                <div class="tela" data-anima="tela">
                                     <img
                                         src={`/telas/${t.nome}-1600.webp`}
                                         srcset={srcset(t.nome)}
@@ -203,7 +227,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
 
             <div class="outros">
                 <h3>Também entregues</h3>
-                <ul>
+                <ul data-anima="lista">
                     {semTela.map((s) => (
                         <li data-origens={s.origens.join(' ')}>
                             <span class="outros-nome">{s.sistema}</span>
@@ -217,7 +241,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
 
         <section class="metodo" aria-labelledby="metodo-titulo">
             <h2 id="metodo-titulo">Como o trabalho é feito</h2>
-            <div class="metodo-itens">
+            <div class="metodo-itens" data-anima="lista">
                 <div>
                     <h3>O ERP continua sendo o ERP.</h3>
                     <p>Os sistemas leem o Sankhya em modo somente leitura, e cada consulta nova é medida antes de ir para produção. Nada escreve no banco do cliente sem autorização.</p>
@@ -236,7 +260,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
         <section id="contato" class="contato" aria-labelledby="contato-titulo">
           <div class="contato-grade">
             <div class="contato-intro">
-                <h2 id="contato-titulo">Iniciar um projeto</h2>
+                <h2 id="contato-titulo" data-anima="titulo">Iniciar um projeto</h2>
                 <p>Conte o que a sua operação precisa e qual ERP ela usa. A resposta vem pelo e-mail informado.</p>
                 <p class="contato-alt">Prefere e-mail? <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a></p>
             </div>
@@ -261,7 +285,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 <div class="envio">
                     <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="dark"></div>
                     <button type="submit" class="botao" id="submit-btn">
-                        <span id="submit-text">Enviar</span>
+                        <span id="submit-text">Enviar</span><svg class="seta" id="submit-seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                         <span id="submit-loading" class="hidden">Enviando…</span>
                     </button>
                 </div>
@@ -295,16 +319,6 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 marca.textContent = 'Você veio daqui';
                 alvo.querySelector('h3, .outros-nome')?.append(marca);
             }
-        }
-
-        // O único movimento da página: os marcadores de cada tela aparecem quando ela entra na
-        // vista. Sem JS, ou com movimento reduzido, eles já estão lá.
-        if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.documentElement.classList.add('marcadores-animam');
-            const olho = new IntersectionObserver((entradas) => {
-                for (const e of entradas) if (e.isIntersecting) { e.target.classList.add('visto'); olho.unobserve(e.target); }
-            }, { threshold: 0.35 });
-            document.querySelectorAll('.tela').forEach((t) => olho.observe(t));
         }
 
         const form = document.getElementById('contact-form') as HTMLFormElement;
@@ -352,6 +366,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             successMsg?.classList.add('hidden');
             errorMsg?.classList.add('hidden');
             submitText?.classList.add('hidden');
+            document.getElementById('submit-seta')?.classList.add('hidden');
             submitLoading?.classList.remove('hidden');
             if (submitBtn) submitBtn.disabled = true;
 
@@ -398,6 +413,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 // Há um único widget na página, então `reset()` sem argumento é inequívoco.
                 (window as { turnstile?: { reset(): void } }).turnstile?.reset();
                 submitText?.classList.remove('hidden');
+                document.getElementById('submit-seta')?.classList.remove('hidden');
                 submitLoading?.classList.add('hidden');
                 if (submitBtn) submitBtn.disabled = false;
             }

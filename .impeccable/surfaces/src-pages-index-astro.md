@@ -17,7 +17,7 @@ OWN-WORLD: Papel quase branco (#fafaf9), tinta grafite (#111418), um único acen
 
 STORY: O diretor entende em segundos que a CarpeLabs constrói portais sobre o ERP que a empresa já tem e IA em cima desses dados; acredita porque vê as telas que a Nipo usa hoje, com situação honesta (produção x homologação); escreve pelo formulário no fim da página.
 
-FIRST VIEWPORT: Metade esquerda com wordmark, a oferta curta em duas linhas, uma frase de apoio e o botão "Iniciar um projeto"; metade direita ocupada por uma tela real do painel de Logística da Nipo, sangrando para a borda. Abaixo da dobra, os sistemas entregues em faixas, cada um com a própria tela. Sinal: quem chega por /de/<origem> vê a faixa daquele sistema marcada "Você veio daqui". Movimento: um só — os marcadores numerados de cada tela aparecem em sequência quando ela entra na vista (sem JS ou com movimento reduzido, já estão lá).
+FIRST VIEWPORT: Metade esquerda com wordmark, a oferta curta em duas linhas, uma frase de apoio e o botão "Iniciar um projeto"; metade direita ocupada por uma tela real do painel de Logística da Nipo, sangrando para a borda. Abaixo da dobra, os sistemas entregues em faixas, cada um com a própria tela. Sinal: quem chega por /de/<origem> vê a faixa daquele sistema marcada "Você veio daqui". Movimento: chegada orquestrada (título sobe, palco abre da direita, a tela da frente ganha foco saindo do desfoque); ao rolar, as camadas se montam de baixo para cima (ERP → portais → IA), as telas abrem em cortina e os marcadores chegam com uma onda; listas em sequência curta; topo fixo que ganha régua. Com movimento reduzido, só esmaecimento; sem JS, tudo visível.
 
 FORM: caso Nipo em primeiro plano, seed 7718cdc5, re-roll 1, registro safer, opção "caso". A rodada anterior (romaneio em formulário contínuo) foi rejeitada pelo José: "o conceito inteiro".
 
@@ -25,5 +25,6 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 ## Em aberto
 - 25/09/2026, 2ª rodada: o José aprovou o formato e pediu mais riqueza ("simples demais"); vieram as anotações, as camadas, o palco e o fechamento.
+- 25/09/2026, 3ª rodada: o José pediu mais animação ("para ficar mais moderno").
 - Versão em inglês: estrutura não decidida.
 - Capturas aprovadas pelo José em 25/09/2026: produtividade, fluxo (tabela), armazenagem 3D (Daz Import tarjado) e compras. Números de pedido podem aparecer.
