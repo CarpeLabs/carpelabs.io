@@ -11,17 +11,27 @@
  * para fora. O caminho é a única via que funciona nas cinco.
  *
  * ⚠️ Esta lista tem de acompanhar o `origemAssinatura` do `nipo-ui/consumers.json`, no outro
- * repositório. Origem que existir lá e não aqui vira **404 para quem clicou** — e o link fica no
- * rodapé de toda tela. É o modo de falha mais caro desta rota, e não há guarda automático
+ * repositório. Origem que existir lá e não aqui cai no `404.astro`: quem clicou ainda vê a landing,
+ * mas a visita é contada como 404, e não como a ferramenta — e o link fica no rodapé de toda tela. É o modo de falha mais caro desta rota, e não há guarda automático
  * atravessando os dois repositórios.
  */
 export function getStaticPaths() {
   return [
-    { params: { origem: 'nipo-fotos' } },
-    { params: { origem: 'nipo-produtividade' } },
+    // Espelho do `origemAssinatura` de `nipo-ui/consumers.json` em 25/09/2026.
+    { params: { origem: 'nipo-atendimento' } },
+    { params: { origem: 'nipo-comercial' } },
     { params: { origem: 'nipo-compras' } },
-    { params: { origem: 'nipo-painel' } },
+    { params: { origem: 'nipo-cotacao' } },
+    { params: { origem: 'nipo-dados' } },
     { params: { origem: 'nipo-entregas' } },
+    { params: { origem: 'nipo-fotos' } },
+    { params: { origem: 'nipo-logistica' } },
+    { params: { origem: 'nipo-rastreio' } },
+    { params: { origem: 'nipo-suporte' } },
+    { params: { origem: 'nipo-vendas' } },
+    // Saíram do `consumers.json`, mas o link pode seguir em imagem antiga ainda no ar.
+    { params: { origem: 'nipo-painel' } },
+    { params: { origem: 'nipo-produtividade' } },
   ];
 }
 
