@@ -9,7 +9,7 @@ O comprador típico é dono ou diretor de empresa média com operação física 
 A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Os portais leem o ERP em modo somente leitura.
 
 - Em produção: Painel de Logística (pedidos da matriz e da filial, produtividade, ocupação do galpão em 3D, TVs da operação), Portal de Compras (reposição por grupo e por fornecedor, ruptura, exposição por lead time), Fotos de produto e Rastreio de pedido para o cliente final.
-- Em homologação: Nipo Dados (Claude e ChatGPT consultando os dados da Nipo e da PARI), Painel do vendedor e Atendimento no WhatsApp.
+- Em homologação: Nipo Dados (assistentes de IA consultando os dados da operação), Painel do vendedor e Atendimento no WhatsApp.
 
 ## Como o trabalho é feito
 
