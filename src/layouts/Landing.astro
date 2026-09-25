@@ -7,8 +7,14 @@
  * qual ferramenta esta visita veio".
  *
  * Por isso ela não é uma landing diferente — é a mesma, num endereço que o analytics sabe contar.
- * `canonical` aponta sempre para a raiz e a rota de origem sai do índice.
+ * `canonical` aponta sempre para a raiz e a rota de origem sai do índice. A única diferença é
+ * visual: o sistema daquela ferramenta chega marcado (ver o script no fim).
+ *
+ * 🔴 As telas em `public/telas/` são capturas reais dos portais da Nipo (HML, clone de produção),
+ * com clientes, vendedores, pessoas, fornecedores, valores e parceiros tarjados. Cada uma foi
+ * conferida pelo José em 25/09/2026 antes de publicar. Tela nova passa pela mesma conferência.
  */
+import '@fontsource-variable/schibsted-grotesk';
 import '../styles/global.css';
 
 interface Props {
@@ -17,6 +23,120 @@ interface Props {
 }
 
 const { noindex = false } = Astro.props;
+
+/* Só entra o que está no ar na Nipo; "homologação" é homologação, não produção.
+ * `origens` liga o sistema às rotas `/de/<ferramenta>` que devem abri-lo marcado. */
+const comTela = [
+  {
+    sistema: 'Painel de Logística',
+    situacao: 'producao',
+    origens: ['nipo-logistica', 'nipo-produtividade', 'nipo-painel'],
+    texto: 'Matriz e filial acompanham cada pedido do faturamento à expedição. O mesmo painel mostra a ocupação de cada endereço do galpão e roda nas TVs da operação.',
+    telas: [
+      { nome: 'fluxo', alt: 'Tabela de pedidos do painel de Logística, com situação, etapa e número de cada pedido; nomes de cliente e vendedor tarjados.', legenda: 'Fluxo de pedidos. Cliente e vendedor tarjados.', w: 1600, h: 1000,
+        notas: [
+          { x: 20, y: 42.2, t: 'Situação pelo tempo logístico, contado só dentro do expediente.' },
+          { x: 46.8, y: 42.2, t: 'O que a operação precisa priorizar agora, pedido a pedido.' },
+        ] },
+      { nome: 'armazenagem', alt: 'Vista em três dimensões da armazenagem, com os andares e os endereços coloridos pela ocupação.', legenda: 'Armazenagem em 3D, com a ocupação de cada endereço por cor. Parceiro tarjado.', w: 1600, h: 1081,
+        notas: [
+          { x: 54.8, y: 33, t: 'Endereço acima do limite aparece em vermelho, antes de virar problema.' },
+          { x: 57, y: 76, t: 'Cada andar e cada endereço do galpão, no lugar onde está.' },
+        ] },
+    ],
+  },
+  {
+    sistema: 'Portal de Compras',
+    situacao: 'producao',
+    origens: ['nipo-compras'],
+    texto: 'O time de compras decide a reposição sobre um espelho analítico do ERP, por grupo e por fornecedor.',
+    telas: [
+      { nome: 'compras', alt: 'Visão da carteira no portal de Compras, com produtos para decidir por grupo e ranking de fornecedores; nomes de fornecedor e valores em reais tarjados.', legenda: 'Visão da carteira. Fornecedores e valores tarjados.', w: 1600, h: 1000,
+        notas: [
+          { x: 62, y: 23.5, t: 'Ruptura em destaque: o que já falta na prateleira.' },
+          { x: 19, y: 38, t: 'Quantas decisões cada grupo e subgrupo tem pela frente.' },
+          { x: 59.2, y: 35.9, t: 'Fornecedores ordenados pela exposição: lead time × itens em ruptura.' },
+        ] },
+    ],
+  },
+];
+
+/* Numeração contínua dentro de cada sistema: o marcador na tela e o item da legenda ao lado. */
+const numerados = comTela.map((s) => {
+  let n = 0;
+  const telas = s.telas.map((t) => ({ ...t, notas: t.notas.map((nota) => ({ ...nota, n: ++n })) }));
+  return { ...s, telas, notas: telas.flatMap((t) => t.notas) };
+});
+
+const semTela = [
+  { sistema: 'Fotos de produto', situacao: 'producao', origens: ['nipo-fotos'], texto: 'Upload, análise e decisão humana sobre a foto de cada item do catálogo.' },
+  { sistema: 'Rastreio de pedido', situacao: 'producao', origens: ['nipo-rastreio'], texto: 'O cliente final acompanha o próprio pedido por link, sem login.' },
+  { sistema: 'Nipo Dados', situacao: 'homologacao', origens: ['nipo-dados'], texto: 'Claude, ChatGPT ou qualquer outro assistente de IA consulta os dados da operação, com limite e registro.' },
+  { sistema: 'Painel do vendedor', situacao: 'homologacao', origens: ['nipo-vendas'], texto: 'Estoque, preço e pedido na mão de quem vende.' },
+  { sistema: 'Atendimento no WhatsApp', situacao: 'homologacao', origens: ['nipo-atendimento'], texto: 'Autoatendimento para o cliente e console para o atendente.' },
+];
+
+/* Perguntas que o comprador faz. Só entra o que é verdade hoje: preço, contratação e prazo
+ * continuam fora até serem decididos (PRODUCT.md). O mesmo texto vai para a página e para o
+ * FAQPage do JSON-LD, então não há como um divergir do outro. */
+const perguntas = [
+  { p: 'Preciso trocar o meu ERP?', r: 'Não. Os sistemas são construídos em cima do ERP que a empresa já usa, e ele continua sendo o sistema principal. Nada é migrado nem substituído.' },
+  { p: 'Funciona com qualquer ERP?', r: 'Sim. O caso publicado é sobre o Sankhya, mas o trabalho parte dos dados que o seu ERP já guarda, qualquer que seja ele. A primeira conversa define como esses dados vão ser lidos com segurança.' },
+  { p: 'Os sistemas mexem nos dados do ERP?', r: 'Na Nipo Center, os portais leem o ERP em modo somente leitura, e cada consulta nova é medida antes de ir para produção. Escrever no ERP só acontece com autorização explícita.' },
+  { p: 'Onde entra a IA?', r: 'Depois dos dados. Primeiro os portais deixam os dados organizados e confiáveis; depois a IA passa a consultá-los, com limite e registro de cada consulta.' },
+  { p: 'Funciona com qual IA?', r: 'Com qualquer uma. Claude e ChatGPT já consultam os dados no caso publicado, e outros assistentes de IA entram pelo mesmo caminho, com os mesmos limites e o mesmo registro.' },
+  { p: 'Como uma versão nova chega a quem usa?', r: 'Cada versão roda antes num ambiente de homologação com uma cópia dos dados reais. Só depois do aceite ela vai para produção, com uma nota do que mudou.' },
+  { p: 'Vocês atendem fora de São Paulo?', r: 'Sim. A carpe labs fica em São Paulo (SP) e atende remotamente empresas de qualquer cidade ou estado do Brasil.' },
+  { p: 'Como começa um projeto?', r: 'Pelo formulário desta página ou pelo e-mail contact@carpelabs.io. Conte o que a sua operação precisa e qual ERP ela usa; a resposta vem pelo e-mail informado.' },
+];
+
+const SITE = 'https://carpelabs.io';
+const descricao = 'Portais, integrações e IA aplicada à operação, construídos em cima do ERP que a empresa já usa, qualquer que seja ele. O caso Nipo Center, com as telas em uso.';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE}/#org`,
+      name: 'carpe labs',
+      alternateName: 'Carpe Labs',
+      url: `${SITE}/`,
+      logo: `${SITE}/icon-512.png`,
+      email: 'contact@carpelabs.io',
+      description: 'Constrói portais, integrações e IA aplicada à operação sobre o ERP que a empresa já usa.',
+      address: { '@type': 'PostalAddress', addressRegion: 'SP', addressCountry: 'BR' },
+      areaServed: { '@type': 'Country', name: 'Brasil' },
+      sameAs: ['https://github.com/CarpeLabs'],
+      contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'contact@carpelabs.io', availableLanguage: ['pt-BR'] },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE}/#site`,
+      url: `${SITE}/`,
+      name: 'carpe labs',
+      inLanguage: 'pt-BR',
+      publisher: { '@id': `${SITE}/#org` },
+    },
+    {
+      '@type': 'Service',
+      '@id': `${SITE}/#servico`,
+      name: 'Sistemas sobre o ERP existente',
+      serviceType: 'Desenvolvimento de portais, integrações e IA aplicada à operação sobre ERP',
+      description: descricao,
+      provider: { '@id': `${SITE}/#org` },
+      areaServed: { '@type': 'Country', name: 'Brasil' },
+      availableChannel: { '@type': 'ServiceChannel', serviceUrl: `${SITE}/#contato`, availableLanguage: 'pt-BR' },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${SITE}/#perguntas`,
+      mainEntity: perguntas.map((q) => ({ '@type': 'Question', name: q.p, acceptedAnswer: { '@type': 'Answer', text: q.r } })),
+    },
+  ],
+};
+
+const rotulo = (s: string) => (s === 'producao' ? 'Em produção' : 'Em homologação');
+const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1600.webp 1600w`;
 ---
 
 <!DOCTYPE html>
@@ -24,284 +144,401 @@ const { noindex = false } = Astro.props;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carpe Labs | Software House de IA</title>
-    <meta name="description" content="Transformamos ideias ambiciosas em soluções de IA prontas para produção.">
-    <link rel="icon" type="image/png" href="/logo.png">
+    <title>carpe labs · sistemas sobre o ERP que sua empresa já tem</title>
+    <meta name="description" content={descricao}>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="canonical" href="https://carpelabs.io/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="carpe labs">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:url" content="https://carpelabs.io/">
+    <meta property="og:title" content="carpe labs · sistemas sobre o ERP que sua empresa já tem">
+    <meta property="og:description" content={descricao}>
+    <meta property="og:image" content="https://carpelabs.io/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Sistemas sobre o ERP que sua empresa já tem, com a tela de produtividade do painel de Logística da Nipo Center.">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <meta name="theme-color" content="#fafaf9">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     {noindex && <meta name="robots" content="noindex, follow" />}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+    <script is:inline>
+        // Movimento de entrada. Fica no <head> e não no bundle de propósito: o CSS só esconde
+        // o que vai animar quando `anima` está no <html>, e quem põe a classe é o mesmo script
+        // que depois revela. Se ele não rodar, nada fica escondido.
+        (function () {
+            var d = document.documentElement;
+            if (!('IntersectionObserver' in window)) return;
+            d.classList.add('anima');
+            document.addEventListener('DOMContentLoaded', function () {
+                var olho = new IntersectionObserver(function (entradas) {
+                    entradas.forEach(function (e) {
+                        if (e.isIntersecting) { e.target.classList.add('visto'); olho.unobserve(e.target); }
+                    });
+                }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+                document.querySelectorAll('[data-anima]').forEach(function (el) { olho.observe(el); });
+
+                // O topo fica fixo e ganha a régua quando a página sai do começo.
+                var topo = document.querySelector('.topo');
+
+                // Movimento ligado à rolagem: cada [data-rolagem] recebe --p (0 → 1) conforme passa
+                // pela janela, e o CSS decide o que fazer com ele. Sem este script, ou com movimento
+                // reduzido, --p fica no valor-padrão do CSS, que é o estado final.
+                var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+                var els = reduz ? [] : Array.prototype.slice.call(document.querySelectorAll('[data-rolagem]'));
+                var pendente = false;
+                var lim = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+                var suave = function (v) { return 1 - Math.pow(1 - v, 3); };
+                var calcular = function () {
+                    pendente = false;
+                    var vh = innerHeight;
+                    topo && topo.classList.toggle('rolou', scrollY > 8);
+                    d.style.setProperty('--rolado', lim(scrollY / Math.max(1, d.scrollHeight - vh)).toFixed(4));
+                    for (var i = 0; i < els.length; i++) {
+                        var el = els[i], r = el.getBoundingClientRect(), tipo = el.getAttribute('data-rolagem'), p;
+                        if (r.bottom < -vh || r.top > vh * 2) continue;
+                        if (tipo === 'sai') p = lim(-r.top / (r.height * 0.85));
+                        else if (tipo === 'faixa') p = lim((vh - r.top) / (vh + r.height));
+                        else if (tipo === 'secao') p = suave(lim((vh - r.top) / (vh * 0.75)));
+                        else p = suave(lim((vh - r.top) / (vh * 0.6)));
+                        el.style.setProperty('--p', p.toFixed(4));
+                    }
+                };
+                var pedir = function () { if (!pendente) { pendente = true; requestAnimationFrame(calcular); } };
+                addEventListener('scroll', pedir, { passive: true });
+                addEventListener('resize', pedir);
+                calcular();
+            });
+        })();
+    </script>
 </head>
 <body>
-    <!-- Ambient Background -->
-    <div class="ambient">
-        <div class="grain"></div>
-        <div class="glow glow-1"></div>
-        <div class="glow glow-2"></div>
-    </div>
+    <header class="topo">
+        <a href="/" class="marca" aria-label="carpe labs, início">
+            <img src="/logo-papel.png" alt="" width="720" height="531">
+        </a>
+        <a href="#contato" class="topo-link">Iniciar um projeto</a>
+    </header>
 
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Logo -->
-        <div class="logo-wrapper">
-            <img src="/logo.png" alt="Carpe Labs" class="logo">
-        </div>
-
-        <!-- Statement -->
-        <div class="content">
-            <h1 class="headline">
-                Construímos sistemas<br>
-                <em>inteligentes</em>
-            </h1>
-            <p class="subtext">
-                Transformamos ideias ambiciosas em soluções de IA prontas para produção.
-            </p>
-        </div>
-
-        <!-- CTA -->
-        <div class="actions">
-            <button type="button" class="cta" id="open-modal-btn">
-                <span>Iniciar um projeto</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Contact Modal -->
-        <dialog id="contact-modal" class="modal">
-            <form id="contact-form" class="modal-content">
-                <button type="button" class="modal-close" id="close-modal-btn" aria-label="Fechar">&times;</button>
-                <h2 class="modal-title">Iniciar um projeto</h2>
-                <p class="modal-subtitle">Conte-nos sobre sua ideia</p>
-
-                <div class="form-group">
-                    <input type="text" name="name" id="form-name" placeholder="Seu nome" required>
-                    <p class="field-error" id="name-error">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        <span>Informe seu nome</span>
-                    </p>
+    <main>
+        <section class="abertura" data-rolagem="sai" aria-labelledby="abertura-titulo">
+            <div class="abertura-texto">
+                <p class="em-uso"><span class="situacao situacao-producao">Em uso na Nipo Center</span><span class="em-uso-erp">ERP Sankhya, somente leitura</span></p>
+                <h1 id="abertura-titulo">Sistemas sobre o ERP que sua empresa já tem.</h1>
+                <p class="abertura-apoio">
+                    Portais, integrações e IA aplicada à operação, construídos em cima dos seus dados.
+                    Sem trocar o ERP, qualquer que seja ele, e sem arriscar a produção.
+                </p>
+                <div class="abertura-acoes">
+                    <a class="botao" href="#contato"><span>Iniciar um projeto</span><svg class="seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                    <a class="link" href="#caso"><span>Ver o caso Nipo Center</span><svg class="seta seta-baixo" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
                 </div>
-                <div class="form-group">
-                    <input type="email" name="email" id="form-email" placeholder="seu@email.com" required>
-                    <p class="field-error" id="email-error">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        <span>Informe um email válido</span>
-                    </p>
+            </div>
+            <figure class="palco">
+                <div class="palco-telas">
+                    <img
+                        class="palco-fundo"
+                        src="/telas/fluxo-960.webp"
+                        width="960" height="600"
+                        alt="" aria-hidden="true">
+                    <img
+                        class="palco-frente"
+                        src="/telas/produtividade-1600.webp"
+                        srcset={srcset('produtividade')}
+                        sizes="(min-width: 64rem) 55vw, 100vw"
+                        width="1600" height="1000"
+                        alt="Tela Quem produziu ontem, do painel de Logística da Nipo: pessoas do checkout com pedidos, carrinhos, linhas e unidades do dia; nomes tarjados."
+                        fetchpriority="high">
                 </div>
-                <div class="form-group">
-                    <textarea name="message" id="form-message" placeholder="Descreva seu projeto..." rows="4" required></textarea>
-                    <p class="field-error" id="message-error">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        <span>Descreva seu projeto</span>
+                <figcaption>Painel de Logística da Nipo Center, em uso. Nomes de pessoas e clientes tarjados.</figcaption>
+            </figure>
+        </section>
+
+        <div class="faixa" data-rolagem="faixa" aria-hidden="true">
+            <p class="faixa-linha faixa-sistemas">{[0, 1].map(() => comTela.map((c) => c.sistema).concat(semTela.map((c) => c.sistema)).map((n) => <span>{n}</span>))}</p>
+            <p class="faixa-linha faixa-lema">{Array.from({ length: 6 }, () => <span>sobre o ERP que já existe</span>)}</p>
+        </div>
+
+        <section id="caso" class="caso" aria-labelledby="caso-titulo">
+            <div class="caso-intro">
+                <div class="caso-intro-texto" data-rolagem="sobe">
+                    <h2 id="caso-titulo" data-anima="titulo">O caso Nipo Center</h2>
+                    <p>
+                        A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Em vez de
+                        trocar o sistema, ela ganhou portais que leem o ERP em modo somente leitura e
+                        entregam a cada área a tela que faltava. Em cima desses dados, a IA passa a consultar
+                        a operação.
                     </p>
                 </div>
 
-                <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="dark"></div>
+                <figure class="camadas" data-anima="camadas" aria-label="As duas camadas construídas sobre o ERP">
+                    <div class="camada camada-ia">
+                        <p class="camada-nome">IA aplicada à operação</p>
+                        <p class="camada-desc">Funciona com qualquer assistente de IA, com limite e registro de cada consulta.</p>
+                        <ul class="camada-itens"><li class="destaque">Claude</li><li class="destaque">ChatGPT</li><li class="outras">qualquer outra IA</li></ul>
+                    </div>
+                    <p class="camada-liga"><span>consulta</span></p>
+                    <div class="camada camada-portais">
+                        <p class="camada-nome">Portais e integrações</p>
+                        <p class="camada-desc">A tela que faltava para cada área.</p>
+                        <ul class="camada-itens"><li>Logística</li><li>Compras</li><li>Fotos</li><li>Rastreio</li></ul>
+                    </div>
+                    <p class="camada-liga"><span>lê, sem escrever</span></p>
+                    <div class="camada camada-erp">
+                        <p class="camada-nome">Seu ERP</p>
+                        <p class="camada-desc">Qualquer que seja ele, continua sendo o sistema da empresa. Nada é trocado.</p>
+                        <p class="camada-caso">No caso Nipo, o Sankhya.</p>
+                    </div>
+                </figure>
+            </div>
 
-                <button type="submit" class="cta cta-submit" id="submit-btn">
-                    <span id="submit-text">Enviar</span>
-                    <span id="submit-loading" class="hidden">Enviando...</span>
-                </button>
+            {numerados.map((s) => (
+                <article class="sistema" data-origens={s.origens.join(' ')}>
+                    <div class="sistema-texto" data-anima="texto">
+                        <h3>{s.sistema}</h3>
+                        <p class={`situacao situacao-${s.situacao}`}>{rotulo(s.situacao)}</p>
+                        <p class="sistema-uso">{s.texto}</p>
+                        <ol class="notas">
+                            {s.notas.map((nota) => (
+                                <li data-n={nota.n}><span class="notas-n" aria-hidden="true">{nota.n}</span>{nota.t}</li>
+                            ))}
+                        </ol>
+                    </div>
+                    <div class="sistema-telas">
+                        {s.telas.map((t) => (
+                            <figure data-rolagem="cresce">
+                                <div class="tela" data-anima="tela">
+                                    <img
+                                        src={`/telas/${t.nome}-1600.webp`}
+                                        srcset={srcset(t.nome)}
+                                        sizes="(min-width: 64rem) 65vw, 100vw"
+                                        width={t.w} height={t.h}
+                                        alt={t.alt}
+                                        loading="lazy" decoding="async">
+                                    {t.notas.map((nota) => (
+                                        <span class="marcador" data-n={nota.n} style={`left: ${nota.x}%; top: ${nota.y}%; --ordem: ${nota.n}`} aria-hidden="true">{nota.n}</span>
+                                    ))}
+                                </div>
+                                <figcaption>{t.legenda}</figcaption>
+                            </figure>
+                        ))}
+                    </div>
+                </article>
+            ))}
 
-                <p id="form-success" class="form-message success hidden">Mensagem enviada com sucesso!</p>
-                <p id="form-error" class="form-message error hidden">Erro ao enviar. Tente novamente.</p>
+            <div class="outros" data-rolagem="sobe">
+                <h3>Também entregues</h3>
+                <ul data-anima="lista">
+                    {semTela.map((s) => (
+                        <li data-origens={s.origens.join(' ')}>
+                            <span class="outros-nome">{s.sistema}</span>
+                            <span class="outros-uso">{s.texto}</span>
+                            <span class={`situacao situacao-${s.situacao}`}>{rotulo(s.situacao)}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </section>
+
+        <section class="metodo" data-rolagem="secao" aria-labelledby="metodo-titulo">
+            <h2 id="metodo-titulo" data-rolagem="sobe">Como o trabalho é feito</h2>
+            <div class="metodo-itens" data-anima="lista">
+                <div>
+                    <h3>O ERP continua sendo o ERP.</h3>
+                    <p>Os sistemas leem o Sankhya em modo somente leitura, e cada consulta nova é medida antes de ir para produção. Nada escreve no banco do cliente sem autorização.</p>
+                </div>
+                <div>
+                    <h3>Tudo passa por homologação.</h3>
+                    <p>Cada versão roda antes num ambiente de teste com uma cópia dos dados reais. Só depois do aceite ela chega a quem usa, com nota do que mudou.</p>
+                </div>
+                <div>
+                    <h3>IA depois dos dados, não antes.</h3>
+                    <p>Primeiro os dados ficam organizados e confiáveis nos portais. Depois a IA passa a consultá-los, com limite e registro de cada consulta.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="perguntas" class="perguntas" aria-labelledby="perguntas-titulo">
+            <h2 id="perguntas-titulo" data-anima="titulo">Perguntas frequentes</h2>
+            <div class="perguntas-lista" data-anima="lista">
+                {perguntas.map((q) => (
+                    <details>
+                        <summary>{q.p}</summary>
+                        <p>{q.r}</p>
+                    </details>
+                ))}
+            </div>
+        </section>
+
+        <section id="contato" class="contato" data-rolagem="secao" aria-labelledby="contato-titulo">
+          <div class="contato-grade">
+            <div class="contato-intro">
+                <h2 id="contato-titulo" data-anima="titulo">Iniciar um projeto</h2>
+                <p>Conte o que a sua operação precisa e qual ERP ela usa. A resposta vem pelo e-mail informado.</p>
+                <p class="contato-alt">Prefere e-mail? <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a></p>
+            </div>
+
+            <form id="contact-form" class="formulario" novalidate>
+                <div class="campo">
+                    <label for="form-name">Nome</label>
+                    <input type="text" name="name" id="form-name" autocomplete="name" required>
+                    <p class="field-error" id="name-error">Informe seu nome.</p>
+                </div>
+                <div class="campo">
+                    <label for="form-email">E-mail</label>
+                    <input type="email" name="email" id="form-email" autocomplete="email" required>
+                    <p class="field-error" id="email-error">Informe um e-mail válido.</p>
+                </div>
+                <div class="campo campo-largo">
+                    <label for="form-message">O que você precisa</label>
+                    <textarea name="message" id="form-message" rows="5" required></textarea>
+                    <p class="field-error" id="message-error">Descreva o que você precisa.</p>
+                </div>
+
+                <div class="envio">
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="dark"></div>
+                    <button type="submit" class="botao" id="submit-btn">
+                        <span id="submit-text">Enviar</span><svg class="seta" id="submit-seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                        <span id="submit-loading" class="hidden">Enviando…</span>
+                    </button>
+                </div>
+
+                <p id="form-success" class="form-message success hidden" role="status">Mensagem recebida. A resposta vai para o seu e-mail.</p>
+                <p id="form-error" class="form-message error hidden" role="alert">Não foi possível enviar agora. Tente de novo em instantes ou escreva para contact@carpelabs.io.</p>
             </form>
-        </dialog>
-
-        <!-- Footer Links -->
-        <footer class="footer">
-            <a href="https://github.com/CarpeLabs" target="_blank">GitHub</a>
-            <span class="divider"></span>
-            <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>
-            <span class="divider"></span>
-            <a href="/privacidade">Privacidade</a>
-            <span class="divider"></span>
-            <a href="/termos">Termos</a>
-        </footer>
+          </div>
+        </section>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Glow animation
-            const glow1 = document.querySelector('.glow-1');
-            if (glow1) {
-                let targetX = 0;
-                let targetY = 0;
-                let currentX = 0;
-                let currentY = 0;
+    <footer class="rodape">
+        <div class="rodape-entidade">
+            <img src="/logo-papel.png" alt="carpe labs" width="720" height="531" class="rodape-marca">
+            <p>A carpe labs constrói portais, integrações e IA aplicada à operação sobre o ERP que a empresa já usa, qualquer que seja ele. Fica em São Paulo (SP) e atende remotamente todo o Brasil. O caso publicado é a Nipo Center, importadora de São Paulo que roda sobre o Sankhya.</p>
+        </div>
+        <nav aria-label="Links do rodapé">
+            <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>
+            <a href="https://github.com/CarpeLabs" target="_blank" rel="noopener">GitHub</a>
+            <a href="/privacidade">Privacidade</a>
+            <a href="/termos">Termos</a>
+        </nav>
+    </footer>
 
-                document.addEventListener('mousemove', (e) => {
-                    const x = e.clientX / window.innerWidth;
-                    const y = e.clientY / window.innerHeight;
-                    targetX = (x - 0.5) * 50;
-                    targetY = (y - 0.5) * 50;
+    <script>
+        // Quem chega por `/de/<ferramenta>` vê o sistema daquela ferramenta marcado.
+        const daOrigem = location.pathname.match(/^\/de\/([a-z0-9-]+)/)?.[1];
+        if (daOrigem) {
+            const alvo = document.querySelector<HTMLElement>(`[data-origens~="${daOrigem}"]`);
+            if (alvo) {
+                alvo.classList.add('origem');
+                const marca = document.createElement('span');
+                marca.className = 'origem-marca';
+                marca.textContent = 'Você veio daqui';
+                alvo.querySelector('h3, .outros-nome')?.append(marca);
+            }
+        }
+
+        const form = document.getElementById('contact-form') as HTMLFormElement;
+        const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+        const submitText = document.getElementById('submit-text');
+        const submitLoading = document.getElementById('submit-loading');
+        const nameInput = document.getElementById('form-name') as HTMLInputElement;
+        const emailInput = document.getElementById('form-email') as HTMLInputElement;
+        const messageInput = document.getElementById('form-message') as HTMLTextAreaElement;
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const messageError = document.getElementById('message-error');
+        const successMsg = document.getElementById('form-success');
+        const errorMsg = document.getElementById('form-error');
+
+        // Mesma origem: sem CORS, e por isso sem `no-cors` — a resposta volta legível.
+        const ENDPOINT = '/api/contato';
+
+        function validateField(input: HTMLInputElement | HTMLTextAreaElement, errorEl: HTMLElement | null) {
+            const isValid = input.validity.valid;
+            input.classList.toggle('invalid', !isValid);
+            input.setAttribute('aria-invalid', String(!isValid));
+            errorEl?.classList.toggle('visible', !isValid);
+            return isValid;
+        }
+
+        for (const [input, errorEl] of [[nameInput, nameError], [emailInput, emailError], [messageInput, messageError]] as const) {
+            input?.addEventListener('blur', () => validateField(input, errorEl));
+            input?.addEventListener('input', () => { if (input.validity.valid) validateField(input, errorEl); });
+        }
+
+        form?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const isNameValid = validateField(nameInput, nameError);
+            const isEmailValid = validateField(emailInput, emailError);
+            const isMessageValid = validateField(messageInput, messageError);
+            if (!isNameValid || !isEmailValid || !isMessageValid) {
+                if (!isNameValid) nameInput?.focus();
+                else if (!isEmailValid) emailInput?.focus();
+                else messageInput?.focus();
+                return;
+            }
+
+            successMsg?.classList.add('hidden');
+            errorMsg?.classList.add('hidden');
+            submitText?.classList.add('hidden');
+            document.getElementById('submit-seta')?.classList.add('hidden');
+            submitLoading?.classList.remove('hidden');
+            if (submitBtn) submitBtn.disabled = true;
+
+            const formData = new FormData(form);
+            const data: Record<string, unknown> = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message'),
+                // O widget insere este campo no próprio form. Sem ele o endpoint devolve 403,
+                // e é isso que se quer: sem prova, sem gravação.
+                'cf-turnstile-response': formData.get('cf-turnstile-response'),
+            };
+
+            // A origem da visita (`/de/<ferramenta>`) viaja junto: é o que responde
+            // "esse contato veio de qual ferramenta?" sem depender do analytics.
+            if (daOrigem) data.origem = daOrigem;
+
+            try {
+                const response = await fetch(ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
                 });
 
-                function animate() {
-                    currentX += (targetX - currentX) * 0.05;
-                    currentY += (targetY - currentY) * 0.05;
-                    (glow1 as HTMLElement).style.transform = `translate(${currentX}px, ${currentY}px)`;
-                    requestAnimationFrame(animate);
+                // 🔴 A resposta é LIDA. O código anterior usava `mode: 'no-cors'` e assumia
+                // sucesso — foi assim que um 403 do endpoint virou "enviada com sucesso" na
+                // tela por meses, sem ninguém saber quantas mensagens sumiram.
+                if (!response.ok) {
+                    // 400 traz a validação em português, feita para a pessoa ler. O resto (403 do
+                    // Turnstile, 5xx) não diz nada a quem está do outro lado: vira a mensagem
+                    // padrão, com o e-mail como saída.
+                    const corpo = await response.json().catch(() => ({}));
+                    const erro = (corpo as { erro?: string }).erro;
+                    throw new Error(response.status === 400 && erro ? erro : '');
                 }
 
-                animate();
+                successMsg?.classList.remove('hidden');
+                form.reset();
+            } catch (error) {
+                if (errorMsg) errorMsg.textContent = error instanceof Error && error.message
+                    ? error.message
+                    : 'Não foi possível enviar agora. Tente de novo em instantes ou escreva para contact@carpelabs.io.';
+                errorMsg?.classList.remove('hidden');
+            } finally {
+                // 🔴 Token do Turnstile é de USO ÚNICO. O formulário continua na tela depois de um
+                // erro, então sem rearmar o widget a segunda tentativa mandaria um token já
+                // gasto — e a pessoa levaria 403 por um problema que não é dela.
+                // Há um único widget na página, então `reset()` sem argumento é inequívoco.
+                (window as { turnstile?: { reset(): void } }).turnstile?.reset();
+                submitText?.classList.remove('hidden');
+                document.getElementById('submit-seta')?.classList.remove('hidden');
+                submitLoading?.classList.add('hidden');
+                if (submitBtn) submitBtn.disabled = false;
             }
-
-            // Modal functionality
-            const modal = document.getElementById('contact-modal') as HTMLDialogElement;
-            const openBtn = document.getElementById('open-modal-btn');
-            const closeBtn = document.getElementById('close-modal-btn');
-            const form = document.getElementById('contact-form') as HTMLFormElement;
-            const submitBtn = document.getElementById('submit-btn');
-            const submitText = document.getElementById('submit-text');
-            const submitLoading = document.getElementById('submit-loading');
-
-            // Form fields and errors
-            const nameInput = document.getElementById('form-name') as HTMLInputElement;
-            const emailInput = document.getElementById('form-email') as HTMLInputElement;
-            const messageInput = document.getElementById('form-message') as HTMLTextAreaElement;
-            const nameError = document.getElementById('name-error');
-            const emailError = document.getElementById('email-error');
-            const messageError = document.getElementById('message-error');
-
-            // Validation helpers
-            function validateField(input: HTMLInputElement | HTMLTextAreaElement, errorEl: HTMLElement | null) {
-                const isValid = input.validity.valid;
-                input.classList.toggle('invalid', !isValid);
-                errorEl?.classList.toggle('visible', !isValid);
-                return isValid;
-            }
-
-            function clearValidation(input: HTMLInputElement | HTMLTextAreaElement, errorEl: HTMLElement | null) {
-                input.classList.remove('invalid');
-                errorEl?.classList.remove('visible');
-            }
-
-            // Validate on blur (when leaving field)
-            nameInput?.addEventListener('blur', () => validateField(nameInput, nameError));
-            emailInput?.addEventListener('blur', () => validateField(emailInput, emailError));
-            messageInput?.addEventListener('blur', () => validateField(messageInput, messageError));
-
-            // Clear error on input
-            nameInput?.addEventListener('input', () => {
-                if (nameInput.validity.valid) clearValidation(nameInput, nameError);
-            });
-            emailInput?.addEventListener('input', () => {
-                if (emailInput.validity.valid) clearValidation(emailInput, emailError);
-            });
-            messageInput?.addEventListener('input', () => {
-                if (messageInput.validity.valid) clearValidation(messageInput, messageError);
-            });
-            const successMsg = document.getElementById('form-success');
-            const errorMsg = document.getElementById('form-error');
-
-            // Google Apps Script URL - substitua pela sua URL após deploy
-            // Mesma origem: sem CORS, e por isso sem `no-cors` — a resposta volta legível.
-            const ENDPOINT = '/api/contato';
-
-            openBtn?.addEventListener('click', () => {
-                // Reset validation state
-                clearValidation(nameInput, nameError);
-                clearValidation(emailInput, emailError);
-                clearValidation(messageInput, messageError);
-                modal?.showModal();
-            });
-
-            closeBtn?.addEventListener('click', () => {
-                modal?.close();
-            });
-
-            modal?.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.close();
-                }
-            });
-
-            form?.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                // Validate all fields
-                const isNameValid = validateField(nameInput, nameError);
-                const isEmailValid = validateField(emailInput, emailError);
-                const isMessageValid = validateField(messageInput, messageError);
-
-                if (!isNameValid || !isEmailValid || !isMessageValid) {
-                    // Focus first invalid field
-                    if (!isNameValid) nameInput?.focus();
-                    else if (!isEmailValid) emailInput?.focus();
-                    else messageInput?.focus();
-                    return;
-                }
-
-                // Reset messages
-                successMsg?.classList.add('hidden');
-                errorMsg?.classList.add('hidden');
-
-                // Show loading
-                submitText?.classList.add('hidden');
-                submitLoading?.classList.remove('hidden');
-                if (submitBtn) (submitBtn as HTMLButtonElement).disabled = true;
-
-                const formData = new FormData(form);
-                const data: Record<string, unknown> = {
-                    name: formData.get('name'),
-                    email: formData.get('email'),
-                    message: formData.get('message'),
-                    // O widget insere este campo no próprio form. Sem ele o endpoint devolve 403,
-                    // e é isso que se quer: sem prova, sem gravação.
-                    'cf-turnstile-response': formData.get('cf-turnstile-response')
-                };
-
-                // A origem da visita (`/de/<ferramenta>`) viaja junto: é o que responde
-                // "esse contato veio de qual ferramenta?" sem depender do analytics.
-                const daRota = location.pathname.match(/^\/de\/([a-z0-9-]+)/);
-                if (daRota) (data as Record<string, unknown>).origem = daRota[1];
-
-                try {
-                    const response = await fetch(ENDPOINT, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data)
-                    });
-
-                    // 🔴 A resposta é LIDA. O código anterior usava `mode: 'no-cors'` e assumia
-                    // sucesso — foi assim que um 403 do endpoint virou "enviada com sucesso" na
-                    // tela por meses, sem ninguém saber quantas mensagens sumiram.
-                    if (!response.ok) {
-                        const corpo = await response.json().catch(() => ({}));
-                        throw new Error((corpo as { erro?: string }).erro || `Erro ${response.status}`);
-                    }
-
-                    successMsg?.classList.remove('hidden');
-                    form.reset();
-
-                    // Close modal after 2 seconds
-                    setTimeout(() => {
-                        modal?.close();
-                        successMsg?.classList.add('hidden');
-                    }, 2000);
-
-                } catch (error) {
-                    if (errorMsg) errorMsg.textContent = error instanceof Error && error.message
-                        ? error.message
-                        : 'Erro ao enviar. Tente novamente.';
-                    errorMsg?.classList.remove('hidden');
-                } finally {
-                    // 🔴 Token do Turnstile é de USO ÚNICO. O modal continua aberto depois de um
-                    // erro, então sem rearmar o widget a segunda tentativa mandaria um token já
-                    // gasto — e a pessoa levaria 403 por um problema que não é dela.
-                    // Há um único widget na página, então `reset()` sem argumento é inequívoco.
-                    (window as { turnstile?: { reset(): void } }).turnstile?.reset();
-                    submitText?.classList.remove('hidden');
-                    submitLoading?.classList.add('hidden');
-                    if (submitBtn) (submitBtn as HTMLButtonElement).disabled = false;
-                }
-            });
         });
     </script>
 </body>

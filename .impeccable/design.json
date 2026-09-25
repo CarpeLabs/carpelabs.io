@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-25T00:00:00Z",
+  "title": "Design System: carpe labs",
+  "extensions": {
+    "colorMeta": {
+      "papel": { "role": "neutral", "displayName": "Papel", "canonical": "#fafaf9" },
+      "tinta": { "role": "neutral", "displayName": "Tinta", "canonical": "#111418" },
+      "tinta-2": { "role": "neutral", "displayName": "Tinta 2", "canonical": "#4a5058" },
+      "tinta-3": { "role": "neutral", "displayName": "Tinta 3 (legenda)", "canonical": "#5d646c" },
+      "acento": { "role": "primary", "displayName": "Verde-petróleo", "canonical": "#0f5c4a" },
+      "acento-escuro": { "role": "primary", "displayName": "Verde-petróleo escuro", "canonical": "#0a4739" },
+      "acento-fundo": { "role": "primary", "displayName": "Fundo do acento", "canonical": "#e2eee9" },
+      "superficie": { "role": "neutral", "displayName": "Superfície", "canonical": "#e7ece9" },
+      "regua": { "role": "neutral", "displayName": "Régua", "canonical": "#d6dbd8" },
+      "borda-campo": { "role": "neutral", "displayName": "Borda de campo", "canonical": "#8a938f" },
+      "erro": { "role": "error", "displayName": "Erro", "canonical": "#a3261c" }
+    },
+    "motion": { "ease": "cubic-bezier(0.16, 1, 0.3, 1)", "note": "Só transições de estado (hover, foco), 150–180ms. Nada anima na chegada." },
+    "breakpoints": { "lista": "48rem", "metodo": "56rem", "duas-colunas": "64rem", "formulario": "40rem" },
+    "components": [
+      { "name": "button-primary", "html": "<a class=\"botao\" href=\"#contato\">Iniciar um projeto</a>", "css": ".botao{display:inline-flex;align-items:center;min-height:3rem;padding:0 1.5rem;border-radius:6px;background:#0f5c4a;color:#fafaf9;font-weight:600;text-decoration:none}.botao:hover{background:#0a4739}" },
+      { "name": "situacao", "html": "<p class=\"s p\">Em produção</p><p class=\"s h\">Em homologação</p>", "css": ".s{display:inline-flex;align-items:center;gap:.5rem;font-size:.875rem;font-weight:550;margin-right:1rem}.s::before{content:'';width:.5rem;height:.5rem;border-radius:50%}.p{color:#0f5c4a}.p::before{background:#0f5c4a}.h{color:#4a5058}.h::before{border:1.5px solid #4a5058}" }
+    ]
+  }
+}
