@@ -354,8 +354,9 @@ figcaption {
 }
 
 .camada-ia .camada-desc { color: var(--tinta-2); }
-.camada-ia .camada-itens li { border: 1.5px dashed var(--acento); color: var(--acento); }
-.camada-ia .camada-itens li::after { content: " · em homologação"; font-weight: 500; }
+/* Claude e ChatGPT em destaque; o "qualquer outra IA" diz que a lista não é fechada. */
+.camada-ia .camada-itens li.destaque { background: var(--acento); color: var(--papel); font-size: 0.875rem; padding: 0.3125rem 0.75rem; }
+.camada-ia .camada-itens li.outras { border: 1.5px dashed var(--acento); color: var(--acento); }
 
 .camada-portais {
     background: var(--acento);

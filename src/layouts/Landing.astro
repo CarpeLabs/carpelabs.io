@@ -33,12 +33,12 @@ const comTela = [
     origens: ['nipo-logistica', 'nipo-produtividade', 'nipo-painel'],
     texto: 'Matriz e filial acompanham cada pedido do faturamento à expedição. O mesmo painel mostra a ocupação de cada endereço do galpão e roda nas TVs da operação.',
     telas: [
-      { nome: 'fluxo', alt: 'Tabela de pedidos do painel de Logística, com situação, etapa e número de cada pedido; nomes de cliente e vendedor tarjados.', legenda: 'Fluxo de pedidos da Loja. Cliente e vendedor tarjados.', w: 1600, h: 1000,
+      { nome: 'fluxo', alt: 'Tabela de pedidos do painel de Logística, com situação, etapa e número de cada pedido; nomes de cliente e vendedor tarjados.', legenda: 'Fluxo de pedidos. Cliente e vendedor tarjados.', w: 1600, h: 1000,
         notas: [
           { x: 20, y: 42.2, t: 'Situação pelo tempo logístico, contado só dentro do expediente.' },
           { x: 46.8, y: 42.2, t: 'O que a operação precisa priorizar agora, pedido a pedido.' },
         ] },
-      { nome: 'armazenagem', alt: 'Vista em três dimensões da armazenagem da Loja, com mezaninos, térreo e endereços coloridos pela ocupação.', legenda: 'Armazenagem da Loja em 3D: 149 endereços. Parceiro tarjado.', w: 1600, h: 1081,
+      { nome: 'armazenagem', alt: 'Vista em três dimensões da armazenagem, com os andares e os endereços coloridos pela ocupação.', legenda: 'Armazenagem em 3D, com a ocupação de cada endereço por cor. Parceiro tarjado.', w: 1600, h: 1081,
         notas: [
           { x: 54.8, y: 33, t: 'Endereço acima do limite aparece em vermelho, antes de virar problema.' },
           { x: 57, y: 76, t: 'Cada andar e cada endereço do galpão, no lugar onde está.' },
@@ -71,7 +71,7 @@ const numerados = comTela.map((s) => {
 const semTela = [
   { sistema: 'Fotos de produto', situacao: 'producao', origens: ['nipo-fotos'], texto: 'Upload, análise e decisão humana sobre a foto de cada item do catálogo.' },
   { sistema: 'Rastreio de pedido', situacao: 'producao', origens: ['nipo-rastreio'], texto: 'O cliente final acompanha o próprio pedido por link, sem login.' },
-  { sistema: 'Nipo Dados', situacao: 'homologacao', origens: ['nipo-dados'], texto: 'Assistentes de IA consultam os dados da operação, com limite e registro.' },
+  { sistema: 'Nipo Dados', situacao: 'homologacao', origens: ['nipo-dados'], texto: 'Claude, ChatGPT ou qualquer outro assistente de IA consulta os dados da operação, com limite e registro.' },
   { sistema: 'Painel do vendedor', situacao: 'homologacao', origens: ['nipo-vendas'], texto: 'Estoque, preço e pedido na mão de quem vende.' },
   { sistema: 'Atendimento no WhatsApp', situacao: 'homologacao', origens: ['nipo-atendimento'], texto: 'Autoatendimento para o cliente e console para o atendente.' },
 ];
@@ -83,7 +83,8 @@ const perguntas = [
   { p: 'Preciso trocar o meu ERP?', r: 'Não. Os sistemas são construídos em cima do ERP que a empresa já usa, e ele continua sendo o sistema principal. Nada é migrado nem substituído.' },
   { p: 'Funciona com qualquer ERP?', r: 'Sim. O caso publicado é sobre o Sankhya, mas o trabalho parte dos dados que o seu ERP já guarda, qualquer que seja ele. A primeira conversa define como esses dados vão ser lidos com segurança.' },
   { p: 'Os sistemas mexem nos dados do ERP?', r: 'Na Nipo Center, os portais leem o ERP em modo somente leitura, e cada consulta nova é medida antes de ir para produção. Escrever no ERP só acontece com autorização explícita.' },
-  { p: 'Onde entra a IA?', r: 'Depois dos dados. Primeiro os portais deixam os dados organizados e confiáveis; depois assistentes como Claude e ChatGPT passam a consultá-los, com limite e registro de cada consulta.' },
+  { p: 'Onde entra a IA?', r: 'Depois dos dados. Primeiro os portais deixam os dados organizados e confiáveis; depois a IA passa a consultá-los, com limite e registro de cada consulta.' },
+  { p: 'Funciona com qual IA?', r: 'Com qualquer uma. Claude e ChatGPT já consultam os dados no caso publicado, e outros assistentes de IA entram pelo mesmo caminho, com os mesmos limites e o mesmo registro.' },
   { p: 'Como uma versão nova chega a quem usa?', r: 'Cada versão roda antes num ambiente de homologação com uma cópia dos dados reais. Só depois do aceite ela vai para produção, com uma nota do que mudou.' },
   { p: 'Vocês atendem fora de São Paulo?', r: 'Sim. A carpe labs fica em São Paulo (SP) e atende remotamente empresas de qualquer cidade ou estado do Brasil.' },
   { p: 'Como começa um projeto?', r: 'Pelo formulário desta página ou pelo e-mail contact@carpelabs.io. Conte o que a sua operação precisa e qual ERP ela usa; a resposta vem pelo e-mail informado.' },
@@ -275,8 +276,8 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 <figure class="camadas" data-anima="camadas" aria-label="As duas camadas construídas sobre o ERP">
                     <div class="camada camada-ia">
                         <p class="camada-nome">IA aplicada à operação</p>
-                        <p class="camada-desc">Claude e ChatGPT consultam os dados, com limite e registro.</p>
-                        <ul class="camada-itens"><li class="homolog">Nipo Dados</li></ul>
+                        <p class="camada-desc">Funciona com qualquer assistente de IA, com limite e registro de cada consulta.</p>
+                        <ul class="camada-itens"><li class="destaque">Claude</li><li class="destaque">ChatGPT</li><li class="outras">qualquer outra IA</li></ul>
                     </div>
                     <p class="camada-liga"><span>consulta</span></p>
                     <div class="camada camada-portais">
