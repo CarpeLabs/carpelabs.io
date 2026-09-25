@@ -1,8 +1,8 @@
-/* Sitemap à mão: são quatro páginas, e a integração do Astro seria uma dependência para isso.
+/* Sitemap à mão: são cinco páginas, e a integração do Astro seria uma dependência para isso.
  * As rotas `/de/<ferramenta>` ficam de fora de propósito: são endereço de medição, com noindex. */
 const SITE = 'https://carpelabs.io';
 // Com barra final: sem ela o Pages responde 308, e o sitemap listaria redirecionamentos.
-const paginas = ['/', '/privacidade/', '/termos/', '/exclusao-de-dados/'];
+const paginas = ['/', '/en/', '/privacidade/', '/termos/', '/exclusao-de-dados/'];
 
 export function GET() {
   const urls = paginas.map((p) => `  <url><loc>${SITE}${p}</loc></url>`).join('\n');

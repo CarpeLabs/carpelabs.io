@@ -29,3 +29,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 - 25/09/2026, 4ª rodada: "coisas subindo e aparecendo, de maneira dinâmica" — movimento contínuo ligado à rolagem.
 - Versão em inglês: estrutura não decidida.
 - Capturas aprovadas pelo José em 25/09/2026: produtividade, fluxo (tabela), armazenagem 3D (Daz Import tarjado) e compras. Números de pedido podem aparecer.
+
+## Idiomas
+
+`/` em português e `/en/` em inglês servem o mesmo layout (`src/layouts/Landing.astro`); o texto fica em `src/i18n/landing.ts`, com `en` tipado pelo `pt`. As rotas `/de/<ferramenta>` e as páginas legais continuam só em português. A troca de idioma é uma pílula com borda no topo, atrás da ação principal. As capturas das telas continuam em português, e a legenda da abertura em inglês diz isso.

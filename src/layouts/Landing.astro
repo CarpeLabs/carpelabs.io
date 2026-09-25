@@ -10,88 +10,80 @@
  * `canonical` aponta sempre para a raiz e a rota de origem sai do índice. A única diferença é
  * visual: o sistema daquela ferramenta chega marcado (ver o script no fim).
  *
+ * `/en/` serve a mesma landing em inglês: a estrutura fica aqui e o texto em `src/i18n/landing.ts`.
+ *
  * 🔴 As telas em `public/telas/` são capturas reais dos portais da Nipo (HML, clone de produção),
  * com clientes, vendedores, pessoas, fornecedores, valores e parceiros tarjados. Cada uma foi
  * conferida pelo José em 25/09/2026 antes de publicar. Tela nova passa pela mesma conferência.
  */
 import '@fontsource-variable/schibsted-grotesk';
 import '../styles/global.css';
+import { textos, type Idioma } from '../i18n/landing';
 
 interface Props {
   /** `true` nas rotas de origem: elas são endereço de medição, não página para indexar. */
   noindex?: boolean;
+  /** `pt` na raiz e nas rotas de origem; `en` em `/en/`. O texto vem de `src/i18n/landing.ts`. */
+  idioma?: Idioma;
 }
 
-const { noindex = false } = Astro.props;
+const { noindex = false, idioma = 'pt' } = Astro.props;
+const t = textos[idioma];
+const caminho = idioma === 'en' ? '/en/' : '/';
 
 /* Só entra o que está no ar na Nipo; "homologação" é homologação, não produção.
- * `origens` liga o sistema às rotas `/de/<ferramenta>` que devem abri-lo marcado. */
+ * `origens` liga o sistema às rotas `/de/<ferramenta>` que devem abri-lo marcado.
+ * Aqui fica a estrutura; o texto de cada sistema, tela e nota vem do idioma, pela chave. */
 const comTela = [
   {
-    sistema: 'Painel de Logística',
+    chave: 'logistica',
     situacao: 'producao',
     origens: ['nipo-logistica', 'nipo-produtividade', 'nipo-painel'],
-    texto: 'Matriz e filial acompanham cada pedido do faturamento à expedição. O mesmo painel mostra a ocupação de cada endereço do galpão e roda nas TVs da operação.',
     telas: [
-      { nome: 'fluxo', alt: 'Tabela de pedidos do painel de Logística, com situação, etapa e número de cada pedido; nomes de cliente e vendedor tarjados.', legenda: 'Fluxo de pedidos. Cliente e vendedor tarjados.', w: 1600, h: 1000,
-        notas: [
-          { x: 20, y: 42.2, t: 'Situação pelo tempo logístico, contado só dentro do expediente.' },
-          { x: 46.8, y: 42.2, t: 'O que a operação precisa priorizar agora, pedido a pedido.' },
-        ] },
-      { nome: 'armazenagem', alt: 'Vista em três dimensões da armazenagem, com os andares e os endereços coloridos pela ocupação.', legenda: 'Armazenagem em 3D, com a ocupação de cada endereço por cor. Parceiro tarjado.', w: 1600, h: 1081,
-        notas: [
-          { x: 54.8, y: 33, t: 'Endereço acima do limite aparece em vermelho, antes de virar problema.' },
-          { x: 57, y: 76, t: 'Cada andar e cada endereço do galpão, no lugar onde está.' },
-        ] },
+      { nome: 'fluxo', w: 1600, h: 1000, notas: [{ x: 20, y: 42.2 }, { x: 46.8, y: 42.2 }] },
+      { nome: 'armazenagem', w: 1600, h: 1081, notas: [{ x: 54.8, y: 33 }, { x: 57, y: 76 }] },
     ],
   },
   {
-    sistema: 'Portal de Compras',
+    chave: 'compras',
     situacao: 'producao',
     origens: ['nipo-compras'],
-    texto: 'O time de compras decide a reposição sobre um espelho analítico do ERP, por grupo e por fornecedor.',
     telas: [
-      { nome: 'compras', alt: 'Visão da carteira no portal de Compras, com produtos para decidir por grupo e ranking de fornecedores; nomes de fornecedor e valores em reais tarjados.', legenda: 'Visão da carteira. Fornecedores e valores tarjados.', w: 1600, h: 1000,
-        notas: [
-          { x: 62, y: 23.5, t: 'Ruptura em destaque: o que já falta na prateleira.' },
-          { x: 19, y: 38, t: 'Quantas decisões cada grupo e subgrupo tem pela frente.' },
-          { x: 59.2, y: 35.9, t: 'Fornecedores ordenados pela exposição: lead time × itens em ruptura.' },
-        ] },
+      { nome: 'compras', w: 1600, h: 1000, notas: [{ x: 62, y: 23.5 }, { x: 19, y: 38 }, { x: 59.2, y: 35.9 }] },
     ],
   },
-];
+] as const;
 
-/* Numeração contínua dentro de cada sistema: o marcador na tela e o item da legenda ao lado. */
+/* Numeração contínua dentro de cada sistema: o marcador na tela e o item da legenda ao lado.
+ * Nota sem posição (ou posição sem nota) quebra o build: marcador mudo ou legenda sem marcador
+ * só se veria olhando a página, e num idioma só. */
 const numerados = comTela.map((s) => {
+  const texto = t.sistemas[s.chave];
   let n = 0;
-  const telas = s.telas.map((t) => ({ ...t, notas: t.notas.map((nota) => ({ ...nota, n: ++n })) }));
-  return { ...s, telas, notas: telas.flatMap((t) => t.notas) };
+  const telas = s.telas.map((tela) => {
+    const tt = (texto.telas as Record<string, { alt: string; legenda: string; notas: string[] }>)[tela.nome];
+    if (!tt || tt.notas.length !== tela.notas.length) {
+      throw new Error(`[${idioma}] tela ${tela.nome}: ${tela.notas.length} posições e ${tt?.notas.length ?? 0} notas`);
+    }
+    return { ...tela, alt: tt.alt, legenda: tt.legenda, notas: tela.notas.map((pos, i) => ({ ...pos, t: tt.notas[i], n: ++n })) };
+  });
+  return { ...s, sistema: texto.nome, texto: texto.texto, telas, notas: telas.flatMap((tela) => tela.notas) };
 });
 
-const semTela = [
-  { sistema: 'Fotos de produto', situacao: 'producao', origens: ['nipo-fotos'], texto: 'Upload, análise e decisão humana sobre a foto de cada item do catálogo.' },
-  { sistema: 'Rastreio de pedido', situacao: 'producao', origens: ['nipo-rastreio'], texto: 'O cliente final acompanha o próprio pedido por link, sem login.' },
-  { sistema: 'Nipo Dados', situacao: 'homologacao', origens: ['nipo-dados'], texto: 'Claude, ChatGPT ou qualquer outro assistente de IA consulta os dados da operação, com limite e registro.' },
-  { sistema: 'Painel do vendedor', situacao: 'homologacao', origens: ['nipo-vendas'], texto: 'Estoque, preço e pedido na mão de quem vende.' },
-  { sistema: 'Atendimento no WhatsApp', situacao: 'homologacao', origens: ['nipo-atendimento'], texto: 'Autoatendimento para o cliente e console para o atendente.' },
-];
+const semTela = ([
+  { chave: 'fotos', situacao: 'producao', origens: ['nipo-fotos'] },
+  { chave: 'rastreio', situacao: 'producao', origens: ['nipo-rastreio'] },
+  { chave: 'dados', situacao: 'homologacao', origens: ['nipo-dados'] },
+  { chave: 'vendas', situacao: 'homologacao', origens: ['nipo-vendas'] },
+  { chave: 'atendimento', situacao: 'homologacao', origens: ['nipo-atendimento'] },
+] as const).map((s) => ({ ...s, sistema: t.semTela[s.chave].nome, texto: t.semTela[s.chave].texto }));
 
-/* Perguntas que o comprador faz. Só entra o que é verdade hoje: preço, contratação e prazo
- * continuam fora até serem decididos (PRODUCT.md). O mesmo texto vai para a página e para o
- * FAQPage do JSON-LD, então não há como um divergir do outro. */
-const perguntas = [
-  { p: 'Preciso trocar o meu ERP?', r: 'Não. Os sistemas são construídos em cima do ERP que a empresa já usa, e ele continua sendo o sistema principal. Nada é migrado nem substituído.' },
-  { p: 'Funciona com qualquer ERP?', r: 'Sim. O caso publicado é sobre o Sankhya, mas o trabalho parte dos dados que o seu ERP já guarda, qualquer que seja ele. A primeira conversa define como esses dados vão ser lidos com segurança.' },
-  { p: 'Os sistemas mexem nos dados do ERP?', r: 'Na Nipo Center, os portais leem o ERP em modo somente leitura, e cada consulta nova é medida antes de ir para produção. Escrever no ERP só acontece com autorização explícita.' },
-  { p: 'Onde entra a IA?', r: 'Depois dos dados. Primeiro os portais deixam os dados organizados e confiáveis; depois a IA passa a consultá-los, com limite e registro de cada consulta.' },
-  { p: 'Funciona com qual IA?', r: 'Com qualquer uma. Claude e ChatGPT já consultam os dados no caso publicado, e outros assistentes de IA entram pelo mesmo caminho, com os mesmos limites e o mesmo registro.' },
-  { p: 'Como uma versão nova chega a quem usa?', r: 'Cada versão roda antes num ambiente de homologação com uma cópia dos dados reais. Só depois do aceite ela vai para produção, com uma nota do que mudou.' },
-  { p: 'Vocês atendem fora de São Paulo?', r: 'Sim. A carpe labs fica em São Paulo (SP) e atende remotamente empresas de qualquer cidade ou estado do Brasil.' },
-  { p: 'Como começa um projeto?', r: 'Pelo formulário desta página ou pelo e-mail contact@carpelabs.io. Conte o que a sua operação precisa e qual ERP ela usa; a resposta vem pelo e-mail informado.' },
-];
+const perguntas = t.perguntas.lista;
 
 const SITE = 'https://carpelabs.io';
-const descricao = 'Portais, integrações e IA aplicada à operação, construídos em cima do ERP que a empresa já usa, qualquer que seja ele. O caso Nipo Center, com as telas em uso.';
+const url = `${SITE}${caminho}`;
+const descricao = t.descricao;
+/* A organização é a mesma nos dois idiomas (mesmo `@id`); o que muda é a página e o texto. */
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -103,62 +95,69 @@ const jsonLd = {
       url: `${SITE}/`,
       logo: `${SITE}/icon-512.png`,
       email: 'contact@carpelabs.io',
-      description: 'Constrói portais, integrações e IA aplicada à operação sobre o ERP que a empresa já usa.',
+      description: t.jsonLd.orgDescricao,
       address: { '@type': 'PostalAddress', addressRegion: 'SP', addressCountry: 'BR' },
-      areaServed: { '@type': 'Country', name: 'Brasil' },
+      areaServed: { '@type': 'Country', name: t.jsonLd.pais },
       sameAs: ['https://github.com/CarpeLabs'],
-      contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'contact@carpelabs.io', availableLanguage: ['pt-BR'] },
+      contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'contact@carpelabs.io', availableLanguage: ['pt-BR', 'en'] },
     },
     {
       '@type': 'WebSite',
       '@id': `${SITE}/#site`,
       url: `${SITE}/`,
       name: 'carpe labs',
-      inLanguage: 'pt-BR',
+      inLanguage: ['pt-BR', 'en'],
       publisher: { '@id': `${SITE}/#org` },
     },
     {
       '@type': 'Service',
-      '@id': `${SITE}/#servico`,
-      name: 'Sistemas sobre o ERP existente',
-      serviceType: 'Desenvolvimento de portais, integrações e IA aplicada à operação sobre ERP',
+      '@id': `${url}#servico`,
+      name: t.jsonLd.servicoNome,
+      serviceType: t.jsonLd.servicoTipo,
       description: descricao,
       provider: { '@id': `${SITE}/#org` },
-      areaServed: { '@type': 'Country', name: 'Brasil' },
-      availableChannel: { '@type': 'ServiceChannel', serviceUrl: `${SITE}/#contato`, availableLanguage: 'pt-BR' },
+      areaServed: { '@type': 'Country', name: t.jsonLd.pais },
+      availableChannel: { '@type': 'ServiceChannel', serviceUrl: `${url}#contato`, availableLanguage: t.lang },
     },
     {
       '@type': 'FAQPage',
-      '@id': `${SITE}/#perguntas`,
+      '@id': `${url}#perguntas`,
+      inLanguage: t.lang,
       mainEntity: perguntas.map((q) => ({ '@type': 'Question', name: q.p, acceptedAnswer: { '@type': 'Answer', text: q.r } })),
     },
   ],
 };
 
-const rotulo = (s: string) => (s === 'producao' ? 'Em produção' : 'Em homologação');
+const rotulo = (s: 'producao' | 'homologacao') => t.situacao[s];
 const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1600.webp 1600w`;
 ---
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang={t.lang}>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>carpe labs · sistemas sobre o ERP que sua empresa já tem</title>
+    <title>{t.titulo}</title>
     <meta name="description" content={descricao}>
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="canonical" href="https://carpelabs.io/">
+    <link rel="canonical" href={url}>
+    {!noindex && <>
+        <link rel="alternate" hreflang="pt-BR" href={`${SITE}/`}>
+        <link rel="alternate" hreflang="en" href={`${SITE}/en/`}>
+        <link rel="alternate" hreflang="x-default" href={`${SITE}/`}>
+    </>}
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="carpe labs">
-    <meta property="og:locale" content="pt_BR">
-    <meta property="og:url" content="https://carpelabs.io/">
-    <meta property="og:title" content="carpe labs · sistemas sobre o ERP que sua empresa já tem">
+    <meta property="og:locale" content={t.ogLocale}>
+    <meta property="og:locale:alternate" content={textos[idioma === 'en' ? 'pt' : 'en'].ogLocale}>
+    <meta property="og:url" content={url}>
+    <meta property="og:title" content={t.titulo}>
     <meta property="og:description" content={descricao}>
-    <meta property="og:image" content="https://carpelabs.io/og.png">
+    <meta property="og:image" content={`${SITE}${t.og.imagem}`}>
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Sistemas sobre o ERP que sua empresa já tem, com a tela de produtividade do painel de Logística da Nipo Center.">
+    <meta property="og:image:alt" content={t.og.alt}>
     <meta name="twitter:card" content="summary_large_image">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <meta name="theme-color" content="#fafaf9">
@@ -216,24 +215,24 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
 </head>
 <body>
     <header class="topo">
-        <a href="/" class="marca" aria-label="carpe labs, início">
+        <a href={caminho} class="marca" aria-label={t.inicio}>
             <img src="/logo-papel.png" alt="" width="720" height="531">
         </a>
-        <a href="#contato" class="topo-link">Iniciar um projeto</a>
+        <div class="topo-acoes">
+            <a href={t.outroIdioma.href} class="idioma" hreflang={t.outroIdioma.lang} lang={t.outroIdioma.lang} aria-label={t.outroIdioma.rotulo}>{t.outroIdioma.texto}</a>
+            <a href="#contato" class="topo-link">{t.abertura.acao}</a>
+        </div>
     </header>
 
     <main>
         <section class="abertura" data-rolagem="sai" aria-labelledby="abertura-titulo">
             <div class="abertura-texto">
-                <p class="em-uso"><span class="situacao situacao-producao">Em uso na Nipo Center</span><span class="em-uso-erp">ERP Sankhya, somente leitura</span></p>
-                <h1 id="abertura-titulo">Sistemas sobre o ERP que sua empresa já tem.</h1>
-                <p class="abertura-apoio">
-                    Portais, integrações e IA aplicada à operação, construídos em cima dos seus dados.
-                    Sem trocar o ERP, qualquer que seja ele, e sem arriscar a produção.
-                </p>
+                <p class="em-uso"><span class="situacao situacao-producao">{t.abertura.emUso}</span><span class="em-uso-erp">{t.abertura.erp}</span></p>
+                <h1 id="abertura-titulo">{t.abertura.titulo}</h1>
+                <p class="abertura-apoio">{t.abertura.apoio}</p>
                 <div class="abertura-acoes">
-                    <a class="botao" href="#contato"><span>Iniciar um projeto</span><svg class="seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-                    <a class="link" href="#caso"><span>Ver o caso Nipo Center</span><svg class="seta seta-baixo" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+                    <a class="botao" href="#contato"><span>{t.abertura.acao}</span><svg class="seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                    <a class="link" href="#caso"><span>{t.abertura.verCaso}</span><svg class="seta seta-baixo" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
                 </div>
             </div>
             <figure class="palco">
@@ -249,47 +248,42 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                         srcset={srcset('produtividade')}
                         sizes="(min-width: 64rem) 55vw, 100vw"
                         width="1600" height="1000"
-                        alt="Tela Quem produziu ontem, do painel de Logística da Nipo: pessoas do checkout com pedidos, carrinhos, linhas e unidades do dia; nomes tarjados."
+                        alt={t.abertura.palcoAlt}
                         fetchpriority="high">
                 </div>
-                <figcaption>Painel de Logística da Nipo Center, em uso. Nomes de pessoas e clientes tarjados.</figcaption>
+                <figcaption>{t.abertura.palcoLegenda}</figcaption>
             </figure>
         </section>
 
         <div class="faixa" data-rolagem="faixa" aria-hidden="true">
-            <p class="faixa-linha faixa-sistemas">{[0, 1].map(() => comTela.map((c) => c.sistema).concat(semTela.map((c) => c.sistema)).map((n) => <span>{n}</span>))}</p>
-            <p class="faixa-linha faixa-lema">{Array.from({ length: 6 }, () => <span>sobre o ERP que já existe</span>)}</p>
+            <p class="faixa-linha faixa-sistemas">{[0, 1].map(() => numerados.map((c) => c.sistema).concat(semTela.map((c) => c.sistema)).map((n) => <span>{n}</span>))}</p>
+            <p class="faixa-linha faixa-lema">{Array.from({ length: 6 }, () => <span>{t.faixaLema}</span>)}</p>
         </div>
 
         <section id="caso" class="caso" aria-labelledby="caso-titulo">
             <div class="caso-intro">
                 <div class="caso-intro-texto" data-rolagem="sobe">
-                    <h2 id="caso-titulo" data-anima="titulo">O caso Nipo Center</h2>
-                    <p>
-                        A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Em vez de
-                        trocar o sistema, ela ganhou portais que leem o ERP em modo somente leitura e
-                        entregam a cada área a tela que faltava. Em cima desses dados, a IA passa a consultar
-                        a operação.
-                    </p>
+                    <h2 id="caso-titulo" data-anima="titulo">{t.caso.titulo}</h2>
+                    <p>{t.caso.intro}</p>
                 </div>
 
-                <figure class="camadas" data-anima="camadas" aria-label="As duas camadas construídas sobre o ERP">
+                <figure class="camadas" data-anima="camadas" aria-label={t.caso.camadas.rotulo}>
                     <div class="camada camada-ia">
-                        <p class="camada-nome">IA aplicada à operação</p>
-                        <p class="camada-desc">Funciona com qualquer assistente de IA, com limite e registro de cada consulta.</p>
-                        <ul class="camada-itens"><li class="destaque">Claude</li><li class="destaque">ChatGPT</li><li class="outras">qualquer outra IA</li></ul>
+                        <p class="camada-nome">{t.caso.camadas.ia.nome}</p>
+                        <p class="camada-desc">{t.caso.camadas.ia.desc}</p>
+                        <ul class="camada-itens"><li class="destaque">Claude</li><li class="destaque">ChatGPT</li><li class="outras">{t.caso.camadas.ia.outras}</li></ul>
                     </div>
-                    <p class="camada-liga"><span>consulta</span></p>
+                    <p class="camada-liga"><span>{t.caso.camadas.consulta}</span></p>
                     <div class="camada camada-portais">
-                        <p class="camada-nome">Portais e integrações</p>
-                        <p class="camada-desc">A tela que faltava para cada área.</p>
-                        <ul class="camada-itens"><li>Logística</li><li>Compras</li><li>Fotos</li><li>Rastreio</li></ul>
+                        <p class="camada-nome">{t.caso.camadas.portais.nome}</p>
+                        <p class="camada-desc">{t.caso.camadas.portais.desc}</p>
+                        <ul class="camada-itens">{t.caso.camadas.portais.itens.map((i) => <li>{i}</li>)}</ul>
                     </div>
-                    <p class="camada-liga"><span>lê, sem escrever</span></p>
+                    <p class="camada-liga"><span>{t.caso.camadas.le}</span></p>
                     <div class="camada camada-erp">
-                        <p class="camada-nome">Seu ERP</p>
-                        <p class="camada-desc">Qualquer que seja ele, continua sendo o sistema da empresa. Nada é trocado.</p>
-                        <p class="camada-caso">No caso Nipo, o Sankhya.</p>
+                        <p class="camada-nome">{t.caso.camadas.erp.nome}</p>
+                        <p class="camada-desc">{t.caso.camadas.erp.desc}</p>
+                        <p class="camada-caso">{t.caso.camadas.erp.caso}</p>
                     </div>
                 </figure>
             </div>
@@ -329,7 +323,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             ))}
 
             <div class="outros" data-rolagem="sobe">
-                <h3>Também entregues</h3>
+                <h3>{t.caso.outros}</h3>
                 <ul data-anima="lista">
                     {semTela.map((s) => (
                         <li data-origens={s.origens.join(' ')}>
@@ -343,25 +337,19 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
         </section>
 
         <section class="metodo" data-rolagem="secao" aria-labelledby="metodo-titulo">
-            <h2 id="metodo-titulo" data-rolagem="sobe">Como o trabalho é feito</h2>
+            <h2 id="metodo-titulo" data-rolagem="sobe">{t.metodo.titulo}</h2>
             <div class="metodo-itens" data-anima="lista">
-                <div>
-                    <h3>O ERP continua sendo o ERP.</h3>
-                    <p>Os sistemas leem o Sankhya em modo somente leitura, e cada consulta nova é medida antes de ir para produção. Nada escreve no banco do cliente sem autorização.</p>
-                </div>
-                <div>
-                    <h3>Tudo passa por homologação.</h3>
-                    <p>Cada versão roda antes num ambiente de teste com uma cópia dos dados reais. Só depois do aceite ela chega a quem usa, com nota do que mudou.</p>
-                </div>
-                <div>
-                    <h3>IA depois dos dados, não antes.</h3>
-                    <p>Primeiro os dados ficam organizados e confiáveis nos portais. Depois a IA passa a consultá-los, com limite e registro de cada consulta.</p>
-                </div>
+                {t.metodo.itens.map((m) => (
+                    <div>
+                        <h3>{m.titulo}</h3>
+                        <p>{m.texto}</p>
+                    </div>
+                ))}
             </div>
         </section>
 
         <section id="perguntas" class="perguntas" aria-labelledby="perguntas-titulo">
-            <h2 id="perguntas-titulo" data-anima="titulo">Perguntas frequentes</h2>
+            <h2 id="perguntas-titulo" data-anima="titulo">{t.perguntas.titulo}</h2>
             <div class="perguntas-lista" data-anima="lista">
                 {perguntas.map((q) => (
                     <details>
@@ -375,38 +363,38 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
         <section id="contato" class="contato" data-rolagem="secao" aria-labelledby="contato-titulo">
           <div class="contato-grade">
             <div class="contato-intro">
-                <h2 id="contato-titulo" data-anima="titulo">Iniciar um projeto</h2>
-                <p>Conte o que a sua operação precisa e qual ERP ela usa. A resposta vem pelo e-mail informado.</p>
-                <p class="contato-alt">Prefere e-mail? <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a></p>
+                <h2 id="contato-titulo" data-anima="titulo">{t.contato.titulo}</h2>
+                <p>{t.contato.intro}</p>
+                <p class="contato-alt">{t.contato.alt} <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a></p>
             </div>
 
-            <form id="contact-form" class="formulario" novalidate>
+            <form id="contact-form" class="formulario" novalidate data-origem-marca={t.caso.origemMarca}>
                 <div class="campo">
-                    <label for="form-name">Nome</label>
+                    <label for="form-name">{t.contato.nome}</label>
                     <input type="text" name="name" id="form-name" autocomplete="name" required>
-                    <p class="field-error" id="name-error">Informe seu nome.</p>
+                    <p class="field-error" id="name-error">{t.contato.erroNome}</p>
                 </div>
                 <div class="campo">
-                    <label for="form-email">E-mail</label>
+                    <label for="form-email">{t.contato.email}</label>
                     <input type="email" name="email" id="form-email" autocomplete="email" required>
-                    <p class="field-error" id="email-error">Informe um e-mail válido.</p>
+                    <p class="field-error" id="email-error">{t.contato.erroEmail}</p>
                 </div>
                 <div class="campo campo-largo">
-                    <label for="form-message">O que você precisa</label>
+                    <label for="form-message">{t.contato.mensagem}</label>
                     <textarea name="message" id="form-message" rows="5" required></textarea>
-                    <p class="field-error" id="message-error">Descreva o que você precisa.</p>
+                    <p class="field-error" id="message-error">{t.contato.erroMensagem}</p>
                 </div>
 
                 <div class="envio">
-                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="dark"></div>
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="dark" data-language={t.contato.turnstile}></div>
                     <button type="submit" class="botao" id="submit-btn">
-                        <span id="submit-text">Enviar</span><svg class="seta" id="submit-seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                        <span id="submit-loading" class="hidden">Enviando…</span>
+                        <span id="submit-text">{t.contato.enviar}</span><svg class="seta" id="submit-seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                        <span id="submit-loading" class="hidden">{t.contato.enviando}</span>
                     </button>
                 </div>
 
-                <p id="form-success" class="form-message success hidden" role="status">Mensagem recebida. A resposta vai para o seu e-mail.</p>
-                <p id="form-error" class="form-message error hidden" role="alert">Não foi possível enviar agora. Tente de novo em instantes ou escreva para contact@carpelabs.io.</p>
+                <p id="form-success" class="form-message success hidden" role="status">{t.contato.sucesso}</p>
+                <p id="form-error" class="form-message error hidden" role="alert">{t.contato.falha}</p>
             </form>
           </div>
         </section>
@@ -415,13 +403,13 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
     <footer class="rodape">
         <div class="rodape-entidade">
             <img src="/logo-papel.png" alt="carpe labs" width="720" height="531" class="rodape-marca">
-            <p>A carpe labs constrói portais, integrações e IA aplicada à operação sobre o ERP que a empresa já usa, qualquer que seja ele. Fica em São Paulo (SP) e atende remotamente todo o Brasil. O caso publicado é a Nipo Center, importadora de São Paulo que roda sobre o Sankhya.</p>
+            <p>{t.rodape.entidade}</p>
         </div>
-        <nav aria-label="Links do rodapé">
+        <nav aria-label={t.rodape.rotulo}>
             <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>
             <a href="https://github.com/CarpeLabs" target="_blank" rel="noopener">GitHub</a>
-            <a href="/privacidade">Privacidade</a>
-            <a href="/termos">Termos</a>
+            <a href="/privacidade/" hreflang="pt-BR">{t.rodape.privacidade}</a>
+            <a href="/termos/" hreflang="pt-BR">{t.rodape.termos}</a>
         </nav>
     </footer>
 
@@ -434,7 +422,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 alvo.classList.add('origem');
                 const marca = document.createElement('span');
                 marca.className = 'origem-marca';
-                marca.textContent = 'Você veio daqui';
+                marca.textContent = document.getElementById('contact-form')?.dataset.origemMarca ?? '';
                 alvo.querySelector('h3, .outros-nome')?.append(marca);
             }
         }
@@ -451,6 +439,9 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
         const messageError = document.getElementById('message-error');
         const successMsg = document.getElementById('form-success');
         const errorMsg = document.getElementById('form-error');
+        // O texto padrão de falha já vem no idioma da página; o script não traduz nada.
+        const falhaPadrao = errorMsg?.textContent ?? '';
+        const emPortugues = document.documentElement.lang.startsWith('pt');
 
         // Mesma origem: sem CORS, e por isso sem `no-cors` — a resposta volta legível.
         const ENDPOINT = '/api/contato';
@@ -500,7 +491,9 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
 
             // A origem da visita (`/de/<ferramenta>`) viaja junto: é o que responde
             // "esse contato veio de qual ferramenta?" sem depender do analytics.
+            // Na versão em inglês, a origem diz isso: o aviso chega marcado e a resposta sai no idioma certo.
             if (daOrigem) data.origem = daOrigem;
+            else if (!emPortugues) data.origem = 'site-en';
 
             try {
                 const response = await fetch(ENDPOINT, {
@@ -515,10 +508,10 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 if (!response.ok) {
                     // 400 traz a validação em português, feita para a pessoa ler. O resto (403 do
                     // Turnstile, 5xx) não diz nada a quem está do outro lado: vira a mensagem
-                    // padrão, com o e-mail como saída.
+                    // padrão, com o e-mail como saída. Na página em inglês, sempre a padrão.
                     const corpo = await response.json().catch(() => ({}));
                     const erro = (corpo as { erro?: string }).erro;
-                    throw new Error(response.status === 400 && erro ? erro : '');
+                    throw new Error(response.status === 400 && erro && emPortugues ? erro : '');
                 }
 
                 successMsg?.classList.remove('hidden');
@@ -526,7 +519,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             } catch (error) {
                 if (errorMsg) errorMsg.textContent = error instanceof Error && error.message
                     ? error.message
-                    : 'Não foi possível enviar agora. Tente de novo em instantes ou escreva para contact@carpelabs.io.';
+                    : falhaPadrao;
                 errorMsg?.classList.remove('hidden');
             } finally {
                 // 🔴 Token do Turnstile é de USO ÚNICO. O formulário continua na tela depois de um

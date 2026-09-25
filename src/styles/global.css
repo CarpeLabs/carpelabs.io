@@ -133,6 +133,21 @@ h1, h2, h3 {
 
 .topo-link:hover { text-decoration: underline; }
 
+.topo-acoes { display: flex; align-items: center; gap: 1.25rem; }
+
+/* Troca de idioma: tem cara de controle (borda), não de texto solto, e fica atrás da ação. */
+.idioma {
+    font-size: 0.8125rem;
+    font-weight: 550;
+    color: var(--tinta-2);
+    text-decoration: none;
+    border: 1px solid var(--regua);
+    border-radius: 999px;
+    padding: 0.3125rem 0.75rem;
+    transition: color 180ms var(--ease), border-color 180ms var(--ease);
+}
+.idioma:hover { color: var(--acento); border-color: var(--acento); }
+
 /* ---------- Botões ---------- */
 
 .botao {
