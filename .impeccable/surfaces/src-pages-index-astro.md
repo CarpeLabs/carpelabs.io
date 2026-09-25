@@ -11,18 +11,18 @@ Modo: Persuade. Público e prova: ver PRODUCT.md. Ação: "Iniciar um projeto" (
 
 ## Direction contract
 
-THESIS: A página é o romaneio do que a CarpeLabs já entregou à Nipo, linha por linha, conferido e carimbado. Recusa a landing escura de software house com promessa de IA e captura em moldura de navegador.
+THESIS: A página conta como a Nipo Center passou a operar com sistemas construídos sobre o próprio ERP, e as telas reais (mascaradas) fazem a venda. Recusa a landing escura de software house com promessa de IA, o mockup inventado e a moldura de navegador decorativa.
 
-OWN-WORLD: Formulário contínuo zebrado (papel claro com faixas verde-pálidas), margens de tração com furos, impressão matricial para cabeçalhos, códigos e números tabulares; sans de jornal para texto corrido; tinta quase preta; azul de carbono só para carimbo, status "em produção" e ação. Picote é o único divisor de seção. Sem cartões, sem sombras, sem brilho.
+OWN-WORLD: Papel quase branco (#fafaf9), tinta grafite (#111418), um único acento verde-petróleo (#0f5c4a) para ação, status "em produção" e a marca de origem; cinza-verde (#e7ece9) como superfície das telas. Sans firme (Schibsted Grotesk) com números tabulares só nos números. Muito respiro, régua fina como único divisor; as capturas entram com borda de 1px e raio pequeno, sem sombra nem brilho.
 
-STORY: O diretor entende em segundos que a CarpeLabs constrói sistemas sobre o ERP existente e IA em cima desses dados; acredita porque a lista é de sistemas reais de um cliente nomeado, com situação honesta (produção x homologação); preenche a solicitação no pé do romaneio.
+STORY: O diretor entende em segundos que a CarpeLabs constrói portais sobre o ERP que a empresa já tem e IA em cima desses dados; acredita porque vê as telas que a Nipo usa hoje, com situação honesta (produção x homologação); escreve pelo formulário no fim da página.
 
-FIRST VIEWPORT: Folha única entre as margens de tração. Topo: wordmark e cabeçalho do documento (ROMANEIO DE ENTREGAS · CLIENTE NIPO CENTER · ERP SANKHYA, SOMENTE LEITURA). Abaixo, à esquerda, a oferta em matricial grande em duas linhas; à direita, o botão-carimbo "Iniciar um projeto". As primeiras linhas do romaneio já aparecem na dobra. Sinal: quem chega por /de/<origem> vê a linha daquele sistema marcada "VOCÊ VEIO DAQUI". Movimento único: as linhas são impressas em sequência na chegada, como a cabeça da matricial; com prefers-reduced-motion, aparecem prontas.
+FIRST VIEWPORT: Metade esquerda com wordmark, a oferta curta em duas linhas, uma frase de apoio e o botão "Iniciar um projeto"; metade direita ocupada por uma tela real do painel de Logística da Nipo, sangrando para a borda. Abaixo da dobra, os sistemas entregues em faixas, cada um com a própria tela. Sinal: quem chega por /de/<origem> vê a faixa daquele sistema marcada "Você veio daqui". Movimento: nenhum além de transições de estado; nada anima na chegada.
 
-FORM: romaneio em formulário contínuo, posição 5 da lista ordenada, seed 7718cdc5 (assigned).
+FORM: caso Nipo em primeiro plano, seed 7718cdc5, re-roll 1, registro safer, opção "caso". A rodada anterior (romaneio em formulário contínuo) foi rejeitada pelo José: "o conceito inteiro".
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
 ## Em aberto
 - Versão em inglês: estrutura não decidida.
-- Capturas das telas da Nipo (mascaradas) como anexo do romaneio: dependem de conferência humana antes de publicar.
+- Capturas aprovadas pelo José em 25/09/2026: produtividade, fluxo (tabela), armazenagem 3D (Daz Import tarjado) e compras. Números de pedido podem aparecer.

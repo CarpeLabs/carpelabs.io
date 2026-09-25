@@ -4,101 +4,23 @@
   "title": "Design System: carpe labs",
   "extensions": {
     "colorMeta": {
-      "papel": { "role": "neutral", "displayName": "Papel", "canonical": "#f3f4ee", "tonalRamp": ["#2c2e1e", "#4d5235", "#6e754c", "#909963", "#a9b085", "#c2c7a9", "#dbdecc", "#f4f5f0"] },
-      "zebra": { "role": "neutral", "displayName": "Zebra Sálvia", "canonical": "#e0e9d9", "tonalRamp": ["#25301c", "#415531", "#5d7a47", "#799f5c", "#97b680", "#b6cba5", "#d4e0ca", "#f2f6ef"] },
-      "tinta": { "role": "neutral", "displayName": "Tinta", "canonical": "#1d2126", "tonalRamp": ["#21262b", "#3a424c", "#545f6e", "#6d7c8f", "#8d99a8", "#aeb7c2", "#cfd4db", "#f1f2f4"] },
-      "tinta-2": { "role": "neutral", "displayName": "Tinta Suave", "canonical": "#4b525a", "tonalRamp": ["#23262a", "#3d434a", "#586069", "#727d89", "#929aa4", "#b2b8be", "#d1d5d9", "#f1f2f3"] },
-      "carbono": { "role": "primary", "displayName": "Azul de Carbono", "canonical": "#2c4a9e", "tonalRamp": ["#111c3c", "#1d3169", "#2a4797", "#375cc5", "#6280d3", "#90a5e0", "#bdcaed", "#ebeff9"] },
-      "carbono-fundo": { "role": "primary", "displayName": "Fundo de Carbono", "canonical": "#e4e9f5", "tonalRamp": ["#151f38", "#243762", "#344e8d", "#4466b7", "#6d88c9", "#97abd9", "#c2cde8", "#ecf0f8"] },
-      "furo": { "role": "neutral", "displayName": "Furo", "canonical": "#c8cbc1", "tonalRamp": ["#282a23", "#46493d", "#646958", "#828973", "#9ea492", "#babeb2", "#d7d9d1", "#f3f3f1"] },
-      "regua": { "role": "neutral", "displayName": "Régua", "canonical": "#b3b8ad", "tonalRamp": ["#262924", "#44483f", "#61675a", "#7e8775", "#9ba294", "#b8bdb3", "#d5d8d2", "#f2f3f1"] },
-      "erro": { "role": "secondary", "displayName": "Vermelho de Erro", "canonical": "#a3261c", "tonalRamp": ["#410f0b", "#731b14", "#a5261c", "#d73225", "#e25f54", "#ea8d86", "#f3bcb7", "#fbebe9"] }
+      "papel": { "role": "neutral", "displayName": "Papel", "canonical": "#fafaf9" },
+      "tinta": { "role": "neutral", "displayName": "Tinta", "canonical": "#111418" },
+      "tinta-2": { "role": "neutral", "displayName": "Tinta 2", "canonical": "#4a5058" },
+      "tinta-3": { "role": "neutral", "displayName": "Tinta 3 (legenda)", "canonical": "#5d646c" },
+      "acento": { "role": "primary", "displayName": "Verde-petróleo", "canonical": "#0f5c4a" },
+      "acento-escuro": { "role": "primary", "displayName": "Verde-petróleo escuro", "canonical": "#0a4739" },
+      "acento-fundo": { "role": "primary", "displayName": "Fundo do acento", "canonical": "#e2eee9" },
+      "superficie": { "role": "neutral", "displayName": "Superfície", "canonical": "#e7ece9" },
+      "regua": { "role": "neutral", "displayName": "Régua", "canonical": "#d6dbd8" },
+      "borda-campo": { "role": "neutral", "displayName": "Borda de campo", "canonical": "#8a938f" },
+      "erro": { "role": "error", "displayName": "Erro", "canonical": "#a3261c" }
     },
-    "typographyMeta": {
-      "display": { "displayName": "Display / Matricial", "purpose": "Título da oferta (h1), único em toda a página." },
-      "headline": { "displayName": "Headline / Matricial", "purpose": "Títulos de seção (h2) do romaneio, das observações e da solicitação." },
-      "title": { "displayName": "Title", "purpose": "Nome do sistema na tabela (th) e título de cada item em 'Como o trabalho é feito'; sempre Schibsted Grotesk, nunca Doto." },
-      "body": { "displayName": "Body", "purpose": "Parágrafos correntes." },
-      "label": { "displayName": "Label", "purpose": "Rótulos de campo do cabeçalho do documento, cabeçalhos de coluna, rótulo de formulário, links do rodapé." }
-    },
-    "shadows": [],
-    "motion": [
-      { "name": "ease-standard", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Easing padrão de todas as transições de estado (carimbo, campos)." },
-      { "name": "imprimir-print-reveal", "value": "steps(16, end)", "purpose": "Animação única de entrada das linhas do romaneio: clip-path de inset(0 100% 0 0) a inset(0 0 0 0), 0.5s, atraso de 0.25s + 0.14s por linha (rodapé fixo em 1.3s), simulando a cabeça de impressão matricial passando uma vez. Desligada por prefers-reduced-motion." }
-    ],
-    "breakpoints": [
-      { "name": "md", "value": "960px" },
-      { "name": "sm", "value": "720px" }
-    ]
-  },
-  "components": [
-    {
-      "name": "Carimbo (Button Primary)",
-      "kind": "button",
-      "refersTo": "button-primary",
-      "description": "Única ação da página: botão-carimbo com borda dupla, levemente girado em repouso e endireitado no hover.",
-      "html": "<button class=\"ds-carimbo\">Iniciar um projeto</button>",
-      "css": ".ds-carimbo { display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; min-height: 3.5rem; padding: 0 1.75rem; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.08em; color: #2c4a9e; background: transparent; border: 3px double #2c4a9e; border-radius: 6px; cursor: pointer; transform: rotate(-1.5deg); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1); } .ds-carimbo:hover { background: #2c4a9e; color: #f3f4ee; transform: rotate(0deg); } .ds-carimbo:active { transform: rotate(0deg) scale(0.98); } .ds-carimbo:focus-visible { outline: 2px dashed #2c4a9e; outline-offset: 3px; }"
-    },
-    {
-      "name": "Campo de Texto (Input)",
-      "kind": "input",
-      "refersTo": "input-text",
-      "description": "Campo de formulário sem caixa: só uma linha inferior, que muda de cor em foco e em erro.",
-      "html": "<div class=\"ds-campo\"><label for=\"ds-nome\">Nome</label><input type=\"text\" id=\"ds-nome\"></div>",
-      "css": ".ds-campo { display: flex; flex-direction: column; gap: 0.35rem; } .ds-campo label { font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; font-weight: 600; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: #4b525a; } .ds-campo input { font: inherit; font-size: 1.0625rem; color: #1d2126; background: transparent; border: none; border-bottom: 2px solid #1d2126; border-radius: 0; padding: 0.5rem 0; caret-color: #2c4a9e; transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1); } .ds-campo input:focus-visible { outline: none; border-bottom-color: #2c4a9e; background-color: #e4e9f5; } .ds-campo input.ds-invalid { border-bottom-color: #a3261c; }"
-    },
-    {
-      "name": "Badge de Situação",
-      "kind": "chip",
-      "refersTo": "badge-status-producao",
-      "description": "Status do romaneio: só a cor do texto distingue 'Em produção' de 'Homologação', sem fundo nem borda.",
-      "html": "<span class=\"ds-badge ds-badge--producao\">Em produção</span> <span class=\"ds-badge ds-badge--homologacao\">Homologação</span>",
-      "css": ".ds-badge { font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; } .ds-badge--producao { color: #2c4a9e; } .ds-badge--homologacao { color: #4b525a; }"
-    },
-    {
-      "name": "Linha de Origem (carimbada)",
-      "kind": "custom",
-      "description": "Marca a linha do romaneio de quem chegou por uma rota /de/<ferramenta>: contorno duplo mais etiqueta girada.",
-      "html": "<div class=\"ds-linha-origem\">Painel de Logística <span class=\"ds-etiqueta-origem\">Você veio daqui</span></div>",
-      "css": ".ds-linha-origem { display: inline-flex; align-items: center; padding: 0.5rem 1rem; font-weight: 700; font-size: 1.125rem; outline: 3px double #2c4a9e; outline-offset: -3px; } .ds-etiqueta-origem { display: inline-block; margin-left: 0.75rem; padding: 0 0.5rem; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; font-weight: 800; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: #2c4a9e; border: 2px solid #2c4a9e; border-radius: 4px; transform: rotate(-3deg); vertical-align: middle; }"
-    },
-    {
-      "name": "Linha de Tabela Zebrada",
-      "kind": "card",
-      "description": "Item do romaneio: três linhas de impressão de altura, fundo alternado entre papel e zebra sálvia.",
-      "html": "<table class=\"ds-romaneio\"><tbody><tr><td class=\"ds-item\">01</td><th>Portal de Compras</th><td class=\"ds-uso\">O time de compras decide reposição sobre um espelho analítico do ERP.</td></tr></tbody></table>",
-      "css": ".ds-romaneio { width: 100%; border-collapse: collapse; font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif; } .ds-romaneio tr { height: 5.25rem; background: #e0e9d9; } .ds-romaneio th, .ds-romaneio td { padding: 0.875rem 1rem; text-align: left; vertical-align: middle; color: #1d2126; } .ds-romaneio .ds-item { font-family: 'Doto', ui-monospace, monospace; font-weight: 800; text-transform: uppercase; font-variant-numeric: tabular-nums; font-size: 1.25rem; width: 4.5rem; } .ds-romaneio th { font-size: 1.125rem; font-weight: 700; white-space: nowrap; }"
-    }
-  ],
-  "narrative": {
-    "northStar": "O Romaneio em Formulário Contínuo",
-    "overview": "O site é um único documento: um romaneio de entregas impresso em papel contínuo, com furos de tração nas duas margens e uma cabeça de impressão matricial que datila os cabeçalhos e os números. Não é uma landing de software house com promessa de IA — é a prova, linha por linha, do que já foi entregue a um cliente nomeado (Nipo Center), com situação honesta (\"em produção\" ou \"homologação\"). A página se comporta como papel: zebrada para leitura de tabela longa, sem cartões, sem sombra, sem brilho. A única cor viva é o azul de carbono, reservada para o que importa conferir — o carimbo de ação, o status \"em produção\", o foco de formulário.\n\nO movimento é o mesmo gesto do documento: as linhas do romaneio são impressas em sequência na chegada, como a cabeça de uma matricial passando da esquerda para a direita, uma vez só, depois param. prefers-reduced-motion desliga o efeito e entrega tudo já pronto. Rotação leve (-1.5° no carimbo, -3° na etiqueta de origem) imita o desalinhamento físico de um carimbo real e se resolve para 0° quando a peça é acionada — a única correção de \"postura\" que o sistema pratica.",
-    "keyCharacteristics": [
-      "Papel contínuo com furos de tração e picote como único divisor de seção.",
-      "Dois alfabetos com papéis fixos: Doto (matricial) para dados de registro; Schibsted Grotesk para tudo que se lê em voz alta.",
-      "Zero elevação: nenhuma box-shadow, nenhum blur, no arquivo inteiro.",
-      "Uma única cor de ação (azul de carbono), usada com parcimônia.",
-      "Uma única animação, disparada uma vez, desligável por preferência do sistema."
-    ],
-    "rules": [
-      { "name": "The One Blue Rule", "body": "O azul de carbono só aparece onde algo precisa ser conferido ou acionado: uma ação, um status positivo, um foco, uma seleção. Fora disso a página é papel e tinta.", "section": "colors" },
-      { "name": "The Two Voices Rule", "body": "Doto fala pelo sistema (números de item, cabeçalhos, valores de campo do documento); Schibsted Grotesk fala pelas pessoas (parágrafos, nomes de sistema, rótulos, botões, status). Só o peso 800 do Doto é efetivamente usado; o peso 500 está importado e não é consumido por nenhuma regra hoje.", "section": "typography" },
-      { "name": "The Line Rule", "body": "Todo espaçamento vertical de seção é um múltiplo de --linha (1.75rem). Um valor de espaçamento fora dessa escala quebra o ritmo do papel contínuo.", "section": "layout" },
-      { "name": "The Flat Paper Rule", "body": "Nenhum elemento projeta sombra. Onde outro sistema usaria elevação, este usa régua, traço duplo ou contraste de tinta.", "section": "elevation" }
-    ],
-    "dos": [
-      "Do reservar o azul de carbono (#2c4a9e) para ação, status positivo, foco e seleção — nunca como cor decorativa de fundo (The One Blue Rule).",
-      "Do expressar espaçamento vertical de seção como múltiplo de --linha (1.75rem).",
-      "Do usar Doto (800, maiúsculo, tabular-nums) só para dados de registro — números de item, cabeçalhos de seção, valores do cabeçalho do documento — e Schibsted Grotesk para tudo que é lido como frase, incluindo botões e badges de status (The Two Voices Rule).",
-      "Do manter o picote (régua tracejada de 2px, full-bleed) como único divisor de seção — não introduzir cartão, sombra ou fundo alternado para separar blocos.",
-      "Do repetir o pipeline de recorte-e-recolorização de logo.png → logo-papel.png para qualquer novo derivado do símbolo, em vez de gerar um novo arquivo a partir do zero."
-    ],
-    "donts": [
-      "Don't adicionar box-shadow, blur ou qualquer glow — o sistema é inteiramente plano (The Flat Paper Rule).",
-      "Don't arredondar campo de formulário ou dar-lhe caixa: o contorno é sempre uma única linha inferior.",
-      "Don't introduzir uma segunda cor de ação. Erro (#a3261c) é reservado a estado de validação e não substitui nem complementa o azul de carbono como CTA.",
-      "Don't girar elementos além do carimbo e da etiqueta de origem — a leve rotação de \"carimbo real\" é um recurso raro, não um hábito geral de botão ou chip."
+    "motion": { "ease": "cubic-bezier(0.16, 1, 0.3, 1)", "note": "Só transições de estado (hover, foco), 150–180ms. Nada anima na chegada." },
+    "breakpoints": { "lista": "48rem", "metodo": "56rem", "duas-colunas": "64rem", "formulario": "40rem" },
+    "components": [
+      { "name": "button-primary", "html": "<a class=\"botao\" href=\"#contato\">Iniciar um projeto</a>", "css": ".botao{display:inline-flex;align-items:center;min-height:3rem;padding:0 1.5rem;border-radius:6px;background:#0f5c4a;color:#fafaf9;font-weight:600;text-decoration:none}.botao:hover{background:#0a4739}" },
+      { "name": "situacao", "html": "<p class=\"s p\">Em produção</p><p class=\"s h\">Em homologação</p>", "css": ".s{display:inline-flex;align-items:center;gap:.5rem;font-size:.875rem;font-weight:550;margin-right:1rem}.s::before{content:'';width:.5rem;height:.5rem;border-radius:50%}.p{color:#0f5c4a}.p::before{background:#0f5c4a}.h{color:#4a5058}.h::before{border:1.5px solid #4a5058}" }
     ]
   }
 }

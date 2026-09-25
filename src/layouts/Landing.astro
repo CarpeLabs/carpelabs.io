@@ -8,9 +8,12 @@
  *
  * Por isso ela não é uma landing diferente — é a mesma, num endereço que o analytics sabe contar.
  * `canonical` aponta sempre para a raiz e a rota de origem sai do índice. A única diferença é
- * visual: a linha do romaneio daquela ferramenta chega marcada (ver o script no fim).
+ * visual: o sistema daquela ferramenta chega marcado (ver o script no fim).
+ *
+ * 🔴 As telas em `public/telas/` são capturas reais dos portais da Nipo (HML, clone de produção),
+ * com clientes, vendedores, pessoas, fornecedores, valores e parceiros tarjados. Cada uma foi
+ * conferida pelo José em 25/09/2026 antes de publicar. Tela nova passa pela mesma conferência.
  */
-import '@fontsource/doto/800.css';
 import '@fontsource-variable/schibsted-grotesk';
 import '../styles/global.css';
 
@@ -21,20 +24,40 @@ interface Props {
 
 const { noindex = false } = Astro.props;
 
-/* O romaneio. Só entra o que está no ar na Nipo; "homologação" é homologação, não produção.
- * `origens` liga a linha às rotas `/de/<ferramenta>` que devem abri-la marcada. */
-const itens = [
-  { sistema: 'Portal de Compras', uso: 'O time de compras decide reposição sobre um espelho analítico do ERP.', situacao: 'producao', origens: ['nipo-compras'] },
-  { sistema: 'Painel de Logística', uso: 'Matriz e filial acompanham pedido, expedição e estoque; as TVs do galpão mostram o ritmo.', situacao: 'producao', origens: ['nipo-logistica', 'nipo-produtividade', 'nipo-painel'] },
-  { sistema: 'Fotos de produto', uso: 'Upload, análise e decisão humana sobre a foto de cada item do catálogo.', situacao: 'producao', origens: ['nipo-fotos'] },
-  { sistema: 'Rastreio de pedido', uso: 'O cliente final acompanha o próprio pedido por link, sem login.', situacao: 'producao', origens: ['nipo-rastreio'] },
-  { sistema: 'Nipo Dados', uso: 'Claude e ChatGPT consultam os dados da Nipo e da PARI, com cada consulta registrada.', situacao: 'homologacao', origens: ['nipo-dados'] },
-  { sistema: 'Painel do vendedor', uso: 'Estoque, preço e pedido na mão de quem vende.', situacao: 'homologacao', origens: ['nipo-vendas'] },
-  { sistema: 'Atendimento no WhatsApp', uso: 'Autoatendimento para o cliente e console para o atendente.', situacao: 'homologacao', origens: ['nipo-atendimento'] },
+/* Só entra o que está no ar na Nipo; "homologação" é homologação, não produção.
+ * `origens` liga o sistema às rotas `/de/<ferramenta>` que devem abri-lo marcado. */
+const comTela = [
+  {
+    sistema: 'Painel de Logística',
+    situacao: 'producao',
+    origens: ['nipo-logistica', 'nipo-produtividade', 'nipo-painel'],
+    texto: 'Matriz e filial acompanham cada pedido do faturamento à expedição, com o tempo contado só dentro do expediente. O mesmo painel mostra quem produziu, a ocupação de cada endereço do galpão e roda nas TVs da operação.',
+    telas: [
+      { nome: 'fluxo', alt: 'Tabela de pedidos do painel de Logística, com situação, etapa e número de cada pedido; nomes de cliente e vendedor tarjados.', legenda: 'Fluxo de pedidos da Loja. Cliente e vendedor tarjados.', w: 1600, h: 1000 },
+      { nome: 'armazenagem', alt: 'Vista em três dimensões da armazenagem da Loja, com mezaninos, térreo e endereços coloridos pela ocupação.', legenda: 'Armazenagem da Loja em 3D: 149 endereços, ocupação por cor.', w: 1600, h: 1081 },
+    ],
+  },
+  {
+    sistema: 'Portal de Compras',
+    situacao: 'producao',
+    origens: ['nipo-compras'],
+    texto: 'O time de compras decide a reposição sobre um espelho analítico do ERP: o que está em ruptura, o que decidir primeiro e quanto custa recomprar, por grupo e por fornecedor.',
+    telas: [
+      { nome: 'compras', alt: 'Visão da carteira no portal de Compras, com produtos para decidir por grupo e ranking de fornecedores; nomes de fornecedor e valores em reais tarjados.', legenda: 'Visão da carteira. Fornecedores e valores tarjados.', w: 1600, h: 1000 },
+    ],
+  },
 ];
-const emProducao = itens.filter((i) => i.situacao === 'producao').length;
-const dois = (n: number) => String(n).padStart(2, '0');
-const emissao = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'America/Sao_Paulo' }).format(new Date());
+
+const semTela = [
+  { sistema: 'Fotos de produto', situacao: 'producao', origens: ['nipo-fotos'], texto: 'Upload, análise e decisão humana sobre a foto de cada item do catálogo.' },
+  { sistema: 'Rastreio de pedido', situacao: 'producao', origens: ['nipo-rastreio'], texto: 'O cliente final acompanha o próprio pedido por link, sem login.' },
+  { sistema: 'Nipo Dados', situacao: 'homologacao', origens: ['nipo-dados'], texto: 'Claude e ChatGPT consultam os dados da Nipo e da PARI, com cada consulta limitada e registrada.' },
+  { sistema: 'Painel do vendedor', situacao: 'homologacao', origens: ['nipo-vendas'], texto: 'Estoque, preço e pedido na mão de quem vende.' },
+  { sistema: 'Atendimento no WhatsApp', situacao: 'homologacao', origens: ['nipo-atendimento'], texto: 'Autoatendimento para o cliente e console para o atendente.' },
+];
+
+const rotulo = (s: string) => (s === 'producao' ? 'Em produção' : 'Em homologação');
+const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1600.webp 1600w`;
 ---
 
 <!DOCTYPE html>
@@ -43,144 +66,171 @@ const emissao = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-dig
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>carpe labs · sistemas sobre o ERP que sua empresa já tem</title>
-    <meta name="description" content="Portais, integrações e IA aplicada à operação, construídos em cima do ERP que a empresa já usa. Sete sistemas entregues à Nipo Center.">
+    <meta name="description" content="Portais, integrações e IA aplicada à operação, construídos em cima do ERP que a empresa já usa. O caso Nipo Center, com as telas em uso.">
     <link rel="icon" type="image/png" href="/logo.png">
     <link rel="canonical" href="https://carpelabs.io/">
-    <meta name="theme-color" content="#f3f4ee">
+    <meta name="theme-color" content="#fafaf9">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     {noindex && <meta name="robots" content="noindex, follow" />}
 </head>
 <body>
-    <div class="folha">
-        <header class="cabecalho">
-            <a href="/" class="marca" aria-label="carpe labs, início">
-                <img src="/logo-papel.png" alt="" width="720" height="531">
-            </a>
-            <dl class="campos">
-                <div><dt>Documento</dt><dd>Romaneio de entregas</dd></div>
-                <div><dt>Cliente</dt><dd>Nipo Center · São Paulo</dd></div>
-                <div><dt>ERP</dt><dd>Sankhya · somente leitura</dd></div>
-                <div><dt>Emissão</dt><dd>{emissao}</dd></div>
-            </dl>
-        </header>
+    <header class="topo">
+        <a href="/" class="marca" aria-label="carpe labs, início">
+            <img src="/logo-papel.png" alt="" width="720" height="531">
+        </a>
+        <a href="#contato" class="topo-link">Iniciar um projeto</a>
+    </header>
 
-        <main>
-            <section class="oferta" aria-labelledby="oferta-titulo">
-                <h1 id="oferta-titulo" class="matricial">Sistemas sobre o ERP que sua empresa já tem.</h1>
-                <p class="oferta-texto">
+    <main>
+        <section class="abertura" aria-labelledby="abertura-titulo">
+            <div class="abertura-texto">
+                <h1 id="abertura-titulo">Sistemas sobre o ERP que sua empresa já tem.</h1>
+                <p class="abertura-apoio">
                     Portais, integrações e IA aplicada à operação, construídos em cima dos seus dados.
                     Sem trocar o ERP e sem arriscar a produção.
                 </p>
-                <a class="carimbo" href="#solicitacao">Iniciar um projeto</a>
-            </section>
+                <div class="abertura-acoes">
+                    <a class="botao" href="#contato">Iniciar um projeto</a>
+                    <a class="link" href="#caso">Ver o caso Nipo Center</a>
+                </div>
+            </div>
+            <figure class="abertura-tela">
+                <img
+                    src="/telas/produtividade-1600.webp"
+                    srcset={srcset('produtividade')}
+                    sizes="(min-width: 64rem) 60vw, 100vw"
+                    width="1600" height="1000"
+                    alt="Tela Quem produziu ontem, do painel de Logística da Nipo: pessoas do checkout com pedidos, carrinhos, linhas e unidades do dia; nomes tarjados."
+                    fetchpriority="high">
+                <figcaption>Painel de Logística da Nipo Center, em uso. Nomes de pessoas tarjados.</figcaption>
+            </figure>
+        </section>
 
-            <section class="romaneio" aria-labelledby="romaneio-titulo">
-                <h2 class="matricial" id="romaneio-titulo">O que já está entregue na Nipo Center</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th scope="col" class="col-item">Item</th>
-                            <th scope="col">Sistema</th>
-                            <th scope="col">Para quê</th>
-                            <th scope="col" class="col-situacao">Situação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {itens.map((item, i) => (
-                            <tr data-origens={item.origens.join(' ')} style={`--i: ${i}`}>
-                                <td class="col-item matricial">{dois(i + 1)}</td>
-                                <th scope="row">{item.sistema}</th>
-                                <td class="col-uso">{item.uso}</td>
-                                <td class={`col-situacao matricial situacao-${item.situacao}`}>
-                                    {item.situacao === 'producao' ? 'Em produção' : 'Homologação'}
-                                </td>
-                            </tr>
+        <section id="caso" class="caso" aria-labelledby="caso-titulo">
+            <div class="caso-intro">
+                <h2 id="caso-titulo">O caso Nipo Center</h2>
+                <p>
+                    A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Em vez de
+                    trocar o sistema, ela ganhou portais que leem o ERP em modo somente leitura e
+                    entregam a cada área a tela que faltava. As telas abaixo são as que a operação usa hoje.
+                </p>
+            </div>
+
+            {comTela.map((s) => (
+                <article class="sistema" data-origens={s.origens.join(' ')}>
+                    <div class="sistema-texto">
+                        <h3>{s.sistema}</h3>
+                        <p class={`situacao situacao-${s.situacao}`}>{rotulo(s.situacao)}</p>
+                        <p class="sistema-uso">{s.texto}</p>
+                    </div>
+                    <div class="sistema-telas">
+                        {s.telas.map((t) => (
+                            <figure>
+                                <img
+                                    src={`/telas/${t.nome}-1600.webp`}
+                                    srcset={srcset(t.nome)}
+                                    sizes="(min-width: 64rem) 70vw, 100vw"
+                                    width={t.w} height={t.h}
+                                    alt={t.alt}
+                                    loading="lazy" decoding="async">
+                                <figcaption>{t.legenda}</figcaption>
+                            </figure>
                         ))}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td class="col-item matricial">{dois(itens.length)}</td>
-                            <td colspan="3" class="matricial">
-                                Sistemas · {dois(emProducao)} em produção · {dois(itens.length - emProducao)} em homologação
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </section>
-
-            <section class="observacoes" aria-labelledby="obs-titulo">
-                <h2 class="matricial" id="obs-titulo">Como o trabalho é feito</h2>
-                <ol>
-                    <li>
-                        <h3>O ERP continua sendo o ERP.</h3>
-                        <p>Os sistemas leem o Sankhya em modo somente leitura, e cada consulta nova é medida antes de ir para produção. Nada escreve no banco do cliente sem autorização.</p>
-                    </li>
-                    <li>
-                        <h3>Tudo passa por homologação.</h3>
-                        <p>Cada versão roda antes num ambiente de teste com uma cópia dos dados reais. Só depois do aceite ela chega a quem usa, com nota do que mudou.</p>
-                    </li>
-                    <li>
-                        <h3>IA depois dos dados, não antes.</h3>
-                        <p>Primeiro os dados ficam organizados e confiáveis nos portais. Depois a IA passa a consultá-los, com limite e registro de cada consulta.</p>
-                    </li>
-                </ol>
-            </section>
-
-            <section id="solicitacao" class="solicitacao" aria-labelledby="solicitacao-titulo">
-                <h2 class="matricial" id="solicitacao-titulo">Solicitação de projeto</h2>
-                <p class="solicitacao-texto">Conte o que a sua operação precisa. A resposta vem pelo e-mail informado.</p>
-
-                <form id="contact-form" class="formulario" novalidate>
-                    <div class="campo">
-                        <label for="form-name">Nome</label>
-                        <input type="text" name="name" id="form-name" autocomplete="name" required>
-                        <p class="field-error" id="name-error">Informe seu nome.</p>
                     </div>
-                    <div class="campo">
-                        <label for="form-email">E-mail</label>
-                        <input type="email" name="email" id="form-email" autocomplete="email" required>
-                        <p class="field-error" id="email-error">Informe um e-mail válido.</p>
-                    </div>
-                    <div class="campo campo-largo">
-                        <label for="form-message">O que você precisa</label>
-                        <textarea name="message" id="form-message" rows="5" required></textarea>
-                        <p class="field-error" id="message-error">Descreva o que você precisa.</p>
-                    </div>
+                </article>
+            ))}
 
-                    <div class="envio">
-                        <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="light"></div>
-                        <button type="submit" class="carimbo" id="submit-btn">
-                            <span id="submit-text">Enviar solicitação</span>
-                            <span id="submit-loading" class="hidden">Enviando…</span>
-                        </button>
-                    </div>
+            <div class="outros">
+                <h3>Também entregues</h3>
+                <ul>
+                    {semTela.map((s) => (
+                        <li data-origens={s.origens.join(' ')}>
+                            <span class="outros-nome">{s.sistema}</span>
+                            <span class="outros-uso">{s.texto}</span>
+                            <span class={`situacao situacao-${s.situacao}`}>{rotulo(s.situacao)}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </section>
 
-                    <p id="form-success" class="form-message success hidden" role="status">Solicitação recebida. A resposta vai para o seu e-mail.</p>
-                    <p id="form-error" class="form-message error hidden" role="alert">Não foi possível enviar. Tente de novo em instantes.</p>
-                </form>
-            </section>
-        </main>
+        <section class="metodo" aria-labelledby="metodo-titulo">
+            <h2 id="metodo-titulo">Como o trabalho é feito</h2>
+            <div class="metodo-itens">
+                <div>
+                    <h3>O ERP continua sendo o ERP.</h3>
+                    <p>Os sistemas leem o Sankhya em modo somente leitura, e cada consulta nova é medida antes de ir para produção. Nada escreve no banco do cliente sem autorização.</p>
+                </div>
+                <div>
+                    <h3>Tudo passa por homologação.</h3>
+                    <p>Cada versão roda antes num ambiente de teste com uma cópia dos dados reais. Só depois do aceite ela chega a quem usa, com nota do que mudou.</p>
+                </div>
+                <div>
+                    <h3>IA depois dos dados, não antes.</h3>
+                    <p>Primeiro os dados ficam organizados e confiáveis nos portais. Depois a IA passa a consultá-los, com limite e registro de cada consulta.</p>
+                </div>
+            </div>
+        </section>
 
-        <footer class="rodape">
+        <section id="contato" class="contato" aria-labelledby="contato-titulo">
+            <div class="contato-intro">
+                <h2 id="contato-titulo">Iniciar um projeto</h2>
+                <p>Conte o que a sua operação precisa e qual ERP ela usa. A resposta vem pelo e-mail informado.</p>
+                <p class="contato-alt">Prefere e-mail? <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a></p>
+            </div>
+
+            <form id="contact-form" class="formulario" novalidate>
+                <div class="campo">
+                    <label for="form-name">Nome</label>
+                    <input type="text" name="name" id="form-name" autocomplete="name" required>
+                    <p class="field-error" id="name-error">Informe seu nome.</p>
+                </div>
+                <div class="campo">
+                    <label for="form-email">E-mail</label>
+                    <input type="email" name="email" id="form-email" autocomplete="email" required>
+                    <p class="field-error" id="email-error">Informe um e-mail válido.</p>
+                </div>
+                <div class="campo campo-largo">
+                    <label for="form-message">O que você precisa</label>
+                    <textarea name="message" id="form-message" rows="5" required></textarea>
+                    <p class="field-error" id="message-error">Descreva o que você precisa.</p>
+                </div>
+
+                <div class="envio">
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="light"></div>
+                    <button type="submit" class="botao" id="submit-btn">
+                        <span id="submit-text">Enviar</span>
+                        <span id="submit-loading" class="hidden">Enviando…</span>
+                    </button>
+                </div>
+
+                <p id="form-success" class="form-message success hidden" role="status">Mensagem recebida. A resposta vai para o seu e-mail.</p>
+                <p id="form-error" class="form-message error hidden" role="alert">Não foi possível enviar. Tente de novo em instantes.</p>
+            </form>
+        </section>
+    </main>
+
+    <footer class="rodape">
+        <img src="/logo-papel.png" alt="carpe labs" width="720" height="531" class="rodape-marca">
+        <nav aria-label="Links do rodapé">
             <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>
             <a href="https://github.com/CarpeLabs" target="_blank" rel="noopener">GitHub</a>
             <a href="/privacidade">Privacidade</a>
             <a href="/termos">Termos</a>
-        </footer>
-    </div>
+        </nav>
+    </footer>
 
     <script>
-        // Quem chega por `/de/<ferramenta>` vê a linha daquela ferramenta marcada.
+        // Quem chega por `/de/<ferramenta>` vê o sistema daquela ferramenta marcado.
         const daOrigem = location.pathname.match(/^\/de\/([a-z0-9-]+)/)?.[1];
         if (daOrigem) {
-            const linha = document.querySelector<HTMLTableRowElement>(`.romaneio tr[data-origens~="${daOrigem}"]`);
-            if (linha) {
-                linha.classList.add('origem');
-                const sistema = linha.querySelector('th');
+            const alvo = document.querySelector<HTMLElement>(`[data-origens~="${daOrigem}"]`);
+            if (alvo) {
+                alvo.classList.add('origem');
                 const marca = document.createElement('span');
-                marca.className = 'origem-marca matricial';
+                marca.className = 'origem-marca';
                 marca.textContent = 'Você veio daqui';
-                sistema?.append(marca);
+                alvo.querySelector('h3, .outros-nome')?.append(marca);
             }
         }
 
