@@ -2,6 +2,8 @@
 
 > A carpe labs constrói portais, integrações e IA aplicada à operação sobre o ERP que a empresa já usa, qualquer que seja ele, sem trocá-lo e sem arriscar a produção. Fica em São Paulo (SP) e atende remotamente empresas de todo o Brasil.
 
+English version: https://carpelabs.io/en/
+
 O comprador típico é dono ou diretor de empresa média com operação física (atacado, importação, distribuição) que roda sobre um ERP. A oferta são as duas camadas juntas: primeiro, portais e integrações que leem os dados do ERP; depois, IA que consulta esses dados com limite e registro de cada consulta. Funciona com qualquer assistente de IA; Claude e ChatGPT já consultam os dados no caso publicado.
 
 ## Caso publicado: Nipo Center
@@ -23,3 +25,10 @@ A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Os 
 - Formulário: https://carpelabs.io/#contato
 - E-mail: contact@carpelabs.io
 - GitHub: https://github.com/CarpeLabs
+
+## In English
+
+carpe labs builds portals, integrations and AI applied to operations on top of the ERP a company already uses, whichever it is, without replacing it and without putting production at risk. It is based in São Paulo, Brazil, and works remotely across the country. The published case is Nipo Center, a São Paulo importer that runs on the Sankhya ERP; the portals read it in read-only mode, and Claude, ChatGPT or any other AI assistant queries the data with limits and a log of every query.
+
+- English page: https://carpelabs.io/en/
+- Contact form: https://carpelabs.io/en/#contato
