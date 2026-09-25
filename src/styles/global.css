@@ -372,6 +372,13 @@ figcaption {
 }
 
 .camada-erp .camada-desc { color: #c3c8cd; }
+.camada-caso {
+    margin-top: 0.75rem;
+    padding-top: 0.625rem;
+    border-top: 1px solid #2c3238;
+    font-size: 0.8125rem;
+    color: #aab1b8;   /* 7,9:1 sobre a tinta */
+}
 
 /* A ligação entre camadas: uma linha vertical com o verbo da relação. */
 .camada-liga {
