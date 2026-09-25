@@ -110,9 +110,34 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
 
                 // O topo fica fixo e ganha a régua quando a página sai do começo.
                 var topo = document.querySelector('.topo');
-                var marcar = function () { topo && topo.classList.toggle('rolou', scrollY > 8); };
-                addEventListener('scroll', marcar, { passive: true });
-                marcar();
+
+                // Movimento ligado à rolagem: cada [data-rolagem] recebe --p (0 → 1) conforme passa
+                // pela janela, e o CSS decide o que fazer com ele. Sem este script, ou com movimento
+                // reduzido, --p fica no valor-padrão do CSS, que é o estado final.
+                var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+                var els = reduz ? [] : Array.prototype.slice.call(document.querySelectorAll('[data-rolagem]'));
+                var pendente = false;
+                var lim = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+                var suave = function (v) { return 1 - Math.pow(1 - v, 3); };
+                var calcular = function () {
+                    pendente = false;
+                    var vh = innerHeight;
+                    topo && topo.classList.toggle('rolou', scrollY > 8);
+                    d.style.setProperty('--rolado', lim(scrollY / Math.max(1, d.scrollHeight - vh)).toFixed(4));
+                    for (var i = 0; i < els.length; i++) {
+                        var el = els[i], r = el.getBoundingClientRect(), tipo = el.getAttribute('data-rolagem'), p;
+                        if (r.bottom < -vh || r.top > vh * 2) continue;
+                        if (tipo === 'sai') p = lim(-r.top / (r.height * 0.85));
+                        else if (tipo === 'faixa') p = lim((vh - r.top) / (vh + r.height));
+                        else if (tipo === 'secao') p = suave(lim((vh - r.top) / (vh * 0.75)));
+                        else p = suave(lim((vh - r.top) / (vh * 0.6)));
+                        el.style.setProperty('--p', p.toFixed(4));
+                    }
+                };
+                var pedir = function () { if (!pendente) { pendente = true; requestAnimationFrame(calcular); } };
+                addEventListener('scroll', pedir, { passive: true });
+                addEventListener('resize', pedir);
+                calcular();
             });
         })();
     </script>
@@ -126,7 +151,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
     </header>
 
     <main>
-        <section class="abertura" aria-labelledby="abertura-titulo">
+        <section class="abertura" data-rolagem="sai" aria-labelledby="abertura-titulo">
             <div class="abertura-texto">
                 <p class="em-uso"><span class="situacao situacao-producao">Em uso na Nipo Center</span><span class="em-uso-erp">ERP Sankhya, somente leitura</span></p>
                 <h1 id="abertura-titulo">Sistemas sobre o ERP que sua empresa já tem.</h1>
@@ -159,9 +184,14 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             </figure>
         </section>
 
+        <div class="faixa" data-rolagem="faixa" aria-hidden="true">
+            <p class="faixa-linha faixa-sistemas">{[0, 1].map(() => comTela.map((c) => c.sistema).concat(semTela.map((c) => c.sistema)).map((n) => <span>{n}</span>))}</p>
+            <p class="faixa-linha faixa-lema">{Array.from({ length: 6 }, () => <span>sobre o ERP que já existe</span>)}</p>
+        </div>
+
         <section id="caso" class="caso" aria-labelledby="caso-titulo">
             <div class="caso-intro">
-                <div class="caso-intro-texto">
+                <div class="caso-intro-texto" data-rolagem="sobe">
                     <h2 id="caso-titulo" data-anima="titulo">O caso Nipo Center</h2>
                     <p>
                         A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Em vez de
@@ -205,7 +235,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                     </div>
                     <div class="sistema-telas">
                         {s.telas.map((t) => (
-                            <figure>
+                            <figure data-rolagem="cresce">
                                 <div class="tela" data-anima="tela">
                                     <img
                                         src={`/telas/${t.nome}-1600.webp`}
@@ -225,7 +255,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 </article>
             ))}
 
-            <div class="outros">
+            <div class="outros" data-rolagem="sobe">
                 <h3>Também entregues</h3>
                 <ul data-anima="lista">
                     {semTela.map((s) => (
@@ -239,8 +269,8 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             </div>
         </section>
 
-        <section class="metodo" aria-labelledby="metodo-titulo">
-            <h2 id="metodo-titulo">Como o trabalho é feito</h2>
+        <section class="metodo" data-rolagem="secao" aria-labelledby="metodo-titulo">
+            <h2 id="metodo-titulo" data-rolagem="sobe">Como o trabalho é feito</h2>
             <div class="metodo-itens" data-anima="lista">
                 <div>
                     <h3>O ERP continua sendo o ERP.</h3>
@@ -257,7 +287,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             </div>
         </section>
 
-        <section id="contato" class="contato" aria-labelledby="contato-titulo">
+        <section id="contato" class="contato" data-rolagem="secao" aria-labelledby="contato-titulo">
           <div class="contato-grade">
             <div class="contato-intro">
                 <h2 id="contato-titulo" data-anima="titulo">Iniciar um projeto</h2>
