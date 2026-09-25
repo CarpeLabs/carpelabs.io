@@ -13,6 +13,8 @@ colors:
   regua: "#d6dbd8"
   borda-campo: "#8a938f"
   erro: "#a3261c"
+  fechamento: "#0a3f33"
+  fechamento-2: "#c9ddd5"
 typography:
   display:
     fontFamily: "Schibsted Grotesk Variable, system-ui, sans-serif"
@@ -44,6 +46,7 @@ typography:
     lineHeight: 1.45
 rounded:
   md: "6px"
+  palco: "14px"
   pill: "999px"
 spacing:
   gutter: "clamp(1rem, 4vw, 3.5rem)"
@@ -87,7 +90,9 @@ Contrato de direção: `.impeccable/surfaces/src-pages-index-astro.md`. A direç
 - **Tinta `#111418`** para títulos e texto forte. **Tinta 2 `#4a5058`** (7,8:1) para texto corrido. **Tinta 3 `#5d646c`** (5,7:1) só em legenda.
 - **Acento `#0f5c4a`** tem três usos e só esses: ação (botão, link do topo), situação "Em produção" e a marca de origem. Papel sobre acento dá 8,1:1.
 - **Homologação** fica na Tinta 2 com ponto vazado; nunca ganha o acento.
-- **Erro `#a3261c`** só em validação e falha de envio.
+- **Erro `#a3261c`** só em validação e falha de envio no fundo claro; no fechamento, o erro é `#ffb8ad`.
+- **Fechamento `#0a3f33`**: a seção de contato, fim da página. Texto em papel, secundário em `#c9ddd5` (9,6:1), botão invertido (papel com texto no fechamento), foco em `#9fd3bf`.
+- **Camadas:** a IA em contorno tracejado de acento (homologação), os portais em acento cheio, o ERP em Tinta.
 
 ## Typography
 
@@ -103,7 +108,7 @@ Uma família só, Schibsted Grotesk (variável, auto-hospedada via `@fontsource-
 
 ## Elevation & Depth
 
-Nenhuma sombra. Profundidade só pela borda de 1px na Régua em volta das telas e pela troca de superfície.
+Uma sombra só, e só nas telas: `0 1px 2px rgba(17,20,24,.06), 0 18px 40px -16px rgba(17,20,24,.28)`. Ela põe a captura "sobre a mesa" do palco de Superfície. Nada mais tem sombra; o marcador leva um anel de papel de 3px para se destacar da tela.
 
 ## Shapes
 
@@ -111,6 +116,9 @@ Raio de 6px em telas, botões, campos e mensagens. Pílula só na marca "Você v
 
 ## Components
 
+- **Palco:** painel de Superfície com raio 14px; na abertura sangra para a direita e sobrepõe duas telas reais (a de trás a 55% de opacidade e dessaturada).
+- **Marcador e notas:** círculo de acento com número, posicionado em % sobre a tela, no canto do elemento que anota (nunca em cima do dado). A legenda ao lado repete o número; passar o mouse na legenda acende o marcador. Único movimento da página: os marcadores entram em sequência (140ms entre eles) quando a tela aparece.
+- **Camadas:** três blocos empilhados (IA, portais, ERP) ligados por linha vertical com o verbo da relação ("consulta", "lê, sem escrever").
 - **Tela (figure):** imagem real em WebP 960/1600 com `srcset`, borda 1px Régua, raio 6px, legenda abaixo dizendo o que é e o que foi tarjado. Toda tela nova é captura real, mascarada e conferida pelo José antes de publicar.
 - **Botão primário:** acento, 3rem de altura; hover escurece; desabilitado vai para Tinta 3 com `cursor: progress`.
 - **Situação:** texto 0,875rem peso 550 com ponto à esquerda.
@@ -123,7 +131,8 @@ Raio de 6px em telas, botões, campos e mensagens. Pílula só na marca "Você v
 - **Faça** cada afirmação apontar para uma tela ou sistema que está no ar na Nipo.
 - **Faça** a legenda de cada tela declarar o que foi tarjado.
 - **Não** publique captura sem máscara conferida (clientes, vendedores, pessoas, fornecedores, valores em R$, parceiros).
-- **Não** use moldura de navegador, mockup, sombra, gradiente ou fundo escuro.
+- **Não** use moldura de navegador, mockup, gradiente, nem sombra fora das telas. O único fundo escuro é o fechamento.
+- **Não** ponha marcador em cima do dado que ele anota.
 - **Não** use o acento para decorar; ele é ação, produção e origem.
 - **Não** ponha rótulo acima de título (eyebrow) nem numere seções.
 - **Não** invente métrica, depoimento ou logo de cliente.

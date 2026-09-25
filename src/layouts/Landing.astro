@@ -31,22 +31,42 @@ const comTela = [
     sistema: 'Painel de Logística',
     situacao: 'producao',
     origens: ['nipo-logistica', 'nipo-produtividade', 'nipo-painel'],
-    texto: 'Matriz e filial acompanham cada pedido do faturamento à expedição, com o tempo contado só dentro do expediente. O mesmo painel mostra quem produziu, a ocupação de cada endereço do galpão e roda nas TVs da operação.',
+    texto: 'Matriz e filial acompanham cada pedido do faturamento à expedição. O mesmo painel mostra a ocupação de cada endereço do galpão e roda nas TVs da operação.',
     telas: [
-      { nome: 'fluxo', alt: 'Tabela de pedidos do painel de Logística, com situação, etapa e número de cada pedido; nomes de cliente e vendedor tarjados.', legenda: 'Fluxo de pedidos da Loja. Cliente e vendedor tarjados.', w: 1600, h: 1000 },
-      { nome: 'armazenagem', alt: 'Vista em três dimensões da armazenagem da Loja, com mezaninos, térreo e endereços coloridos pela ocupação.', legenda: 'Armazenagem da Loja em 3D: 149 endereços, ocupação por cor.', w: 1600, h: 1081 },
+      { nome: 'fluxo', alt: 'Tabela de pedidos do painel de Logística, com situação, etapa e número de cada pedido; nomes de cliente e vendedor tarjados.', legenda: 'Fluxo de pedidos da Loja. Cliente e vendedor tarjados.', w: 1600, h: 1000,
+        notas: [
+          { x: 20, y: 42.2, t: 'Situação pelo tempo logístico, contado só dentro do expediente.' },
+          { x: 46.8, y: 42.2, t: 'O que a operação precisa priorizar agora, pedido a pedido.' },
+        ] },
+      { nome: 'armazenagem', alt: 'Vista em três dimensões da armazenagem da Loja, com mezaninos, térreo e endereços coloridos pela ocupação.', legenda: 'Armazenagem da Loja em 3D: 149 endereços. Parceiro tarjado.', w: 1600, h: 1081,
+        notas: [
+          { x: 54.8, y: 33, t: 'Endereço acima do limite aparece em vermelho, antes de virar problema.' },
+          { x: 57, y: 76, t: 'Cada andar e cada endereço do galpão, no lugar onde está.' },
+        ] },
     ],
   },
   {
     sistema: 'Portal de Compras',
     situacao: 'producao',
     origens: ['nipo-compras'],
-    texto: 'O time de compras decide a reposição sobre um espelho analítico do ERP: o que está em ruptura, o que decidir primeiro e quanto custa recomprar, por grupo e por fornecedor.',
+    texto: 'O time de compras decide a reposição sobre um espelho analítico do ERP, por grupo e por fornecedor.',
     telas: [
-      { nome: 'compras', alt: 'Visão da carteira no portal de Compras, com produtos para decidir por grupo e ranking de fornecedores; nomes de fornecedor e valores em reais tarjados.', legenda: 'Visão da carteira. Fornecedores e valores tarjados.', w: 1600, h: 1000 },
+      { nome: 'compras', alt: 'Visão da carteira no portal de Compras, com produtos para decidir por grupo e ranking de fornecedores; nomes de fornecedor e valores em reais tarjados.', legenda: 'Visão da carteira. Fornecedores e valores tarjados.', w: 1600, h: 1000,
+        notas: [
+          { x: 62, y: 23.5, t: 'Ruptura em destaque: o que já falta na prateleira.' },
+          { x: 19, y: 38, t: 'Quantas decisões cada grupo e subgrupo tem pela frente.' },
+          { x: 59.2, y: 35.9, t: 'Fornecedores ordenados pela exposição: lead time × itens em ruptura.' },
+        ] },
     ],
   },
 ];
+
+/* Numeração contínua dentro de cada sistema: o marcador na tela e o item da legenda ao lado. */
+const numerados = comTela.map((s) => {
+  let n = 0;
+  const telas = s.telas.map((t) => ({ ...t, notas: t.notas.map((nota) => ({ ...nota, n: ++n })) }));
+  return { ...s, telas, notas: telas.flatMap((t) => t.notas) };
+});
 
 const semTela = [
   { sistema: 'Fotos de produto', situacao: 'producao', origens: ['nipo-fotos'], texto: 'Upload, análise e decisão humana sobre a foto de cada item do catálogo.' },
@@ -84,6 +104,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
     <main>
         <section class="abertura" aria-labelledby="abertura-titulo">
             <div class="abertura-texto">
+                <p class="em-uso"><span class="situacao situacao-producao">Em uso na Nipo Center</span><span class="em-uso-erp">ERP Sankhya, somente leitura</span></p>
                 <h1 id="abertura-titulo">Sistemas sobre o ERP que sua empresa já tem.</h1>
                 <p class="abertura-apoio">
                     Portais, integrações e IA aplicada à operação, construídos em cima dos seus dados.
@@ -94,45 +115,85 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                     <a class="link" href="#caso">Ver o caso Nipo Center</a>
                 </div>
             </div>
-            <figure class="abertura-tela">
-                <img
-                    src="/telas/produtividade-1600.webp"
-                    srcset={srcset('produtividade')}
-                    sizes="(min-width: 64rem) 60vw, 100vw"
-                    width="1600" height="1000"
-                    alt="Tela Quem produziu ontem, do painel de Logística da Nipo: pessoas do checkout com pedidos, carrinhos, linhas e unidades do dia; nomes tarjados."
-                    fetchpriority="high">
-                <figcaption>Painel de Logística da Nipo Center, em uso. Nomes de pessoas tarjados.</figcaption>
+            <figure class="palco">
+                <div class="palco-telas">
+                    <img
+                        class="palco-fundo"
+                        src="/telas/fluxo-960.webp"
+                        width="960" height="600"
+                        alt="" aria-hidden="true">
+                    <img
+                        class="palco-frente"
+                        src="/telas/produtividade-1600.webp"
+                        srcset={srcset('produtividade')}
+                        sizes="(min-width: 64rem) 55vw, 100vw"
+                        width="1600" height="1000"
+                        alt="Tela Quem produziu ontem, do painel de Logística da Nipo: pessoas do checkout com pedidos, carrinhos, linhas e unidades do dia; nomes tarjados."
+                        fetchpriority="high">
+                </div>
+                <figcaption>Painel de Logística da Nipo Center, em uso. Nomes de pessoas e clientes tarjados.</figcaption>
             </figure>
         </section>
 
         <section id="caso" class="caso" aria-labelledby="caso-titulo">
             <div class="caso-intro">
-                <h2 id="caso-titulo">O caso Nipo Center</h2>
-                <p>
-                    A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Em vez de
-                    trocar o sistema, ela ganhou portais que leem o ERP em modo somente leitura e
-                    entregam a cada área a tela que faltava. As telas abaixo são as que a operação usa hoje.
-                </p>
+                <div class="caso-intro-texto">
+                    <h2 id="caso-titulo">O caso Nipo Center</h2>
+                    <p>
+                        A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Em vez de
+                        trocar o sistema, ela ganhou portais que leem o ERP em modo somente leitura e
+                        entregam a cada área a tela que faltava. Em cima desses dados, a IA passa a consultar
+                        a operação.
+                    </p>
+                </div>
+
+                <figure class="camadas" aria-label="As duas camadas construídas sobre o ERP">
+                    <div class="camada camada-ia">
+                        <p class="camada-nome">IA aplicada à operação</p>
+                        <p class="camada-desc">Claude e ChatGPT consultam os dados, com limite e registro.</p>
+                        <ul class="camada-itens"><li class="homolog">Nipo Dados</li></ul>
+                    </div>
+                    <p class="camada-liga"><span>consulta</span></p>
+                    <div class="camada camada-portais">
+                        <p class="camada-nome">Portais e integrações</p>
+                        <p class="camada-desc">A tela que faltava para cada área.</p>
+                        <ul class="camada-itens"><li>Logística</li><li>Compras</li><li>Fotos</li><li>Rastreio</li></ul>
+                    </div>
+                    <p class="camada-liga"><span>lê, sem escrever</span></p>
+                    <div class="camada camada-erp">
+                        <p class="camada-nome">ERP Sankhya</p>
+                        <p class="camada-desc">Continua sendo o sistema da empresa. Nada é trocado.</p>
+                    </div>
+                </figure>
             </div>
 
-            {comTela.map((s) => (
+            {numerados.map((s) => (
                 <article class="sistema" data-origens={s.origens.join(' ')}>
                     <div class="sistema-texto">
                         <h3>{s.sistema}</h3>
                         <p class={`situacao situacao-${s.situacao}`}>{rotulo(s.situacao)}</p>
                         <p class="sistema-uso">{s.texto}</p>
+                        <ol class="notas">
+                            {s.notas.map((nota) => (
+                                <li data-n={nota.n}><span class="notas-n" aria-hidden="true">{nota.n}</span>{nota.t}</li>
+                            ))}
+                        </ol>
                     </div>
                     <div class="sistema-telas">
                         {s.telas.map((t) => (
                             <figure>
-                                <img
-                                    src={`/telas/${t.nome}-1600.webp`}
-                                    srcset={srcset(t.nome)}
-                                    sizes="(min-width: 64rem) 70vw, 100vw"
-                                    width={t.w} height={t.h}
-                                    alt={t.alt}
-                                    loading="lazy" decoding="async">
+                                <div class="tela">
+                                    <img
+                                        src={`/telas/${t.nome}-1600.webp`}
+                                        srcset={srcset(t.nome)}
+                                        sizes="(min-width: 64rem) 65vw, 100vw"
+                                        width={t.w} height={t.h}
+                                        alt={t.alt}
+                                        loading="lazy" decoding="async">
+                                    {t.notas.map((nota) => (
+                                        <span class="marcador" data-n={nota.n} style={`left: ${nota.x}%; top: ${nota.y}%; --ordem: ${nota.n}`} aria-hidden="true">{nota.n}</span>
+                                    ))}
+                                </div>
                                 <figcaption>{t.legenda}</figcaption>
                             </figure>
                         ))}
@@ -173,6 +234,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
         </section>
 
         <section id="contato" class="contato" aria-labelledby="contato-titulo">
+          <div class="contato-grade">
             <div class="contato-intro">
                 <h2 id="contato-titulo">Iniciar um projeto</h2>
                 <p>Conte o que a sua operação precisa e qual ERP ela usa. A resposta vem pelo e-mail informado.</p>
@@ -197,7 +259,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 </div>
 
                 <div class="envio">
-                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="light"></div>
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="dark"></div>
                     <button type="submit" class="botao" id="submit-btn">
                         <span id="submit-text">Enviar</span>
                         <span id="submit-loading" class="hidden">Enviando…</span>
@@ -207,6 +269,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 <p id="form-success" class="form-message success hidden" role="status">Mensagem recebida. A resposta vai para o seu e-mail.</p>
                 <p id="form-error" class="form-message error hidden" role="alert">Não foi possível enviar. Tente de novo em instantes.</p>
             </form>
+          </div>
         </section>
     </main>
 
@@ -232,6 +295,16 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 marca.textContent = 'Você veio daqui';
                 alvo.querySelector('h3, .outros-nome')?.append(marca);
             }
+        }
+
+        // O único movimento da página: os marcadores de cada tela aparecem quando ela entra na
+        // vista. Sem JS, ou com movimento reduzido, eles já estão lá.
+        if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('marcadores-animam');
+            const olho = new IntersectionObserver((entradas) => {
+                for (const e of entradas) if (e.isIntersecting) { e.target.classList.add('visto'); olho.unobserve(e.target); }
+            }, { threshold: 0.35 });
+            document.querySelectorAll('.tela').forEach((t) => olho.observe(t));
         }
 
         const form = document.getElementById('contact-form') as HTMLFormElement;
