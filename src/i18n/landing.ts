@@ -17,7 +17,7 @@ const pt = {
   ogLocale: 'pt_BR',
   titulo: 'carpe labs · IA para trabalhar na sua operação',
   descricao: 'A carpe labs implanta IA na operação da sua empresa: dimensiona e configura ferramentas agênticas que consultam os seus dados e cuidam de tarefas da rotina, em cima do sistema que você já usa. O caso Nipo Center.',
-  og: { imagem: '/og.png', alt: 'carpe labs: IA para trabalhar na sua operação.' },
+  og: { imagem: '/og-ia.png', alt: 'carpe labs: IA para trabalhar na sua operação.' },
   inicio: 'carpe labs, início',
   outroIdioma: { href: '/en/', lang: 'en', texto: 'English', rotulo: 'Read this page in English' },
 
@@ -126,7 +126,7 @@ const en: Textos = {
   ogLocale: 'en_US',
   titulo: 'carpe labs · AI at work in your operation',
   descricao: 'carpe labs brings AI into your company’s operation: it sizes and sets up agentic tools that query your data and take care of routine tasks, on top of the system you already use. The Nipo Center case.',
-  og: { imagem: '/og-en.png', alt: 'carpe labs: AI at work in your operation.' },
+  og: { imagem: '/og-ia-en.png', alt: 'carpe labs: AI at work in your operation.' },
   inicio: 'carpe labs, home',
   outroIdioma: { href: '/', lang: 'pt-BR', texto: 'Português', rotulo: 'Ler esta página em português' },
 
