@@ -73,14 +73,15 @@ const jsonLd = {
     {
       '@type': 'Organization',
       '@id': `${SITE}/#org`,
-      name: 'carpe labs',
-      alternateName: 'Carpe Labs',
+      name: 'Carpe Labs',
+      alternateName: 'carpe labs',
       url: `${SITE}/`,
       logo: `${SITE}/icon-512.png`,
       email: 'contact@carpelabs.io',
       description: t.jsonLd.orgDescricao,
       address: { '@type': 'PostalAddress', addressRegion: 'SP', addressCountry: 'BR' },
       areaServed: { '@type': 'Country', name: t.jsonLd.pais },
+      knowsAbout: t.jsonLd.temas,
       sameAs: ['https://github.com/CarpeLabs'],
       contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'contact@carpelabs.io', availableLanguage: ['pt-BR', 'en'] },
     },
@@ -88,7 +89,7 @@ const jsonLd = {
       '@type': 'WebSite',
       '@id': `${SITE}/#site`,
       url: `${SITE}/`,
-      name: 'carpe labs',
+      name: 'Carpe Labs',
       inLanguage: ['pt-BR', 'en'],
       publisher: { '@id': `${SITE}/#org` },
     },
@@ -133,7 +134,7 @@ const palavras = (texto: string) => texto.split(' ').map((w, i) => ({ w, i }));
         <link rel="alternate" hreflang="x-default" href={`${SITE}/`}>
     </>}
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="carpe labs">
+    <meta property="og:site_name" content="Carpe Labs">
     <meta property="og:locale" content={t.ogLocale}>
     <meta property="og:locale:alternate" content={textos[idioma === 'en' ? 'pt' : 'en'].ogLocale}>
     <meta property="og:url" content={url}>
@@ -146,8 +147,30 @@ const palavras = (texto: string) => texto.split(' ').map((w, i) => ({ w, i }));
     <meta name="twitter:card" content="summary_large_image">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <meta name="theme-color" content="#f4f4f1">
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     {noindex && <meta name="robots" content="noindex, follow" />}
+    <script is:inline>
+        // Turnstile só quando o formulário se aproxima (ou recebe foco): a maioria das visitas não
+        // chega ao contato, e o script de terceiro saía do caminho de toda carga de página.
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('contact-form');
+            if (!form) return;
+            var carregado = false;
+            function carrega() {
+                if (carregado) return;
+                carregado = true;
+                var s = document.createElement('script');
+                s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+                s.async = true;
+                document.head.appendChild(s);
+            }
+            form.addEventListener('focusin', carrega, { once: true });
+            if (!('IntersectionObserver' in window)) return carrega();
+            var perto = new IntersectionObserver(function (entradas) {
+                if (entradas.some(function (e) { return e.isIntersecting; })) { carrega(); perto.disconnect(); }
+            }, { rootMargin: '800px 0px' });
+            perto.observe(form);
+        });
+    </script>
     <script is:inline>
         // Movimento de entrada. Fica no <head> e não no bundle de propósito: o CSS só esconde
         // o que vai animar quando `anima` está no <html>, e quem põe a classe é o mesmo script
@@ -257,6 +280,7 @@ const palavras = (texto: string) => texto.split(' ').map((w, i) => ({ w, i }));
     </script>
 </head>
 <body>
+<Fragment set:html={'<!--email_off-->'} />
     {/* O header só aparece quando o peixe da abertura pousa nele (ver o script do <head>). */}
     <header class="topo">
         <a href={caminho} class="topo-marca" aria-label={t.inicio}><span class="topo-slot"></span><span class="topo-nome" aria-hidden="true">carpe labs</span></a>
@@ -479,7 +503,7 @@ const palavras = (texto: string) => texto.split(' ').map((w, i) => ({ w, i }));
             </nav>
         </div>
         <div class="rodape-base">
-            <p class="rodape-ano">© {new Date().getFullYear()} carpe labs</p>
+            <p class="rodape-ano">© {new Date().getFullYear()} Carpe Labs</p>
         </div>
     </footer>
 
@@ -603,5 +627,6 @@ const palavras = (texto: string) => texto.split(' ').map((w, i) => ({ w, i }));
             }
         });
     </script>
+<Fragment set:html={'<!--email_on-->'} />
 </body>
 </html>

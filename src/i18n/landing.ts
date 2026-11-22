@@ -15,15 +15,15 @@
 const pt = {
   lang: 'pt-BR',
   ogLocale: 'pt_BR',
-  titulo: 'carpe labs · IA para trabalhar na sua operação',
-  descricao: 'A carpe labs implanta IA na operação da sua empresa: dimensiona e configura ferramentas agênticas que consultam os seus dados e cuidam de tarefas da rotina, em cima do sistema que você já usa. O caso Nipo Center.',
-  og: { imagem: '/og-ia.png', alt: 'carpe labs: IA para trabalhar na sua operação.' },
-  inicio: 'carpe labs, início',
+  titulo: 'Carpe Labs · IA para trabalhar na sua operação',
+  descricao: 'A Carpe Labs implanta IA na operação da sua empresa: dimensiona e configura ferramentas agênticas que consultam os seus dados e cuidam de tarefas da rotina, em cima do sistema que você já usa. O caso Nipo Center.',
+  og: { imagem: '/og-ia.png', alt: 'Carpe Labs: IA para trabalhar na sua operação.' },
+  inicio: 'Carpe Labs, início',
   outroIdioma: { href: '/en/', lang: 'en', texto: 'English', rotulo: 'Read this page in English' },
 
   abertura: {
     titulo: 'Colocamos a IA para trabalhar na sua operação.',
-    apoio: 'A carpe labs dimensiona e configura ferramentas agênticas, assistentes de IA que consultam os dados da sua empresa e cuidam de tarefas da rotina. Tudo em cima do sistema que você já usa, com limite e registro de cada ação.',
+    apoio: 'A Carpe Labs dimensiona e configura ferramentas agênticas, assistentes de IA que consultam os dados da sua empresa e cuidam de tarefas da rotina. Tudo em cima do sistema que você já usa, com limite e registro de cada ação.',
     acao: 'Implantar IA',
     verCaso: 'Ver o caso Nipo Center',
   },
@@ -32,7 +32,7 @@ const pt = {
     origemMarca: 'Você veio daqui',
   },
 
-  /* As etapas da implantação de IA, logo abaixo do título: é isso que a carpe labs faz. */
+  /* As etapas da implantação de IA, logo abaixo do título: é isso que a Carpe Labs faz. */
   ia: {
     passos: [
       { titulo: 'Mapear', texto: 'Onde a IA ganha tempo na sua operação, e onde ela ainda não vale a pena.' },
@@ -85,6 +85,8 @@ const pt = {
       { p: 'Preciso trocar o sistema que uso?', r: 'Não. A IA é configurada em cima do sistema de gestão que a empresa já usa, qualquer que seja ele, e ele continua sendo o principal. Nada é migrado nem substituído.' },
       { p: 'Com qual IA funciona?', r: 'Com a que fizer mais sentido para a sua operação: Claude, ChatGPT ou outro assistente de IA. A escolha faz parte do dimensionamento.' },
       { p: 'A IA pode mexer nos dados da empresa?', r: 'Só no que for liberado. Cada ferramenta recebe permissões definidas, com limite e registro de cada ação. Gravar no sistema só acontece com autorização.' },
+      { p: 'O que é uma ferramenta agêntica?', r: 'É um assistente de IA que, além de responder, executa tarefas: consulta os dados da empresa, prepara um rascunho, aponta o que precisa de atenção. Cada uma tem limite e registro de cada ação.' },
+      { p: 'Vocês atendem empresas fora de São Paulo?', r: 'Sim. A Carpe Labs fica em São Paulo e atende remotamente empresas de todo o Brasil.' },
       { p: 'Como começa?', r: 'Por uma conversa sobre a rotina da empresa, para mapear onde a IA ganha tempo e onde ainda não vale a pena. Use o formulário desta página ou escreva para contact@carpelabs.io.' },
     ],
   },
@@ -116,6 +118,7 @@ const pt = {
     servicoNome: 'Implantação de IA na operação sobre o sistema de gestão (ERP) existente',
     servicoTipo: 'Dimensionamento e configuração de ferramentas agênticas de IA sobre o sistema de gestão (ERP) da empresa',
     pais: 'Brasil',
+    temas: ['Inteligência artificial aplicada à operação', 'Ferramentas agênticas', 'Assistentes de IA', 'Integração com sistemas de gestão (ERP)', 'Atendimento automatizado no WhatsApp'],
   },
 };
 
@@ -124,15 +127,15 @@ export type Textos = typeof pt;
 const en: Textos = {
   lang: 'en',
   ogLocale: 'en_US',
-  titulo: 'carpe labs · AI at work in your operation',
-  descricao: 'carpe labs brings AI into your company’s operation: it sizes and sets up agentic tools that query your data and take care of routine tasks, on top of the system you already use. The Nipo Center case.',
-  og: { imagem: '/og-ia-en.png', alt: 'carpe labs: AI at work in your operation.' },
-  inicio: 'carpe labs, home',
+  titulo: 'Carpe Labs · AI at work in your operation',
+  descricao: 'Carpe Labs brings AI into your company’s operation: it sizes and sets up agentic tools that query your data and take care of routine tasks, on top of the system you already use. The Nipo Center case.',
+  og: { imagem: '/og-ia-en.png', alt: 'Carpe Labs: AI at work in your operation.' },
+  inicio: 'Carpe Labs, home',
   outroIdioma: { href: '/', lang: 'pt-BR', texto: 'Português', rotulo: 'Ler esta página em português' },
 
   abertura: {
     titulo: 'We put AI to work in your operation.',
-    apoio: 'carpe labs sizes and sets up agentic tools, AI assistants that query your company’s data and take care of routine tasks. All on top of the system you already use, with limits and a log of every action.',
+    apoio: 'Carpe Labs sizes and sets up agentic tools, AI assistants that query your company’s data and take care of routine tasks. All on top of the system you already use, with limits and a log of every action.',
     acao: 'Bring in AI',
     verCaso: 'See the Nipo Center case',
   },
@@ -188,6 +191,8 @@ const en: Textos = {
       { p: 'Do I need to replace the system I use?', r: 'No. AI is set up on top of the management system the company already uses, whichever it is, and it remains the main one. Nothing is migrated or replaced.' },
       { p: 'Which AI does it work with?', r: 'Whichever fits your operation best: Claude, ChatGPT or another AI assistant. Choosing it is part of the sizing.' },
       { p: 'Can the AI change company data?', r: 'Only what is allowed. Each tool gets defined permissions, with limits and a log of every action. Writing to the system only happens with authorization.' },
+      { p: 'What is an agentic tool?', r: 'An AI assistant that, besides answering, carries out tasks: it queries the company’s data, prepares a draft, points out what needs attention. Each one has limits and a log of every action.' },
+      { p: 'Do you work with companies outside São Paulo?', r: 'Yes. Carpe Labs is based in São Paulo and works remotely with companies across Brazil.' },
       { p: 'How does it start?', r: 'With a conversation about the company’s routine, to map where AI saves time and where it is not worth it yet. Use the form on this page or write to contact@carpelabs.io.' },
     ],
   },
@@ -219,6 +224,7 @@ const en: Textos = {
     servicoNome: 'Bringing AI into operations on top of the existing management system (ERP)',
     servicoTipo: 'Sizing and setting up agentic AI tools on top of the company’s management system (ERP)',
     pais: 'Brazil',
+    temas: ['AI applied to operations', 'Agentic tools', 'AI assistants', 'Management system (ERP) integration', 'Automated WhatsApp customer service'],
   },
 };
 

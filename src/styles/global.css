@@ -431,7 +431,9 @@ main > section:not(.abertura) {
 
     /* Títulos: cada palavra sobe saindo do desfoque, em sequência curta. */
     .anima .palavras .p { display: inline-block; opacity: 0; transform: translateY(0.45em) rotate(2deg); filter: blur(10px); transform-origin: 0 100%; }
-    .anima .abertura h1 .p { animation: palavra 1000ms var(--sai) both; animation-delay: calc(120ms + var(--i) * 70ms); }
+    /* O h1 é o LCP: as palavras já pintam no primeiro quadro (opacidade 1) e só saem do desfoque.
+     * Com opacidade 0 o navegador adiava o LCP para o fim da animação, ~1,9 s no celular. */
+    .anima .abertura h1 .p { opacity: 1; animation: palavra 1000ms var(--sai) both; animation-delay: calc(120ms + var(--i) * 70ms); }
     .anima .palavras.visto .p { animation: palavra 1000ms var(--sai) both; animation-delay: calc(var(--i) * 60ms); }
     .anima .abertura-apoio { animation: sobe 900ms var(--sai) 300ms both; }
     .anima .abertura-acoes { animation: sobe 900ms var(--sai) 420ms both; }

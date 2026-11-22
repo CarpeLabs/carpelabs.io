@@ -1,8 +1,8 @@
-# carpe labs
+# Carpe Labs
 
-> A carpe labs implanta IA na operação das empresas: dimensiona e configura ferramentas agênticas, assistentes de IA que consultam os dados da empresa e cuidam de tarefas da rotina, em cima do sistema de gestão (ERP) que ela já usa, qualquer que seja ele. Fica em São Paulo (SP) e atende remotamente empresas de todo o Brasil.
+> A Carpe Labs implanta IA na operação das empresas: dimensiona e configura ferramentas agênticas, assistentes de IA que consultam os dados da empresa e cuidam de tarefas da rotina, em cima do sistema de gestão (ERP) que ela já usa, qualquer que seja ele. Fica em São Paulo (SP) e atende remotamente empresas de todo o Brasil.
 
-English version: https://carpelabs.io/en/
+English version: [carpelabs.io/en](https://carpelabs.io/en/)
 
 ## Como funciona
 
@@ -32,14 +32,14 @@ Por trás, cada área tem os dados em ordem, como a expedição e o rastreio de 
 
 ## Contato
 
-- Site: https://carpelabs.io/
-- Formulário: https://carpelabs.io/#contato
-- E-mail: contact@carpelabs.io
-- GitHub: https://github.com/CarpeLabs
+- [Site](https://carpelabs.io/): a página com o método, o caso Nipo Center e as perguntas frequentes.
+- [Formulário de contato](https://carpelabs.io/#contato): nome, e-mail e o que mais toma tempo hoje.
+- [E-mail](mailto:contact@carpelabs.io): contact@carpelabs.io
+- [GitHub](https://github.com/CarpeLabs): a organização no GitHub.
 
 ## In English
 
-carpe labs brings AI into companies' operations: it sizes and sets up agentic tools, AI assistants that query the company's data and take care of routine tasks, on top of the management system (ERP) it already uses, whichever it is. It is based in São Paulo, Brazil, and works remotely across the country. The published case is Nipo Center, a São Paulo importer: management asks the AI in plain language and gets answers from today's data, AI serves customers on WhatsApp, AI reviews catalog photos, recommends what to buy and supports imports, and points sales reps to the best offer for each customer, all with limits and a log of every action.
+Carpe Labs brings AI into companies' operations: it sizes and sets up agentic tools, AI assistants that query the company's data and take care of routine tasks, on top of the management system (ERP) it already uses, whichever it is. It is based in São Paulo, Brazil, and works remotely across the country. The published case is Nipo Center, a São Paulo importer: management asks the AI in plain language and gets answers from today's data, AI serves customers on WhatsApp, AI reviews catalog photos, recommends what to buy and supports imports, and points sales reps to the best offer for each customer, all with limits and a log of every action.
 
-- English page: https://carpelabs.io/en/
-- Contact form: https://carpelabs.io/en/#contato
+- [English page](https://carpelabs.io/en/): the same content in English.
+- [Contact form](https://carpelabs.io/en/#contato): name, email and what takes the most time today.
