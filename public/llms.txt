@@ -1,23 +1,34 @@
 # carpe labs
 
-> A carpe labs constrói portais, integrações e IA aplicada à operação sobre o ERP que a empresa já usa, qualquer que seja ele, sem trocá-lo e sem arriscar a produção. Fica em São Paulo (SP) e atende remotamente empresas de todo o Brasil.
+> A carpe labs implanta IA na operação das empresas: dimensiona e configura ferramentas agênticas, assistentes de IA que consultam os dados da empresa e cuidam de tarefas da rotina, em cima do sistema de gestão (ERP) que ela já usa, qualquer que seja ele. Fica em São Paulo (SP) e atende remotamente empresas de todo o Brasil.
 
 English version: https://carpelabs.io/en/
 
-O comprador típico é dono ou diretor de empresa média com operação física (atacado, importação, distribuição) que roda sobre um ERP. A oferta são as duas camadas juntas: primeiro, portais e integrações que leem os dados do ERP; depois, IA que consulta esses dados com limite e registro de cada consulta. Funciona com qualquer assistente de IA; Claude e ChatGPT já consultam os dados no caso publicado.
+## Como funciona
+
+- Mapear: onde a IA ganha tempo na operação, e onde ela ainda não vale a pena.
+- Dimensionar: quais ferramentas, para quem, com que acesso aos dados e com qual custo de uso.
+- Configurar: os agentes ligados ao sistema da empresa, com permissões, limites e registro de cada ação.
+
+Funciona com a IA que fizer mais sentido para a operação; Claude e ChatGPT já consultam os dados no caso publicado.
 
 ## Caso publicado: Nipo Center
 
-A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Os portais leem o ERP em modo somente leitura.
+A Nipo Center é uma importadora de São Paulo. Sem trocar de sistema, a IA já trabalha na rotina:
 
-- Em produção: Painel de Logística (pedidos da matriz e da filial, produtividade, ocupação do galpão em 3D, TVs da operação), Portal de Compras (reposição por grupo e por fornecedor, ruptura, exposição por lead time), Fotos de produto e Rastreio de pedido para o cliente final.
-- Em homologação: Nipo Dados (Claude, ChatGPT ou qualquer outro assistente de IA consultando os dados da operação), Painel do vendedor e Atendimento no WhatsApp.
+- A gestão pergunta à IA em português e recebe a resposta com os dados do dia, com limite e registro de cada pergunta.
+- A IA atende o cliente no WhatsApp: resolve o que é simples e passa para uma pessoa o que precisa de atenção.
+- A IA revisa as fotos do catálogo; uma pessoa aprova antes de publicar.
+- Em compras, a IA recomenda o que comprar e o que deixar de comprar, valida oportunidades e apoia as importações.
+- No painel do vendedor, a IA indica a melhor oferta de produto para cada cliente.
 
-## Como o trabalho é feito
+Por trás, cada área tem os dados em ordem, como a expedição e o rastreio de pedido para o cliente.
 
-- O ERP continua sendo o ERP: leitura somente, cada consulta nova medida antes de ir para produção, escrita só com autorização.
-- Toda versão passa por homologação com cópia dos dados reais antes de chegar a quem usa.
-- IA depois dos dados, não antes.
+## Com controle
+
+- O sistema continua o mesmo: nada é migrado, e nada é gravado nele sem autorização.
+- Cada agente recebe só o acesso de que precisa, e cada ação fica registrada.
+- Cada agente roda antes com uma cópia dos dados reais e só chega a quem usa depois do aceite.
 
 ## Contato
 
@@ -28,7 +39,7 @@ A Nipo Center é uma importadora de São Paulo que roda sobre o ERP Sankhya. Os 
 
 ## In English
 
-carpe labs builds portals, integrations and AI applied to operations on top of the ERP a company already uses, whichever it is, without replacing it and without putting production at risk. It is based in São Paulo, Brazil, and works remotely across the country. The published case is Nipo Center, a São Paulo importer that runs on the Sankhya ERP; the portals read it in read-only mode, and Claude, ChatGPT or any other AI assistant queries the data with limits and a log of every query.
+carpe labs brings AI into companies' operations: it sizes and sets up agentic tools, AI assistants that query the company's data and take care of routine tasks, on top of the management system (ERP) it already uses, whichever it is. It is based in São Paulo, Brazil, and works remotely across the country. The published case is Nipo Center, a São Paulo importer: management asks the AI in plain language and gets answers from today's data, AI serves customers on WhatsApp, AI reviews catalog photos, recommends what to buy and supports imports, and points sales reps to the best offer for each customer, all with limits and a log of every action.
 
 - English page: https://carpelabs.io/en/
 - Contact form: https://carpelabs.io/en/#contato

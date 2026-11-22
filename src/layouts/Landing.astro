@@ -12,11 +12,9 @@
  *
  * `/en/` serve a mesma landing em inglês: a estrutura fica aqui e o texto em `src/i18n/landing.ts`.
  *
- * 🔴 As telas em `public/telas/` são capturas reais dos portais da Nipo (HML, clone de produção),
- * com clientes, vendedores, pessoas, fornecedores, valores e parceiros tarjados. Cada uma foi
- * conferida pelo José em 25/09/2026 antes de publicar. Tela nova passa pela mesma conferência.
+ * A página não mostra capturas de tela: o caso Nipo é contado pelo que muda na operação.
  */
-import '@fontsource-variable/schibsted-grotesk';
+import '@fontsource-variable/hanken-grotesk';
 import '../styles/global.css';
 import { textos, type Idioma } from '../i18n/landing';
 
@@ -31,52 +29,37 @@ const { noindex = false, idioma = 'pt' } = Astro.props;
 const t = textos[idioma];
 const caminho = idioma === 'en' ? '/en/' : '/';
 
-/* Só entra o que está no ar na Nipo; "homologação" é homologação, não produção.
- * `origens` liga o sistema às rotas `/de/<ferramenta>` que devem abri-lo marcado.
- * Aqui fica a estrutura; o texto de cada sistema, tela e nota vem do idioma, pela chave. */
-const comTela = [
-  {
-    chave: 'logistica',
-    situacao: 'producao',
-    origens: ['nipo-logistica', 'nipo-produtividade', 'nipo-painel'],
-    telas: [
-      { nome: 'fluxo', w: 1600, h: 1000, notas: [{ x: 20, y: 42.2 }, { x: 46.8, y: 42.2 }] },
-      { nome: 'armazenagem', w: 1600, h: 1081, notas: [{ x: 54.8, y: 33 }, { x: 57, y: 76 }] },
-    ],
-  },
-  {
-    chave: 'compras',
-    situacao: 'producao',
-    origens: ['nipo-compras'],
-    telas: [
-      { nome: 'compras', w: 1600, h: 1000, notas: [{ x: 62, y: 23.5 }, { x: 19, y: 38 }, { x: 59.2, y: 35.9 }] },
-    ],
-  },
-] as const;
+/* Os resultados da Nipo, na ordem da página, em dois grupos: onde a IA já trabalha (o assistente
+ * abre em destaque) e a base de dados organizada por área, que é o que a IA consulta.
+ * `origens` liga o resultado às rotas `/de/<ferramenta>` que devem abri-lo marcado.
+ * Só entra em `comIa` o que de fato usa IA na Nipo. Aqui fica a ordem; o texto vem do idioma. */
+const comIa = ([
+  { chave: 'dados', origens: ['nipo-dados'], destaque: true },
+  { chave: 'atendimento', origens: ['nipo-atendimento'] },
+  { chave: 'fotos', origens: ['nipo-fotos'] },
+  { chave: 'compras', origens: ['nipo-compras'] },
+  { chave: 'vendas', origens: ['nipo-vendas'] },
+] as const).map((r) => ({ ...r, ...t.resultados.itens[r.chave] }));
+const base = ([
+  { chave: 'logistica', origens: ['nipo-logistica', 'nipo-produtividade', 'nipo-painel'] },
+  { chave: 'rastreio', origens: ['nipo-rastreio'] },
+] as const).map((r) => ({ ...r, ...t.resultados.itens[r.chave] }));
 
-/* Numeração contínua dentro de cada sistema: o marcador na tela e o item da legenda ao lado.
- * Nota sem posição (ou posição sem nota) quebra o build: marcador mudo ou legenda sem marcador
- * só se veria olhando a página, e num idioma só. */
-const numerados = comTela.map((s) => {
-  const texto = t.sistemas[s.chave];
-  let n = 0;
-  const telas = s.telas.map((tela) => {
-    const tt = (texto.telas as Record<string, { alt: string; legenda: string; notas: string[] }>)[tela.nome];
-    if (!tt || tt.notas.length !== tela.notas.length) {
-      throw new Error(`[${idioma}] tela ${tela.nome}: ${tela.notas.length} posições e ${tt?.notas.length ?? 0} notas`);
-    }
-    return { ...tela, alt: tt.alt, legenda: tt.legenda, notas: tela.notas.map((pos, i) => ({ ...pos, t: tt.notas[i], n: ++n })) };
-  });
-  return { ...s, sistema: texto.nome, texto: texto.texto, telas, notas: telas.flatMap((tela) => tela.notas) };
+/* O diagrama do fluxo (viewBox 640×560): seis fontes em duas colunas alimentam a IA no centro, que
+ * devolve respostas e tarefas embaixo. As curvas saem da borda de cada cartão e chegam à borda do
+ * círculo; as partículas correm por elas (SMIL `animateMotion`, que funciona em todo navegador). */
+const centro = { x: 320, y: 250, r: 74 };
+const fontes = t.fluxo.fontes.map((nome, i) => {
+  const esquerda = i < 3;
+  const x = esquerda ? 86 : 554;
+  const y = [90, 250, 410][i % 3];
+  const borda = esquerda ? x + 82 : x - 82;
+  const meio = esquerda ? 232 : 408;
+  const fim = esquerda ? centro.x - centro.r - 4 : centro.x + centro.r + 4;
+  /* Cor de cada ferramenta, em bloco com símbolo genérico (sem logotipo de terceiros). */
+  const cor = ['#1f7a4d', '#2b5fb4', '#d0542b', '#6b4fbb', '#0f84c8', '#d33b32'][i];
+  return { nome, i, x, y, cor, d: `M${borda},${y} C${meio},${y} ${meio},${centro.y} ${fim},${centro.y}` };
 });
-
-const semTela = ([
-  { chave: 'fotos', situacao: 'producao', origens: ['nipo-fotos'] },
-  { chave: 'rastreio', situacao: 'producao', origens: ['nipo-rastreio'] },
-  { chave: 'dados', situacao: 'homologacao', origens: ['nipo-dados'] },
-  { chave: 'vendas', situacao: 'homologacao', origens: ['nipo-vendas'] },
-  { chave: 'atendimento', situacao: 'homologacao', origens: ['nipo-atendimento'] },
-] as const).map((s) => ({ ...s, sistema: t.semTela[s.chave].nome, texto: t.semTela[s.chave].texto }));
 
 const perguntas = t.perguntas.lista;
 
@@ -128,8 +111,9 @@ const jsonLd = {
   ],
 };
 
-const rotulo = (s: 'producao' | 'homologacao') => t.situacao[s];
-const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1600.webp 1600w`;
+/* Títulos entram palavra por palavra: cada palavra vira um <span> com a ordem em `--i`. */
+const palavras = (texto: string) => texto.split(' ').map((w, i) => ({ w, i }));
+
 ---
 
 <!DOCTYPE html>
@@ -160,7 +144,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
     <meta property="og:image:alt" content={t.og.alt}>
     <meta name="twitter:card" content="summary_large_image">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    <meta name="theme-color" content="#fafaf9">
+    <meta name="theme-color" content="#f4f4f1">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     {noindex && <meta name="robots" content="noindex, follow" />}
     <script is:inline>
@@ -177,47 +161,104 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                         if (e.isIntersecting) { e.target.classList.add('visto'); olho.unobserve(e.target); }
                     });
                 }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
-                document.querySelectorAll('[data-anima]').forEach(function (el) { olho.observe(el); });
+                document.querySelectorAll('[data-anima]:not([data-anima="secao"])').forEach(function (el) { olho.observe(el); });
+                // Os blocos entram inteiros, de uma vez, assim que a borda de cima passa um pouco do
+                // fim da tela; um limiar por área atrasaria demais os blocos altos.
+                var olhoBloco = new IntersectionObserver(function (entradas) {
+                    entradas.forEach(function (e) {
+                        if (e.isIntersecting) { e.target.classList.add('visto'); olhoBloco.unobserve(e.target); }
+                    });
+                }, { rootMargin: '0px 0px -12% 0px' });
+                document.querySelectorAll('[data-anima="secao"]').forEach(function (el) { olhoBloco.observe(el); });
 
-                // O topo fica fixo e ganha a régua quando a página sai do começo.
-                var topo = document.querySelector('.topo');
+                // O botão do header só aparece quando o da abertura sai da tela.
+                var cta = document.querySelector('.abertura-acoes .botao');
+                if (cta) new IntersectionObserver(function (entradas) {
+                    d.classList.toggle('cta-a-vista', entradas[0].isIntersecting);
+                }, { rootMargin: '-80px 0px 0px 0px' }).observe(cta);
 
-                // Movimento ligado à rolagem: cada [data-rolagem] recebe --p (0 → 1) conforme passa
-                // pela janela, e o CSS decide o que fazer com ele. Sem este script, ou com movimento
-                // reduzido, --p fica no valor-padrão do CSS, que é o estado final.
+                // O peixe da abertura voa até o header conforme a página desce: o `.simbolo` fica no
+                // fluxo como lugar reservado, e o `.peixe` (fixo) é interpolado entre esse lugar e o
+                // encaixe do header. Com movimento reduzido, ele troca de lugar sem o voo.
+                var vaga = document.querySelector('.simbolo');
+                var peixe = document.querySelector('.peixe');
+                var encaixe = document.querySelector('.topo-slot');
                 var reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
-                var els = reduz ? [] : Array.prototype.slice.call(document.querySelectorAll('[data-rolagem]'));
-                var pendente = false;
-                var lim = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-                var suave = function (v) { return 1 - Math.pow(1 - v, 3); };
-                var calcular = function () {
-                    pendente = false;
-                    var vh = innerHeight;
-                    topo && topo.classList.toggle('rolou', scrollY > 8);
-                    d.style.setProperty('--rolado', lim(scrollY / Math.max(1, d.scrollHeight - vh)).toFixed(4));
-                    for (var i = 0; i < els.length; i++) {
-                        var el = els[i], r = el.getBoundingClientRect(), tipo = el.getAttribute('data-rolagem'), p;
-                        if (r.bottom < -vh || r.top > vh * 2) continue;
-                        if (tipo === 'sai') p = lim(-r.top / (r.height * 0.85));
-                        else if (tipo === 'faixa') p = lim((vh - r.top) / (vh + r.height));
-                        else if (tipo === 'secao') p = suave(lim((vh - r.top) / (vh * 0.75)));
-                        else p = suave(lim((vh - r.top) / (vh * 0.6)));
-                        el.style.setProperty('--p', p.toFixed(4));
-                    }
-                };
-                var pedir = function () { if (!pendente) { pendente = true; requestAnimationFrame(calcular); } };
-                addEventListener('scroll', pedir, { passive: true });
-                addEventListener('resize', pedir);
-                calcular();
+                if (vaga && peixe && encaixe) {
+                    d.classList.add('voa');
+                    var pend = false;
+                    var voar = function () {
+                        pend = false;
+                        var a = vaga.getBoundingClientRect(), b = encaixe.getBoundingClientRect();
+                        var lim = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+                        // O peixe rola junto com a página, como qualquer conteúdo. Quando a vaga dele
+                        // passa do topo, ele fica preso ali e encolhe na mesma medida em que a vaga sai:
+                        // nunca fica maior que o pedaço da vaga ainda visível, então não cobre o texto
+                        // nem deixa um vão. Pousa no header quando atinge o tamanho do logo.
+                        var sb = b.width / a.width;
+                        var k = b.top - a.top;
+                        var p = k > 0 ? lim(k / (a.height * (1 - sb))) : 0;
+                        if (reduz) p = p > 0.5 ? 1 : 0;
+                        // O deslize lateral fica para a segunda metade, quando o peixe já está pequeno:
+                        // grande, ele só encolhe dentro da própria vaga.
+                        var q = lim((p - 0.5) / 0.5), e = q * q * (3 - 2 * q);
+                        var x = a.left + (b.left - a.left) * e, y = p > 0 ? b.top : a.top;
+                        var s = 1 - p * (1 - sb);
+                        var giro = Math.sin(Math.PI * p) * -6;
+                        var pousa = p >= 1;
+                        peixe.style.width = a.width + 'px';
+                        peixe.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + s.toFixed(4) + ') rotate(' + giro.toFixed(2) + 'deg)';
+                        d.classList.toggle('pousou', pousa);
+                    };
+                    var pedir = function () { if (!pend) { pend = true; requestAnimationFrame(voar); } };
+                    addEventListener('scroll', pedir, { passive: true });
+                    addEventListener('resize', pedir);
+                    voar();
+                }
+
+                // A montagem do fluxo acompanha a rolagem: `--p` vai de 0, quando o diagrama encosta no
+                // pé da tela, a 1, quando o meio dele chega um pouco abaixo do centro.
+                var figuraP = document.querySelector('.fluxo-figura');
+                if (figuraP) {
+                    var pendF = false;
+                    var montar = function () {
+                        pendF = false;
+                        var r = figuraP.getBoundingClientRect();
+                        var p = reduz ? 1 : (innerHeight - r.top) / (innerHeight * 0.4 + r.height * 0.5);
+                        figuraP.style.setProperty('--p', (p < 0 ? 0 : p > 1 ? 1 : p).toFixed(3));
+                    };
+                    addEventListener('scroll', function () { if (!pendF) { pendF = true; requestAnimationFrame(montar); } }, { passive: true });
+                    addEventListener('resize', montar);
+                    montar();
+                }
+
+                // O diagrama do fluxo só se move enquanto está na tela; com movimento reduzido, fica parado.
+                var figura = document.querySelector('.fluxo-figura');
+                var svgFluxo = figura && figura.querySelector('svg');
+                if (svgFluxo && svgFluxo.pauseAnimations) {
+                    if (reduz) svgFluxo.pauseAnimations();
+                    else new IntersectionObserver(function (entradas) {
+                        var ve = entradas[0].isIntersecting;
+                        figura.classList.toggle('parado', !ve);
+                        if (ve) svgFluxo.unpauseAnimations(); else svgFluxo.pauseAnimations();
+                    }).observe(figura);
+                }
+
+                // O peixe acompanha o cursor de leve, só enquanto está na abertura.
+                if (peixe && matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+                    addEventListener('pointermove', function (e) {
+                        peixe.style.setProperty('--mx', ((e.clientX / innerWidth) - 0.5).toFixed(3));
+                        peixe.style.setProperty('--my', ((e.clientY / innerHeight) - 0.5).toFixed(3));
+                    }, { passive: true });
+                }
             });
         })();
     </script>
 </head>
 <body>
+    {/* O header só aparece quando o peixe da abertura pousa nele (ver o script do <head>). */}
     <header class="topo">
-        <a href={caminho} class="marca" aria-label={t.inicio}>
-            <img src="/logo-papel.png" alt="" width="720" height="531">
-        </a>
+        <a href={caminho} class="topo-marca" aria-label={t.inicio}><span class="topo-slot"></span><span class="topo-nome" aria-hidden="true">carpe labs</span></a>
         <div class="topo-acoes">
             <a href={t.outroIdioma.href} class="idioma" hreflang={t.outroIdioma.lang} lang={t.outroIdioma.lang} aria-label={t.outroIdioma.rotulo}>{t.outroIdioma.texto}</a>
             <a href="#contato" class="topo-link">{t.abertura.acao}</a>
@@ -225,119 +266,137 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
     </header>
 
     <main>
-        <section class="abertura" data-rolagem="sai" aria-labelledby="abertura-titulo">
+        <section class="abertura" aria-labelledby="abertura-titulo">
             <div class="abertura-texto">
-                <p class="em-uso"><span class="situacao situacao-producao">{t.abertura.emUso}</span><span class="em-uso-erp">{t.abertura.erp}</span></p>
-                <h1 id="abertura-titulo">{t.abertura.titulo}</h1>
+                <h1 id="abertura-titulo" class="palavras">{palavras(t.abertura.titulo).map(({ w, i }) => <><span class:list={['p', { forte: w === 'IA' || w === 'AI' }]} style={`--i:${i}`}>{w}</span>{' '}</>)}</h1>
                 <p class="abertura-apoio">{t.abertura.apoio}</p>
                 <div class="abertura-acoes">
-                    <a class="botao" href="#contato"><span>{t.abertura.acao}</span><svg class="seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-                    <a class="link" href="#caso"><span>{t.abertura.verCaso}</span><svg class="seta seta-baixo" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+                    <a class="botao" href="#contato"><span>{t.ia.acao}</span><svg class="seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                    <a class="link" href="#resultados"><span>{t.abertura.verCaso}</span></a>
                 </div>
             </div>
-            <figure class="palco">
-                <div class="palco-telas">
-                    <img
-                        class="palco-fundo"
-                        src="/telas/fluxo-960.webp"
-                        width="960" height="600"
-                        alt="" aria-hidden="true">
-                    <img
-                        class="palco-frente"
-                        src="/telas/produtividade-1600.webp"
-                        srcset={srcset('produtividade')}
-                        sizes="(min-width: 64rem) 55vw, 100vw"
-                        width="1600" height="1000"
-                        alt={t.abertura.palcoAlt}
-                        fetchpriority="high">
-                </div>
-                <figcaption>{t.abertura.palcoLegenda}</figcaption>
+            <div class="simbolo" aria-hidden="true">
+              <div class="peixe">
+                {/* O peixe do logo, redesenhado em vetor sobre `public/logo.png` para poder se desenhar. */}
+                <svg viewBox="480 470 930 680" fill="none" stroke="currentColor" stroke-width="48">
+                    <path class="traco" pathLength="1" d="M512 848 C650 702 955 628 1165 765"/>
+                    <path class="traco" pathLength="1" d="M1325 668 C1290 820 1150 960 958 985"/>
+                    <path class="traco" pathLength="1" d="M828 962 C860 1050 920 1100 1000 1108"/>
+                    <path class="cheio" fill="currentColor" stroke="none" fill-rule="evenodd" d="M826 648 C880 568 955 520 1045 497 C1028 570 1035 635 1080 688 L826 648 Z M890 645 C925 610 955 588 985 573 C988 610 993 637 1003 660 Z"/>
+                    <circle class="cheio olho" cx="713" cy="820" r="35" fill="currentColor" stroke="none"/>
+                    <circle class="cheio" cx="1320" cy="928" r="57" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+            </div>
+            <ol id="ia" class="abertura-passos" data-anima="lista">
+                {t.ia.passos.map((passo, i) => (
+                    <li>
+                        <span class="passo-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                        <h2>{passo.titulo}</h2>
+                        <p>{passo.texto}</p>
+                    </li>
+                ))}
+            </ol>
+        </section>
+
+        <section id="fluxo" class="fluxo" data-anima="secao" aria-labelledby="fluxo-titulo">
+            <div class="fluxo-texto">
+                <h2 id="fluxo-titulo" class="palavras" data-anima="titulo">{palavras(t.fluxo.titulo).map(({ w, i }) => <><span class:list={['p', { forte: w === 'IA' || w === 'AI' }]} style={`--i:${i}`}>{w}</span>{' '}</>)}</h2>
+                <p>{t.fluxo.texto}</p>
+            </div>
+            <figure class="fluxo-figura">
+                <svg viewBox="0 0 640 560" role="img" aria-label={t.fluxo.rotulo}>
+                    {/* Linhas de base: desenham-se quando o bloco entra. */}
+                    <g class="fluxo-linhas" fill="none">
+                        {fontes.map((f) => <path id={`fluxo-${f.i}`} d={f.d} pathLength="1" style={`--i:${f.i}`} />)}
+                        <path id="fluxo-saida" d={`M${centro.x},${centro.y + centro.r + 4} L${centro.x},464`} pathLength="1" style="--i:6" />
+                    </g>
+                    {/* Partículas: os dados chegando à IA e as respostas saindo. */}
+                    <g class="fluxo-particulas">
+                        {fontes.map((f) => [0, 1].map((k) => (
+                            <circle r="4.5">
+                                <animateMotion dur="2.6s" repeatCount="indefinite" begin={`-${(f.i * 0.43 + k * 1.3).toFixed(2)}s`} calcMode="spline" keyTimes="0;1" keySplines="0.45 0 0.55 1">
+                                    <mpath href={`#fluxo-${f.i}`} />
+                                </animateMotion>
+                            </circle>
+                        )))}
+                        {[0, 1, 2].map((k) => (
+                            <circle r="5.5" class="saindo">
+                                <animateMotion dur="1.6s" repeatCount="indefinite" begin={`-${(k * 0.53).toFixed(2)}s`}>
+                                    <mpath href="#fluxo-saida" />
+                                </animateMotion>
+                            </circle>
+                        ))}
+                    </g>
+                    {/* A IA no centro: órbitas girando e um pulso contínuo. */}
+                    <g class="fluxo-centro">
+                        <circle class="orbita orbita-1" cx={centro.x} cy={centro.y} r="100" />
+                        <circle class="orbita orbita-2" cx={centro.x} cy={centro.y} r="124" />
+                        <circle class="pulso" cx={centro.x} cy={centro.y} r={centro.r} />
+                        <circle class="nucleo" cx={centro.x} cy={centro.y} r={centro.r} />
+                        <text x={centro.x} y={centro.y} text-anchor="middle" dominant-baseline="central">{idioma === 'en' ? 'AI' : 'IA'}</text>
+                    </g>
+                    {/* As fontes, em cartões com ícone genérico e o nome. */}
+                    {fontes.map((f) => (
+                        <g class="fonte" style={`--i:${f.i}; --lado:${f.i < 3 ? -1 : 1}`} transform={`translate(${f.x} ${f.y})`}>
+                            <rect class="fonte-cartao" x="-82" y="-44" width="164" height="88" rx="16" />
+                            <rect class="fonte-bloco" x="-18" y="-34" width="36" height="36" rx="10" fill={f.cor} />
+                            <g class="fonte-icone" transform="translate(0 -16) scale(0.62)" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                {f.i === 0 && <><path d="M-11,-15 h15 l7,7 v23 h-22 z M4,-15 v7 h7" /><path d="M-7,-2 h14 M-7,4 h14 M-7,10 h14 M0,-6 v18" /></>}
+                                {f.i === 1 && <><path d="M-11,-15 h15 l7,7 v23 h-22 z M4,-15 v7 h7" /><path d="M-7,-3 h10 M-7,2 h14 M-7,7 h14 M-7,12 h9" /></>}
+                                {f.i === 2 && <><rect x="-15" y="-12" width="30" height="21" rx="2.5" /><path d="M-8,4 v-5 M-2,4 v-9 M4,4 v-3 M0,9 v6 M-6,15 h12" /></>}
+                                {f.i === 3 && <><ellipse cx="0" cy="-10" rx="13" ry="4.5" /><path d="M-13,-10 v20 c0,6 26,6 26,0 v-20 M-13,0 c0,6 26,6 26,0" /></>}
+                                {f.i === 4 && <><rect x="-15" y="-10" width="30" height="21" rx="2.5" /><path d="M-15,-9 L0,3 L15,-9" /></>}
+                                {f.i === 5 && <><path d="M-11,-15 h15 l7,7 v23 h-22 z M4,-15 v7 h7" /><path d="M-7,4 h14 M-7,10 h9" /><path d="M-7,-4 h6" /></>}
+                            </g>
+                            <text y="26" text-anchor="middle">{f.nome}</text>
+                        </g>
+                    ))}
+                    {/* O que sai: respostas e tarefas. */}
+                    <g class="fluxo-resultado" style="--i:7">
+                        <rect x="190" y="466" width="260" height="56" rx="28" />
+                        <text x="320" y="494" text-anchor="middle" dominant-baseline="central">{t.fluxo.saida}</text>
+                    </g>
+                </svg>
             </figure>
         </section>
 
-        <div class="faixa" data-rolagem="faixa" aria-hidden="true">
-            <p class="faixa-linha faixa-sistemas">{[0, 1].map(() => numerados.map((c) => c.sistema).concat(semTela.map((c) => c.sistema)).map((n) => <span>{n}</span>))}</p>
-            <p class="faixa-linha faixa-lema">{Array.from({ length: 6 }, () => <span>{t.faixaLema}</span>)}</p>
-        </div>
-
-        <section id="caso" class="caso" aria-labelledby="caso-titulo">
-            <div class="caso-intro">
-                <div class="caso-intro-texto" data-rolagem="sobe">
-                    <h2 id="caso-titulo" data-anima="titulo">{t.caso.titulo}</h2>
-                    <p>{t.caso.intro}</p>
-                </div>
-
-                <figure class="camadas" data-anima="camadas" aria-label={t.caso.camadas.rotulo}>
-                    <div class="camada camada-ia">
-                        <p class="camada-nome">{t.caso.camadas.ia.nome}</p>
-                        <p class="camada-desc">{t.caso.camadas.ia.desc}</p>
-                        <ul class="camada-itens"><li class="destaque">Claude</li><li class="destaque">ChatGPT</li><li class="outras">{t.caso.camadas.ia.outras}</li></ul>
-                    </div>
-                    <p class="camada-liga"><span>{t.caso.camadas.consulta}</span></p>
-                    <div class="camada camada-portais">
-                        <p class="camada-nome">{t.caso.camadas.portais.nome}</p>
-                        <p class="camada-desc">{t.caso.camadas.portais.desc}</p>
-                        <ul class="camada-itens">{t.caso.camadas.portais.itens.map((i) => <li>{i}</li>)}</ul>
-                    </div>
-                    <p class="camada-liga"><span>{t.caso.camadas.le}</span></p>
-                    <div class="camada camada-erp">
-                        <p class="camada-nome">{t.caso.camadas.erp.nome}</p>
-                        <p class="camada-desc">{t.caso.camadas.erp.desc}</p>
-                        <p class="camada-caso">{t.caso.camadas.erp.caso}</p>
-                    </div>
-                </figure>
+        <section id="resultados" class="resultados" data-anima="secao" aria-labelledby="resultados-titulo">
+            <div class="secao-cabeca">
+                <h2 id="resultados-titulo" class="palavras" data-anima="titulo">{palavras(t.resultados.titulo).map(({ w, i }) => <><span class="p" style={`--i:${i}`}>{w}</span>{' '}</>)}</h2>
+                <p>{t.resultados.intro}</p>
             </div>
-
-            {numerados.map((s) => (
-                <article class="sistema" data-origens={s.origens.join(' ')}>
-                    <div class="sistema-texto" data-anima="texto">
-                        <h3>{s.sistema}</h3>
-                        <p class={`situacao situacao-${s.situacao}`}>{rotulo(s.situacao)}</p>
-                        <p class="sistema-uso">{s.texto}</p>
-                        <ol class="notas">
-                            {s.notas.map((nota) => (
-                                <li data-n={nota.n}><span class="notas-n" aria-hidden="true">{nota.n}</span>{nota.t}</li>
-                            ))}
-                        </ol>
-                    </div>
-                    <div class="sistema-telas">
-                        {s.telas.map((t) => (
-                            <figure data-rolagem="cresce">
-                                <div class="tela" data-anima="tela">
-                                    <img
-                                        src={`/telas/${t.nome}-1600.webp`}
-                                        srcset={srcset(t.nome)}
-                                        sizes="(min-width: 64rem) 65vw, 100vw"
-                                        width={t.w} height={t.h}
-                                        alt={t.alt}
-                                        loading="lazy" decoding="async">
-                                    {t.notas.map((nota) => (
-                                        <span class="marcador" data-n={nota.n} style={`left: ${nota.x}%; top: ${nota.y}%; --ordem: ${nota.n}`} aria-hidden="true">{nota.n}</span>
-                                    ))}
-                                </div>
-                                <figcaption>{t.legenda}</figcaption>
-                            </figure>
-                        ))}
-                    </div>
-                </article>
-            ))}
-
-            <div class="outros" data-rolagem="sobe">
-                <h3>{t.caso.outros}</h3>
-                <ul data-anima="lista">
-                    {semTela.map((s) => (
-                        <li data-origens={s.origens.join(' ')}>
-                            <span class="outros-nome">{s.sistema}</span>
-                            <span class="outros-uso">{s.texto}</span>
-                            <span class={`situacao situacao-${s.situacao}`}>{rotulo(s.situacao)}</span>
-                        </li>
-                    ))}
-                </ul>
+            <ol class="resultados-lista" data-anima="lista">
+                {comIa.map((r) => (
+                    <li class:list={['resultado', { 'resultado-destaque': 'destaque' in r }]} data-origens={r.origens.join(' ')}>
+                        <span class="selo-ia">IA</span>
+                        <div class="resultado-corpo">
+                            <h3>{r.titulo}</h3>
+                            <p>{r.texto}</p>
+                        </div>
+                        <p class="resultado-meta">{r.sistema}</p>
+                    </li>
+                ))}
+            </ol>
+            <div class="resultados-grupo" data-anima="titulo">
+                <h3>{t.resultados.base.titulo}</h3>
+                <p>{t.resultados.base.texto}</p>
             </div>
+            <ol class="resultados-base" data-anima="lista">
+                {base.map((r) => (
+                    <li class="resultado resultado-base" data-origens={r.origens.join(' ')}>
+                        <p class="resultado-area">{r.sistema}</p>
+                        <div class="resultado-corpo">
+                            <h3>{r.titulo}</h3>
+                            <p>{r.texto}</p>
+                        </div>
+                    </li>
+                ))}
+            </ol>
         </section>
 
-        <section class="metodo" data-rolagem="secao" aria-labelledby="metodo-titulo">
-            <h2 id="metodo-titulo" data-rolagem="sobe">{t.metodo.titulo}</h2>
+        <section class="metodo" data-anima="secao" aria-labelledby="metodo-titulo">
+            <h2 id="metodo-titulo" class="palavras" data-anima="titulo">{palavras(t.metodo.titulo).map(({ w, i }) => <><span class="p" style={`--i:${i}`}>{w}</span>{' '}</>)}</h2>
             <div class="metodo-itens" data-anima="lista">
                 {t.metodo.itens.map((m) => (
                     <div>
@@ -348,8 +407,8 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             </div>
         </section>
 
-        <section id="perguntas" class="perguntas" aria-labelledby="perguntas-titulo">
-            <h2 id="perguntas-titulo" data-anima="titulo">{t.perguntas.titulo}</h2>
+        <section id="perguntas" class="perguntas" data-anima="secao" aria-labelledby="perguntas-titulo">
+            <h2 id="perguntas-titulo" class="palavras" data-anima="titulo">{palavras(t.perguntas.titulo).map(({ w, i }) => <><span class="p" style={`--i:${i}`}>{w}</span>{' '}</>)}</h2>
             <div class="perguntas-lista" data-anima="lista">
                 {perguntas.map((q) => (
                     <details>
@@ -360,15 +419,13 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             </div>
         </section>
 
-        <section id="contato" class="contato" data-rolagem="secao" aria-labelledby="contato-titulo">
-          <div class="contato-grade">
+        <section id="contato" class="contato" data-anima="secao" aria-labelledby="contato-titulo">
             <div class="contato-intro">
-                <h2 id="contato-titulo" data-anima="titulo">{t.contato.titulo}</h2>
+                <h2 id="contato-titulo" class="palavras" data-anima="titulo">{palavras(t.contato.titulo).map(({ w, i }) => <><span class="p" style={`--i:${i}`}>{w}</span>{' '}</>)}</h2>
                 <p>{t.contato.intro}</p>
-                <p class="contato-alt">{t.contato.alt} <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a></p>
             </div>
 
-            <form id="contact-form" class="formulario" novalidate data-origem-marca={t.caso.origemMarca}>
+            <form id="contact-form" class="formulario" data-anima="lista" novalidate data-origem-marca={t.caso.origemMarca}>
                 <div class="campo">
                     <label for="form-name">{t.contato.nome}</label>
                     <input type="text" name="name" id="form-name" autocomplete="name" required>
@@ -381,14 +438,14 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 </div>
                 <div class="campo campo-largo">
                     <label for="form-message">{t.contato.mensagem}</label>
-                    <textarea name="message" id="form-message" rows="5" required></textarea>
+                    <textarea name="message" id="form-message" rows="3" maxlength="4500" required></textarea>
                     <p class="field-error" id="message-error">{t.contato.erroMensagem}</p>
                 </div>
 
                 <div class="envio">
-                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="dark" data-language={t.contato.turnstile}></div>
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAEYqJuOOSujfYNYH" data-action="contato" data-theme="light" data-appearance="interaction-only" data-language={t.contato.turnstile}></div>
                     <button type="submit" class="botao" id="submit-btn">
-                        <span id="submit-text">{t.contato.enviar}</span><svg class="seta" id="submit-seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                        <span id="submit-text">{t.contato.enviar}</span><svg class="seta" id="submit-seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                         <span id="submit-loading" class="hidden">{t.contato.enviando}</span>
                     </button>
                 </div>
@@ -396,21 +453,33 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 <p id="form-success" class="form-message success hidden" role="status">{t.contato.sucesso}</p>
                 <p id="form-error" class="form-message error hidden" role="alert">{t.contato.falha}</p>
             </form>
-          </div>
         </section>
     </main>
 
-    <footer class="rodape">
-        <div class="rodape-entidade">
-            <img src="/logo-papel.png" alt="carpe labs" width="720" height="531" class="rodape-marca">
-            <p>{t.rodape.entidade}</p>
+    <footer class="rodape" data-anima="secao">
+        <div class="rodape-topo">
+            <a href={caminho} class="rodape-marca" aria-label={t.inicio}>
+                <svg viewBox="480 470 930 680" fill="none" stroke="currentColor" stroke-width="48" aria-hidden="true">
+                    <path d="M512 848 C650 702 955 628 1165 765"/>
+                    <path d="M1325 668 C1290 820 1150 960 958 985"/>
+                    <path d="M828 962 C860 1050 920 1100 1000 1108"/>
+                    <path fill="currentColor" stroke="none" fill-rule="evenodd" d="M826 648 C880 568 955 520 1045 497 C1028 570 1035 635 1080 688 L826 648 Z M890 645 C925 610 955 588 985 573 C988 610 993 637 1003 660 Z"/>
+                    <circle cx="713" cy="820" r="35" fill="currentColor" stroke="none"/>
+                    <circle cx="1320" cy="928" r="57" fill="currentColor" stroke="none"/>
+                </svg>
+                <span>carpe labs</span>
+            </a>
+            <nav aria-label={t.rodape.rotulo}>
+                <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>
+                <a href="https://github.com/CarpeLabs" target="_blank" rel="noopener">GitHub</a>
+                <a href="/privacidade/" hreflang="pt-BR">{t.rodape.privacidade}</a>
+                <a href="/termos/" hreflang="pt-BR">{t.rodape.termos}</a>
+                <a href={t.outroIdioma.href} hreflang={t.outroIdioma.lang} lang={t.outroIdioma.lang}>{t.outroIdioma.texto}</a>
+            </nav>
         </div>
-        <nav aria-label={t.rodape.rotulo}>
-            <a href="mailto:contact@carpelabs.io">contact@carpelabs.io</a>
-            <a href="https://github.com/CarpeLabs" target="_blank" rel="noopener">GitHub</a>
-            <a href="/privacidade/" hreflang="pt-BR">{t.rodape.privacidade}</a>
-            <a href="/termos/" hreflang="pt-BR">{t.rodape.termos}</a>
-        </nav>
+        <div class="rodape-base">
+            <p class="rodape-ano">© {new Date().getFullYear()} carpe labs</p>
+        </div>
     </footer>
 
     <script>
@@ -423,7 +492,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
                 const marca = document.createElement('span');
                 marca.className = 'origem-marca';
                 marca.textContent = document.getElementById('contact-form')?.dataset.origemMarca ?? '';
-                alvo.querySelector('h3, .outros-nome')?.append(marca);
+                alvo.querySelector('h3')?.append(marca);
             }
         }
 
@@ -447,7 +516,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
         const ENDPOINT = '/api/contato';
 
         function validateField(input: HTMLInputElement | HTMLTextAreaElement, errorEl: HTMLElement | null) {
-            const isValid = input.validity.valid;
+            const isValid = input === messageInput ? input.value.trim() !== '' : input.validity.valid;
             input.classList.toggle('invalid', !isValid);
             input.setAttribute('aria-invalid', String(!isValid));
             errorEl?.classList.toggle('visible', !isValid);
@@ -458,7 +527,6 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             input?.addEventListener('blur', () => validateField(input, errorEl));
             input?.addEventListener('input', () => { if (input.validity.valid) validateField(input, errorEl); });
         }
-
         form?.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -483,7 +551,7 @@ const srcset = (nome: string) => `/telas/${nome}-960.webp 960w, /telas/${nome}-1
             const data: Record<string, unknown> = {
                 name: formData.get('name'),
                 email: formData.get('email'),
-                message: formData.get('message'),
+                message: String(formData.get('message') ?? '').trim(),
                 // O widget insere este campo no próprio form. Sem ele o endpoint devolve 403,
                 // e é isso que se quer: sem prova, sem gravação.
                 'cf-turnstile-response': formData.get('cf-turnstile-response'),
