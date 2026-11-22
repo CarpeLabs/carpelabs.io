@@ -397,7 +397,6 @@ const palavras = (texto: string) => texto.split(' ').map((w, i) => ({ w, i }));
             <ol class="resultados-lista" data-anima="lista">
                 {comIa.map((r) => (
                     <li class:list={['resultado', { 'resultado-destaque': 'destaque' in r }]} data-origens={r.origens.join(' ')}>
-                        <span class="selo-ia">IA</span>
                         <div class="resultado-corpo">
                             <h3>{r.titulo}</h3>
                             <p>{r.texto}</p>

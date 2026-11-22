@@ -19,7 +19,6 @@
     /* Única cor de destaque: verde-floresta, só onde está a IA. 5,8:1 sobre o fundo. */
     --verde: #2e6b55;
     --verde-escuro: #24563f;
-    --verde-claro: #7fc4a6;
 
     --fonte: 'Hanken Grotesk Variable', system-ui, sans-serif;
 
@@ -271,12 +270,10 @@ main > section:not(.abertura) {
 .resultados-lista, .resultados-base { display: grid; gap: clamp(0.75rem, 1.5vw, 1rem); }
 .resultado { display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; padding: clamp(1.5rem, 2.5vw, 2.25rem); border-radius: clamp(1rem, 1.8vw, 1.5rem); background: var(--fundo); }
 .resultado-corpo { align-self: stretch; }
-.selo-ia { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.3rem 0.65rem; border-radius: 999px; background: var(--verde); color: #fff; }
 .resultado h3 { font-size: clamp(1.5rem, 2.3vw, 1.875rem); font-weight: 500; line-height: 1.12; letter-spacing: -0.025em; }
 .resultado-corpo p { margin-top: 0.75rem; color: var(--texto-2); }
 .resultado-meta { margin-top: auto; padding-top: 0.75rem; font-size: 0.875rem; color: var(--texto-3); }
 .resultado-destaque { background: var(--texto); color: var(--fundo); padding: clamp(2rem, 4.5vw, 3.75rem); gap: 1.25rem; }
-.resultado-destaque .selo-ia { background: var(--verde-claro); color: var(--texto); }
 .resultado-destaque h3 { font-size: clamp(2rem, 4.6vw, 3.75rem); font-weight: 400; line-height: 1.02; letter-spacing: -0.035em; max-width: 18ch; }
 .resultado-destaque .resultado-corpo p { margin-top: 1.25rem; max-width: 34rem; font-size: 1.1875rem; color: rgb(244 244 241 / 0.72); }
 .resultado-destaque .resultado-meta { color: rgb(244 244 241 / 0.6); }
