@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+N:;;;;
+FN:Carpe Labs
+ORG:Carpe Labs
+TITLE:IA para trabalhar na sua operação
+EMAIL;TYPE=INTERNET,WORK:contact@carpelabs.io
+URL:https://carpelabs.io/
+URL:https://github.com/CarpeLabs
+ADR;TYPE=WORK:;;;São Paulo;SP;;Brasil
+NOTE:Implantamos IA na operação da sua empresa\, em cima do sistema que você já usa.
+X-ABShowAs:COMPANY
+END:VCARD
