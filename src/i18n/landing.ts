@@ -23,7 +23,7 @@ const pt = {
 
   abertura: {
     titulo: 'Colocamos a IA para trabalhar na sua operação.',
-    apoio: 'A Carpe Labs dimensiona e configura ferramentas agênticas, assistentes de IA que consultam os dados da sua empresa e cuidam de tarefas da rotina. Tudo em cima do sistema que você já usa, com limite e registro de cada ação.',
+    apoio: 'A Carpe Labs dimensiona e configura ferramentas agênticas, assistentes que consultam os dados da sua empresa e cuidam de tarefas da rotina. Tudo em cima do sistema que você já usa, com limite e registro de cada ação.',
     acao: 'Implantar IA',
     verCaso: 'Ver o caso Nipo Center',
   },
@@ -35,7 +35,7 @@ const pt = {
   /* As etapas da implantação de IA, logo abaixo do título: é isso que a Carpe Labs faz. */
   ia: {
     passos: [
-      { titulo: 'Mapear', texto: 'Onde a IA ganha tempo na sua operação, e onde ela ainda não vale a pena.' },
+      { titulo: 'Mapear', texto: 'Onde a automação ganha tempo na sua operação, e onde ainda não vale a pena.' },
       { titulo: 'Dimensionar', texto: 'Quais ferramentas, para quem, com que acesso aos dados e com qual custo de uso.' },
       { titulo: 'Configurar', texto: 'Os agentes ligados ao seu sistema, com permissões, limites e registro de cada ação.' },
     ],
@@ -46,7 +46,7 @@ const pt = {
    * Os nomes de produto (Excel, Word, PowerPoint) entram só como texto; os ícones são genéricos. */
   fluxo: {
     titulo: 'Tudo o que a empresa já tem alimenta a IA',
-    texto: 'Planilhas, documentos, apresentações, e-mails e o sistema de gestão deixam de ficar espalhados. A IA lê tudo junto e devolve respostas e tarefas feitas.',
+    texto: 'Planilhas, documentos, apresentações, e-mails e o sistema de gestão deixam de ficar espalhados. Tudo é lido junto e volta como respostas e tarefas feitas.',
     rotulo: 'Excel, Word, PowerPoint, PDF, e-mail e o sistema de gestão alimentando a IA, que devolve respostas e tarefas.',
     fontes: ['Excel', 'Word', 'PowerPoint', 'Sistema de gestão', 'E-mail', 'PDF'],
     saida: 'Respostas e tarefas',
@@ -55,22 +55,22 @@ const pt = {
   resultados: {
     titulo: 'O que muda na operação',
     intro: 'Na Nipo Center, importadora de São Paulo, a IA já trabalha na rotina, sem trocar de sistema.',
-    base: { titulo: 'E a base por trás', texto: 'Os dados de cada área em ordem, para quem decide e para a IA.' },
+    base: { titulo: 'E a base por trás', texto: 'Os dados de cada área em ordem, para quem decide e para os assistentes.' },
     itens: {
-      dados: { sistema: 'Assistente de IA', titulo: 'A gestão pergunta à IA e tem a resposta na hora.', texto: 'Em português, sobre os dados do dia, sem esperar relatório. Cada pergunta tem limite e fica registrada.' },
-      atendimento: { sistema: 'Atendimento no WhatsApp', titulo: 'A IA atende o cliente no WhatsApp.', texto: 'Resolve sozinha o que é simples e passa para uma pessoa o que precisa de atenção.' },
-      fotos: { sistema: 'Fotos de produto', titulo: 'A IA revisa cada foto do catálogo.', texto: 'Aponta a foto com problema e prepara a correção. Uma pessoa aprova antes de publicar.' },
+      dados: { sistema: 'Assistente de IA', titulo: 'A gestão pergunta e tem a resposta na hora.', texto: 'Em português, sobre os dados do dia, sem esperar relatório. Cada pergunta tem limite e fica registrada.' },
+      atendimento: { sistema: 'Atendimento no WhatsApp', titulo: 'O cliente é atendido no WhatsApp.', texto: 'O assistente resolve sozinho o que é simples e passa para uma pessoa o que precisa de atenção.' },
+      fotos: { sistema: 'Fotos de produto', titulo: 'Cada foto do catálogo passa por revisão.', texto: 'O assistente aponta a foto com problema e prepara a correção. Uma pessoa aprova antes de publicar.' },
       logistica: { sistema: 'Painel de Logística', titulo: 'A expedição sabe o que atacar primeiro.', texto: 'Cada pedido, do faturamento à saída, com a prioridade à vista.' },
-      compras: { sistema: 'Portal de Compras', titulo: 'A IA diz o que comprar e o que deixar de comprar.', texto: 'Valida cada oportunidade antes do pedido e apoia as importações, do fornecedor à chegada.' },
+      compras: { sistema: 'Portal de Compras', titulo: 'Compras sabe o que comprar e o que deixar de comprar.', texto: 'Cada oportunidade é validada antes do pedido, com apoio nas importações, do fornecedor à chegada.' },
       rastreio: { sistema: 'Rastreio de pedido', titulo: 'O cliente acompanha o próprio pedido.', texto: 'Por um link, sem login e sem precisar ligar.' },
-      vendas: { sistema: 'Painel do vendedor', titulo: 'A IA mostra ao vendedor a melhor oferta para cada cliente.', texto: 'Produto, preço e estoque escolhidos pelo histórico de quem está comprando.' },
+      vendas: { sistema: 'Painel do vendedor', titulo: 'O vendedor tem a melhor oferta para cada cliente.', texto: 'Produto, preço e estoque sugeridos pelo histórico de quem está comprando.' },
     },
   },
 
   metodo: {
-    titulo: 'IA com controle desde o primeiro dia',
+    titulo: 'Com controle desde o primeiro dia',
     itens: [
-      { titulo: 'O sistema continua o mesmo.', texto: 'A IA trabalha em cima do sistema que você já usa. Nada é migrado, e nada é gravado nele sem autorização.' },
+      { titulo: 'O sistema continua o mesmo.', texto: 'Os assistentes trabalham em cima do sistema que você já usa. Nada é migrado, e nada é gravado nele sem autorização.' },
       { titulo: 'Cada agente tem limite.', texto: 'Cada ferramenta recebe só o acesso de que precisa, e cada ação fica registrada.' },
       { titulo: 'Testado antes de entrar na rotina.', texto: 'Cada agente roda antes com uma cópia dos dados reais. Só depois do aceite ele chega a quem usa.' },
     ],
@@ -82,17 +82,17 @@ const pt = {
   perguntas: {
     titulo: 'Perguntas frequentes',
     lista: [
-      { p: 'Preciso trocar o sistema que uso?', r: 'Não. A IA é configurada em cima do sistema de gestão que a empresa já usa, qualquer que seja ele, e ele continua sendo o principal. Nada é migrado nem substituído.' },
-      { p: 'Com qual IA funciona?', r: 'Com a que fizer mais sentido para a sua operação: Claude, ChatGPT ou outro assistente de IA. A escolha faz parte do dimensionamento.' },
-      { p: 'A IA pode mexer nos dados da empresa?', r: 'Só no que for liberado. Cada ferramenta recebe permissões definidas, com limite e registro de cada ação. Gravar no sistema só acontece com autorização.' },
-      { p: 'O que é uma ferramenta agêntica?', r: 'É um assistente de IA que, além de responder, executa tarefas: consulta os dados da empresa, prepara um rascunho, aponta o que precisa de atenção. Cada uma tem limite e registro de cada ação.' },
+      { p: 'Preciso trocar o sistema que uso?', r: 'Não. As ferramentas são configuradas em cima do sistema de gestão que a empresa já usa, qualquer que seja ele, e ele continua sendo o principal. Nada é migrado nem substituído.' },
+      { p: 'Com qual IA funciona?', r: 'Com a que fizer mais sentido para a sua operação: Claude, ChatGPT ou outro assistente. A escolha faz parte do dimensionamento.' },
+      { p: 'Os assistentes podem mexer nos dados da empresa?', r: 'Só no que for liberado. Cada ferramenta recebe permissões definidas, com limite e registro de cada ação. Gravar no sistema só acontece com autorização.' },
+      { p: 'O que é uma ferramenta agêntica?', r: 'É um assistente que, além de responder, executa tarefas: consulta os dados da empresa, prepara um rascunho, aponta o que precisa de atenção. Cada uma tem limite e registro de cada ação.' },
       { p: 'Vocês atendem empresas fora de São Paulo?', r: 'Sim. A Carpe Labs fica em São Paulo e atende remotamente empresas de todo o Brasil.' },
-      { p: 'Como começa?', r: 'Por uma conversa sobre a rotina da empresa, para mapear onde a IA ganha tempo e onde ainda não vale a pena. Use o formulário desta página ou escreva para contact@carpelabs.io.' },
+      { p: 'Como começa?', r: 'Por uma conversa sobre a rotina da empresa, para mapear onde a automação ganha tempo e onde ainda não vale a pena. Use o formulário desta página ou escreva para contact@carpelabs.io.' },
     ],
   },
 
   contato: {
-    titulo: 'Vamos implantar IA na sua operação',
+    titulo: 'Vamos conversar sobre a sua operação',
     intro: 'Conte o que mais toma tempo na sua operação. A resposta vem por e-mail.',
     nome: 'Nome',
     email: 'E-mail',
@@ -135,7 +135,7 @@ const en: Textos = {
 
   abertura: {
     titulo: 'We put AI to work in your operation.',
-    apoio: 'Carpe Labs sizes and sets up agentic tools, AI assistants that query your company’s data and take care of routine tasks. All on top of the system you already use, with limits and a log of every action.',
+    apoio: 'Carpe Labs sizes and sets up agentic tools: assistants that query your company’s data and take care of routine tasks. All on top of the system you already use, with limits and a log of every action.',
     acao: 'Bring in AI',
     verCaso: 'See the Nipo Center case',
   },
@@ -146,7 +146,7 @@ const en: Textos = {
 
   ia: {
     passos: [
-      { titulo: 'Map', texto: 'Where AI saves time in your operation, and where it isn’t worth it yet.' },
+      { titulo: 'Map', texto: 'Where automation saves time in your operation, and where it isn’t worth it yet.' },
       { titulo: 'Size', texto: 'Which tools, for whom, with what access to the data and at what usage cost.' },
       { titulo: 'Set up', texto: 'Agents connected to your system, with permissions, limits and a log of every action.' },
     ],
@@ -155,7 +155,7 @@ const en: Textos = {
 
   fluxo: {
     titulo: 'Everything the company already has feeds the AI',
-    texto: 'Spreadsheets, documents, presentations, emails and the management system stop being scattered. The AI reads it all together and returns answers and finished tasks.',
+    texto: 'Spreadsheets, documents, presentations, emails and the management system stop being scattered. It is all read together and comes back as answers and finished tasks.',
     rotulo: 'Excel, Word, PowerPoint, PDF, email and the management system feeding the AI, which returns answers and tasks.',
     fontes: ['Excel', 'Word', 'PowerPoint', 'Management system', 'Email', 'PDF'],
     saida: 'Answers and tasks',
@@ -164,22 +164,22 @@ const en: Textos = {
   resultados: {
     titulo: 'What changes in the operation',
     intro: 'At Nipo Center, an importer in São Paulo, AI already works in the daily routine, without changing systems.',
-    base: { titulo: 'And the groundwork behind it', texto: 'Each department’s data in order, for the people who decide and for the AI.' },
+    base: { titulo: 'And the groundwork behind it', texto: 'Each department’s data in order, for the people who decide and for the assistants.' },
     itens: {
-      dados: { sistema: 'AI assistant', titulo: 'Management asks the AI and gets the answer right away.', texto: 'In plain language, about today’s data, without waiting for a report. Every question has limits and is logged.' },
-      atendimento: { sistema: 'WhatsApp support', titulo: 'AI serves customers on WhatsApp.', texto: 'It solves the simple things on its own and hands over to a person what needs attention.' },
-      fotos: { sistema: 'Product photos', titulo: 'AI reviews every catalog photo.', texto: 'It flags the photo with a problem and prepares the fix. A person approves before it goes live.' },
+      dados: { sistema: 'AI assistant', titulo: 'Management asks and gets the answer right away.', texto: 'In plain language, about today’s data, without waiting for a report. Every question has limits and is logged.' },
+      atendimento: { sistema: 'WhatsApp support', titulo: 'Customers are served on WhatsApp.', texto: 'The assistant solves the simple things on its own and hands over to a person what needs attention.' },
+      fotos: { sistema: 'Product photos', titulo: 'Every catalog photo gets reviewed.', texto: 'The assistant flags the photo with a problem and prepares the fix. A person approves before it goes live.' },
       logistica: { sistema: 'Logistics dashboard', titulo: 'Shipping knows what to tackle first.', texto: 'Every order, from invoicing to dispatch, with its priority in plain sight.' },
-      compras: { sistema: 'Purchasing portal', titulo: 'AI says what to buy and what to stop buying.', texto: 'It validates each opportunity before the order and supports imports, from supplier to arrival.' },
+      compras: { sistema: 'Purchasing portal', titulo: 'Purchasing knows what to buy and what to stop buying.', texto: 'Each opportunity is validated before the order, with support for imports, from supplier to arrival.' },
       rastreio: { sistema: 'Order tracking', titulo: 'Customers track their own orders.', texto: 'Through a link, with no login and no need to call.' },
-      vendas: { sistema: 'Sales rep dashboard', titulo: 'AI shows sales reps the best offer for each customer.', texto: 'Product, price and stock picked from the history of who is buying.' },
+      vendas: { sistema: 'Sales rep dashboard', titulo: 'Sales reps have the best offer for each customer.', texto: 'Product, price and stock suggested from the history of who is buying.' },
     },
   },
 
   metodo: {
-    titulo: 'AI under control from day one',
+    titulo: 'Under control from day one',
     itens: [
-      { titulo: 'Your system stays the same.', texto: 'AI works on top of the system you already use. Nothing is migrated, and nothing is written to it without authorization.' },
+      { titulo: 'Your system stays the same.', texto: 'The assistants work on top of the system you already use. Nothing is migrated, and nothing is written to it without authorization.' },
       { titulo: 'Every agent has limits.', texto: 'Each tool gets only the access it needs, and every action is logged.' },
       { titulo: 'Tested before it joins the routine.', texto: 'Every agent first runs on a copy of the real data. Only after sign-off does it reach the people who use it.' },
     ],
@@ -188,17 +188,17 @@ const en: Textos = {
   perguntas: {
     titulo: 'Frequently asked questions',
     lista: [
-      { p: 'Do I need to replace the system I use?', r: 'No. AI is set up on top of the management system the company already uses, whichever it is, and it remains the main one. Nothing is migrated or replaced.' },
-      { p: 'Which AI does it work with?', r: 'Whichever fits your operation best: Claude, ChatGPT or another AI assistant. Choosing it is part of the sizing.' },
-      { p: 'Can the AI change company data?', r: 'Only what is allowed. Each tool gets defined permissions, with limits and a log of every action. Writing to the system only happens with authorization.' },
-      { p: 'What is an agentic tool?', r: 'An AI assistant that, besides answering, carries out tasks: it queries the company’s data, prepares a draft, points out what needs attention. Each one has limits and a log of every action.' },
+      { p: 'Do I need to replace the system I use?', r: 'No. The tools are set up on top of the management system the company already uses, whichever it is, and it remains the main one. Nothing is migrated or replaced.' },
+      { p: 'Which AI does it work with?', r: 'Whichever fits your operation best: Claude, ChatGPT or another assistant. Choosing it is part of the sizing.' },
+      { p: 'Can the assistants change company data?', r: 'Only what is allowed. Each tool gets defined permissions, with limits and a log of every action. Writing to the system only happens with authorization.' },
+      { p: 'What is an agentic tool?', r: 'An assistant that, besides answering, carries out tasks: it queries the company’s data, prepares a draft, points out what needs attention. Each one has limits and a log of every action.' },
       { p: 'Do you work with companies outside São Paulo?', r: 'Yes. Carpe Labs is based in São Paulo and works remotely with companies across Brazil.' },
-      { p: 'How does it start?', r: 'With a conversation about the company’s routine, to map where AI saves time and where it is not worth it yet. Use the form on this page or write to contact@carpelabs.io.' },
+      { p: 'How does it start?', r: 'With a conversation about the company’s routine, to map where automation saves time and where it is not worth it yet. Use the form on this page or write to contact@carpelabs.io.' },
     ],
   },
 
   contato: {
-    titulo: "Let's bring AI into your operation",
+    titulo: "Let's talk about your operation",
     intro: 'Tell us what takes up the most time in your operation. We reply by email.',
     nome: 'Name',
     email: 'Email',
