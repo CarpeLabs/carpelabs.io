@@ -5,31 +5,29 @@ primary_target: "src/pages/index.astro"
 related_targets: ["src/pages/de/[origem].astro","src/layouts/Landing.astro"]
 ---
 
-# Landing (carpelabs.io `/` e `/de/<origem>`)
+# Landing (carpelabs.io `/`, `/en/` e `/de/<origem>`)
 
 Modo: Persuade. Público e prova: ver PRODUCT.md. Ação: "Iniciar um projeto" (formulário na própria página).
 
 ## Direction contract
 
-THESIS: A página conta como a Nipo Center passou a operar com sistemas construídos sobre o próprio ERP, e as telas reais (mascaradas) fazem a venda. Recusa a landing escura de software house com promessa de IA, o mockup inventado e a moldura de navegador decorativa.
+THESIS: A marca carpe labs em primeiro plano, num site moderno e minimalista: o símbolo do peixe grande e vivo, a tipografia fina que ecoa o wordmark, e as telas reais da Nipo como única cor da página. Recusa o pátio de contêineres (rejeitado pelo José em 22/11/2026: "ficou estranho"), o papel claro com verde da versão anterior e o escuro de software house com neon.
 
-OWN-WORLD: Papel quase branco (#fafaf9), tinta grafite (#111418), um único acento verde-petróleo (#0f5c4a) para ação, status "em produção" e a marca de origem; cinza-verde (#e7ece9) como superfície das telas. Sans firme (Schibsted Grotesk) com números tabulares só nos números. Muito respiro, régua fina como único divisor; as capturas entram sobre um palco de superfície, com borda de 1px, sombra suave e marcadores numerados que ligam a tela à legenda ao lado. Diagrama das duas camadas (ERP → portais → IA) no caso. O contato fecha a página num verde-petróleo profundo (#0a3f33).
+OWN-WORLD: Monocromático claro: fundo off-white #f4f4f1 (nunca branco puro), texto #0b0c0e, secundário #50545c, réguas pretas a 10% e 24%. Nenhuma cor de acento: a cor vem só das capturas. Hanken Grotesk variável, display em peso 300 com tracking negativo; corpo 400. Botão primário preto com texto off-white. Situação: ponto cheio (produção) e vazado (homologação). Sem cartões, sem sombras, sem barra de topo; réguas finas e muito espaço.
 
-STORY: O diretor entende em segundos que a CarpeLabs constrói portais sobre o ERP que a empresa já tem e IA em cima desses dados; acredita porque vê as telas que a Nipo usa hoje, com situação honesta (produção x homologação); escreve pelo formulário no fim da página.
+STORY: O diretor reconhece a marca na hora, entende em segundos que a carpe labs constrói portais e IA sobre o ERP que ele já tem, vê as telas que a Nipo usa e escreve pelo formulário.
 
-FIRST VIEWPORT: Metade esquerda com wordmark, a oferta curta em duas linhas, uma frase de apoio e o botão "Iniciar um projeto"; metade direita ocupada por uma tela real do painel de Logística da Nipo, sangrando para a borda. Abaixo da dobra, os sistemas entregues em faixas, cada um com a própria tela. Sinal: quem chega por /de/<origem> vê a faixa daquele sistema marcada "Você veio daqui". Movimento: chegada orquestrada (título sobe, palco abre da direita, a tela da frente ganha foco saindo do desfoque); ao rolar, as camadas se montam de baixo para cima (ERP → portais → IA), as telas abrem em cortina e os marcadores chegam com uma onda; listas em sequência curta; topo fixo que ganha régua. Ligado à rolagem (--p calculado por rAF no script do <head>): a abertura sai de cena, faixa cinética com os sistemas deslizando em sentidos opostos, telas que sobem e crescem, método e contato entram como cartão e se abrem até a largura toda, barra de leitura no topo. Com movimento reduzido, só esmaecimento; sem JS, tudo visível.
+FIRST VIEWPORT: Sem barra de topo: só um link pequeno de idioma no canto superior direito. À esquerda, a oferta em duas a três linhas finas e grandes, apoio curto e botão preto. À direita, o símbolo do peixe em traço preto ocupando quase a altura da tela, desenhando-se na chegada (gesto único) e acompanhando de leve o cursor. Logo abaixo, a tela real da Nipo sobe ao rolar. Rodapé fecha com o logo completo em tamanho de cartaz.
 
-FORM: caso Nipo em primeiro plano, seed 7718cdc5, re-roll 1, registro safer, opção "caso". A rodada anterior (romaneio em formulário contínuo) foi rejeitada pelo José: "o conceito inteiro".
+FORM: pedido direto do usuário (marca, moderno, minimalista), sobrepõe o sorteio 21137dda; caminho code-led.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
 ## Em aberto
-- 25/09/2026, 2ª rodada: o José aprovou o formato e pediu mais riqueza ("simples demais"); vieram as anotações, as camadas, o palco e o fechamento.
-- 25/09/2026, 3ª rodada: o José pediu mais animação ("para ficar mais moderno").
-- 25/09/2026, 4ª rodada: "coisas subindo e aparecendo, de maneira dinâmica" — movimento contínuo ligado à rolagem.
-- Versão em inglês: estrutura não decidida.
-- Capturas aprovadas pelo José em 25/09/2026: produtividade, fluxo (tabela), armazenagem 3D (Daz Import tarjado) e compras. Números de pedido podem aparecer.
+- 22/11/2026: 1ª tentativa (pátio de contêineres) rejeitada; o José pediu ênfase na marca, moderno e minimalista. O símbolo é um peixe.
+- 22/11/2026: redesign completo pedido pelo José para abrir o site aos clientes; direção anterior (papel + verde-petróleo) descartada como referência.
+- Páginas legais (`/privacidade`, `/termos`, `/exclusao-de-dados`) seguem no visual escuro antigo; fora deste escopo.
 
 ## Idiomas
 
-`/` em português e `/en/` em inglês servem o mesmo layout (`src/layouts/Landing.astro`); o texto fica em `src/i18n/landing.ts`, com `en` tipado pelo `pt`. As rotas `/de/<ferramenta>` e as páginas legais continuam só em português. A troca de idioma é uma pílula com borda no topo, atrás da ação principal. As capturas das telas continuam em português, e a legenda da abertura em inglês diz isso.
+`/` em português e `/en/` em inglês servem o mesmo layout (`src/layouts/Landing.astro`); o texto fica em `src/i18n/landing.ts`, com `en` tipado pelo `pt`. As rotas `/de/<ferramenta>` e as páginas legais continuam só em português. As capturas das telas continuam em português, e a legenda em inglês diz isso.

@@ -50,7 +50,7 @@ afirmação é um cliente com vários sistemas em produção, entregues de forma
 
 ## Brand Commitments
 
-- Nome escrito como wordmark "carpe labs", em minúsculas; símbolo do gato em `public/logo.png`.
+- Nome escrito como wordmark "carpe labs", em minúsculas; o símbolo é um **peixe** (carpa, de "carpe") em `public/logo.png`.
 - A empresa aparece como marca institucional, **sem pessoas**: sem nomes, fotos ou biografia de
   equipe.
 - Contato público: `contact@carpelabs.io`; organização no GitHub `CarpeLabs`.

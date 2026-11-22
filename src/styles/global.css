@@ -1,152 +1,76 @@
 /* ========================================
-   carpe labs · o caso Nipo em primeiro plano
-   Direção registrada em .impeccable/surfaces/src-pages-index-astro.md
+   carpe labs — landing
+   ========================================
+
+   A marca em primeiro plano, moderna e minimalista: monocromático escuro, o peixe do logo grande
+   e vivo, tipografia fina que ecoa o wordmark. O único bloco escuro é a faixa de IA, em destaque.
+   Contrato de direção: `.impeccable/surfaces/src-pages-index-astro.md`.
    ======================================== */
 
 :root {
-    --papel: #fafaf9;
-    --tinta: #111418;
-    --tinta-2: #4a5058;   /* 7,8:1 sobre o papel */
-    --tinta-3: #5d646c;   /* 5,7:1 sobre o papel: legendas */
-    --acento: #0f5c4a;    /* 7,8:1 sobre o papel; papel sobre ele, 8,1:1 */
-    --acento-escuro: #0a4739;
-    --acento-fundo: #e2eee9;
-    --superficie: #e7ece9;
-    --regua: #d6dbd8;
-    --erro: #a3261c;
-    --fechamento: #0a3f33;      /* o fim da página: verde-petróleo profundo */
-    --fechamento-2: #c9ddd5;    /* 9,6:1 sobre o fechamento */
-    --fechamento-regua: #2d6152;
+    --fundo: #f4f4f1;
+    --fundo-2: #e9e9e4;
+    --texto: #0b0c0e;
+    --texto-2: #50545c;
+    --texto-3: #686d75;
+    --regua: rgb(11 12 14 / 0.1);
+    --regua-forte: rgb(11 12 14 / 0.24);
+    --erro: #b3261e;
+    /* Única cor de destaque: verde-floresta, só onde está a IA. 5,8:1 sobre o fundo. */
+    --verde: #2e6b55;
+    --verde-escuro: #24563f;
+    --verde-claro: #7fc4a6;
 
-    /* Profundidade só para as telas: é o que as põe "sobre a mesa". */
-    --sombra-tela: 0 1px 2px rgba(17, 20, 24, 0.06), 0 18px 40px -16px rgba(17, 20, 24, 0.28);
+    --fonte: 'Hanken Grotesk Variable', system-ui, sans-serif;
 
-    --texto: 'Schibsted Grotesk Variable', system-ui, sans-serif;
-
-    --gutter: clamp(1rem, 4vw, 3.5rem);
+    --gutter: clamp(1.25rem, 4vw, 3.5rem);
     --largura: 90rem;
-    --raio: 6px;
-    --raio-palco: 14px;
-    --ease: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-saida: cubic-bezier(0.4, 0, 1, 1);
+    --dentro: max(var(--gutter), calc((100vw - var(--largura)) / 2));
+    --secao: clamp(5rem, 11vw, 10rem);
+
+    --sai: cubic-bezier(0.22, 1, 0.36, 1);
+
+    color-scheme: light;
+    scrollbar-color: #c4c7cc var(--fundo);
 }
 
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-    background: var(--papel);
-    scroll-behavior: smooth;
-    scroll-padding-top: 5.5rem;
-    scrollbar-color: #b9c1bd var(--papel);
-}
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
-    font-family: var(--texto);
+    font-family: var(--fonte);
     font-size: 1.0625rem;
     line-height: 1.6;
-    color: var(--tinta);
-    background: var(--papel);
-    caret-color: var(--acento);
+    color: var(--texto);
+    background: var(--fundo);
     -webkit-font-smoothing: antialiased;
-    overflow-x: clip;
+    caret-color: var(--texto);
+    font-feature-settings: 'ss01';
 }
 
-::selection {
-    background: var(--acento);
-    color: var(--papel);
-}
+::selection { background: var(--texto); color: var(--fundo); }
 
-a {
-    color: inherit;
-    text-underline-offset: 0.22em;
-    text-decoration-thickness: 1px;
-}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-underline-offset: 0.25em; text-decoration-thickness: 1px; }
+ul, ol { list-style: none; }
+/* Escala de peso: fino (300) só nos títulos grandes, que ecoam o wordmark; quanto menor o título,
+ * mais peso ele ganha (400 a 500), para não sumir. A palavra-chave da abertura vai em 500. */
+h1, h2, h3 { text-wrap: balance; font-weight: 300; }
+.forte { font-weight: 500; color: var(--verde); }
+p { text-wrap: pretty; }
 
-:focus-visible {
-    outline: 2px solid var(--acento);
-    outline-offset: 3px;
-    border-radius: 2px;
-}
-
-img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-}
-
-h1, h2, h3 {
-    font-weight: 650;
-    text-wrap: balance;
-    letter-spacing: -0.025em;
-    line-height: 1.08;
-}
+:focus-visible { outline: 2px solid var(--texto); outline-offset: 4px; border-radius: 2px; }
 
 .hidden { display: none !important; }
 
-@media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
+/* Títulos de seção: grandes, finos, juntos. */
+h2 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
 }
-
-/* ---------- Topo ---------- */
-
-.topo {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: var(--papel);
-    box-shadow: 0 1px 0 transparent;
-    transition: box-shadow 250ms var(--ease), padding 250ms var(--ease);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    max-width: var(--largura);
-    margin: 0 auto;
-    padding: 1.25rem var(--gutter);
-}
-
-.topo.rolou { box-shadow: 0 1px 0 var(--regua); padding-top: 0.625rem; padding-bottom: 0.625rem; }
-
-/* O topo fixo ocupa a largura toda; o conteúdo dele segue a coluna. */
-@media (min-width: 90rem) {
-    .topo { max-width: none; padding-left: calc((100vw - var(--largura)) / 2 + var(--gutter)); padding-right: calc((100vw - var(--largura)) / 2 + var(--gutter)); }
-}
-
-.marca img {
-    width: 5.5rem;
-    transition: width 250ms var(--ease);
-}
-
-.topo.rolou .marca img { width: 4.25rem; }
-
-.topo-link {
-    font-size: 0.9375rem;
-    font-weight: 550;
-    text-decoration: none;
-    color: var(--acento);
-    padding: 0.5rem 0;
-}
-
-.topo-link:hover { text-decoration: underline; }
-
-.topo-acoes { display: flex; align-items: center; gap: 1.25rem; }
-
-/* Troca de idioma: tem cara de controle (borda), não de texto solto, e fica atrás da ação. */
-.idioma {
-    font-size: 0.8125rem;
-    font-weight: 550;
-    color: var(--tinta-2);
-    text-decoration: none;
-    border: 1px solid var(--regua);
-    border-radius: 999px;
-    padding: 0.3125rem 0.75rem;
-    transition: color 180ms var(--ease), border-color 180ms var(--ease);
-}
-.idioma:hover { color: var(--acento); border-color: var(--acento); }
 
 /* ---------- Botões ---------- */
 
@@ -154,1027 +78,390 @@ h1, h2, h3 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 3rem;
-    padding: 0 1.5rem;
+    gap: 0.6rem;
+    height: 3.25rem;
+    padding: 0 1.6rem;
+    background: var(--verde);
+    color: #fff;
     border: 0;
-    border-radius: var(--raio);
-    background: var(--acento);
-    color: var(--papel);
+    border-radius: 999px;
     font: inherit;
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
     cursor: pointer;
-    gap: 0.625rem;
-    transition: background-color 180ms var(--ease), scale 120ms var(--ease);
+    transition: background-color 180ms ease, transform 120ms ease;
 }
+.botao:hover { background: var(--verde-escuro); }
+.botao:active { transform: scale(0.97); }
+.botao:disabled { background: var(--texto-3); cursor: progress; }
+.botao .seta { transition: transform 220ms var(--sai); }
+.botao:hover .seta { transform: translateX(4px); }
 
-.botao:active { scale: 0.97; }
+.link { font-weight: 500; color: var(--texto-2); text-decoration: underline; text-decoration-color: var(--regua-forte); transition: color 160ms ease; }
+.link:hover { color: var(--texto); text-decoration-color: currentColor; }
 
-.seta { flex: none; transition: translate 220ms var(--ease); }
-.botao:hover .seta { translate: 4px 0; }
+/* ---------- Header: aparece quando o peixe pousa ---------- */
 
-.botao:hover { background: var(--acento-escuro); }
-
-.botao:disabled {
-    background: var(--tinta-3);
-    cursor: progress;
-}
-
-.link {
-    display: inline-flex;
+.topo {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 20;
+    height: 4.25rem;
+    display: flex;
     align-items: center;
-    gap: 0.375rem;
-    font-weight: 550;
-    color: var(--tinta);
-    transition: color 150ms var(--ease);
+    justify-content: space-between;
+    padding: 0 var(--dentro);
+    border-bottom: 1px solid transparent;
+    transition: background-color 300ms ease, border-color 300ms ease;
 }
-
-.link:hover .seta-baixo { translate: 0 3px; }
-
-.link:hover { color: var(--acento); }
+.pousou .topo { background: rgb(244 244 241 / 0.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom-color: var(--regua); }
+.topo-marca { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+/* O encaixe tem a proporção do peixe; sem JS ele mostra o logo parado. */
+.topo-slot { width: 3rem; aspect-ratio: 930 / 680; background: url('/logo-papel.png') center 18% / 100% auto no-repeat; }
+.voa .topo-slot { background: none; }
+.topo-nome { color: var(--verde); font-size: 1.25rem; font-weight: 300; letter-spacing: -0.01em; opacity: 0; transform: translateX(-0.5rem); transition: opacity 400ms var(--sai), transform 400ms var(--sai); }
+.pousou .topo-nome { opacity: 1; transform: none; }
+.topo-acoes { display: flex; align-items: center; gap: clamp(1rem, 2.5vw, 2rem); }
+.idioma { font-size: 0.9375rem; color: var(--texto-2); text-decoration: none; }
+.idioma:hover { color: var(--texto); text-decoration: underline; }
+.topo-link {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: var(--verde);
+    color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-0.4rem);
+    transition: opacity 400ms var(--sai), transform 400ms var(--sai);
+}
+.pousou .topo-link { opacity: 1; pointer-events: auto; transform: none; }
+:root:not(.voa) .topo-link { opacity: 1; pointer-events: auto; transform: none; }
+/* Enquanto o botão da abertura está na tela, o do header some: um "Implantar IA" por vez. */
+:root.cta-a-vista .topo-link { opacity: 0; pointer-events: none; transform: translateY(-0.4rem); }
+.topo-nome, .topo-link, .idioma { white-space: nowrap; }
+/* O idioma fica sempre na borda; o botão surge à esquerda dele quando o peixe pousa. */
+.idioma { order: 2; }
+@media (max-width: 30rem) {
+    .topo-nome { display: none; }
+    .topo-acoes { gap: 0.875rem; }
+    .topo-link { font-size: 0.875rem; padding: 0.45rem 0.875rem; }
+}
 
 /* ---------- Abertura ---------- */
 
 .abertura {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2.5rem;
-    max-width: var(--largura);
-    margin: 0 auto;
-    padding: clamp(2rem, 5vw, 4rem) 0 clamp(3.5rem, 7vw, 6rem) var(--gutter);
-}
-
-.abertura-texto {
-    padding-right: var(--gutter);
-    max-width: 38rem;
-}
-
-.abertura h1 {
-    font-size: clamp(2.5rem, 5.2vw, 4.5rem);
-    letter-spacing: -0.035em;
-    line-height: 1.02;
-}
-
-.abertura-apoio {
-    margin-top: 1.5rem;
-    font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
-    color: var(--tinta-2);
-    max-width: 32rem;
-}
-
-.abertura-acoes {
-    display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 1rem 1.75rem;
-    margin-top: 2.25rem;
-}
-
-/* Linha de fato acima do título: onde isto está em uso, e com qual garantia. */
-.em-uso {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.25rem 1.25rem;
-    margin-bottom: 1.75rem;
-    font-size: 0.9375rem;
-}
-
-.em-uso .situacao { margin-top: 0; }
-.em-uso-erp { color: var(--tinta-2); }
-
-/* O palco: um painel de superfície que sangra para a borda direita, com duas telas reais
-   sobrepostas. É a prova, não um enfeite dentro de moldura. */
-.palco-telas {
-    position: relative;
-    padding: clamp(2rem, 5vw, 4rem) 0 clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 4vw, 3.5rem);
-    background: var(--superficie);
-    border-radius: var(--raio-palco) 0 0 var(--raio-palco);
-    overflow: hidden;
-}
-
-.palco-telas img {
-    border: 1px solid var(--regua);
-    border-radius: var(--raio);
-    background: var(--papel);
-}
-
-.palco-frente {
-    position: relative;
-    width: 100%;
-    border-right: 0 !important;
-    border-radius: var(--raio) 0 0 var(--raio) !important;
-    box-shadow: var(--sombra-tela);
-}
-
-.palco-fundo {
-    position: absolute;
-    top: clamp(0.5rem, 1.5vw, 1.25rem);
-    right: -8%;
-    width: 62%;
-    opacity: 0.55;
-    filter: saturate(0.6);
-}
-
-figcaption {
-    margin-top: 0.75rem;
-    font-size: 0.875rem;
-    line-height: 1.45;
-    color: var(--tinta-3);
-}
-
-.palco figcaption { padding: 0 var(--gutter) 0 clamp(1.25rem, 4vw, 3.5rem); }
-
-@media (min-width: 64rem) {
-    .abertura {
-        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-        align-items: center;
-        gap: clamp(2.5rem, 4vw, 4rem);
-    }
-
-    .abertura-texto { padding-right: 0; }
-
-    .palco {
-        margin-right: calc(-1 * max(0px, (100vw - var(--largura)) / 2));
-    }
-}
-
-/* ---------- Caso ---------- */
-
-.caso,
-.contato {
-    max-width: var(--largura);
-    margin: 0 auto;
-    padding: 0 var(--gutter);
-}
-
-.caso-intro {
-    display: grid;
     gap: 3rem;
-    padding-top: clamp(3rem, 6vw, 5rem);
-    padding-bottom: clamp(1rem, 3vw, 2rem);
+    padding: clamp(6rem, 12vh, 9rem) var(--dentro) clamp(2.5rem, 6vh, 4rem);
 }
+.abertura > * { min-width: 0; }
+.abertura h1 {
+    font-size: clamp(2.75rem, 5.8vw, 5.75rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    max-width: 15ch;
+}
+.abertura-apoio { margin-top: 1.75rem; max-width: 34rem; font-size: 1.1875rem; color: var(--texto-2); }
+/* As etapas da implantação de IA fecham a abertura, de ponta a ponta. */
+.abertura-passos { grid-column: 1 / -1; display: grid; gap: 1.75rem; text-align: left; justify-self: stretch; margin-top: clamp(1rem, 3vw, 2.5rem); }
+.abertura-passos li { border-top: 1px solid var(--regua-forte); padding-top: 1.25rem; }
+.passo-n { display: block; font-size: 0.875rem; font-variant-numeric: tabular-nums; color: var(--texto-3); margin-bottom: 0.75rem; }
+.abertura-passos h2 { font-size: 1.625rem; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+.abertura-passos p { color: var(--texto-2); max-width: 26rem; }
+@media (min-width: 56rem) { .abertura-passos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; } }
+.abertura-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; margin-top: 2.5rem; }
 
-.caso-intro-texto { max-width: 36rem; }
+.simbolo {
+    color: var(--verde);
+    justify-self: center;
+    width: min(100%, 34rem);
+    aspect-ratio: 930 / 680;
+}
+/* O peixe em si. Com o voo ligado ele vira fixo e o script o leva da vaga ao header. */
+.peixe { width: 100%; }
+.voa .peixe { position: fixed; top: 0; left: 0; z-index: 21; transform-origin: 0 0; will-change: transform; pointer-events: none; }
+.peixe svg { width: 100%; height: auto; overflow: visible; display: block; translate: calc(var(--mx, 0) * 22px) calc(var(--my, 0) * 16px); transition: translate 900ms var(--sai); }
+.pousou .peixe svg { translate: none; }
+.simbolo .olho { translate: calc(var(--mx, 0) * 14px) calc(var(--my, 0) * 10px); transition: translate 600ms var(--sai); }
+.pousou .simbolo .olho { translate: none; }
 
 @media (min-width: 64rem) {
-    .caso-intro {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: clamp(3rem, 6vw, 6rem);
-        align-items: center;
-    }
+    .abertura { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); }
+    .simbolo { width: min(100%, 40rem); justify-self: end; }
+}
+@media (max-width: 63.99rem) {
+    /* Empilhado, peixe e texto formam um bloco só: o símbolo menor e colado ao título. */
+    .simbolo { order: -1; width: min(48%, 15rem); justify-self: center; }
+    .abertura { align-content: center; justify-items: center; text-align: center; gap: 0.75rem; }
+    .abertura-passos { margin-top: clamp(2.5rem, 6vw, 3.5rem); }
+    .abertura h1, .abertura-apoio { margin-inline: auto; }
+    .abertura-acoes { justify-content: center; }
 }
 
-/* As duas camadas sobre o ERP. De cima para baixo, como se lê a arquitetura. */
-.camadas {
-    display: grid;
-    max-width: 34rem;
+/* ---------- Blocos ----------
+ * Depois da abertura, cada seção é um bloco: superfície própria, cantos arredondados e o mesmo
+ * respiro em todas. O conteúdo continua alinhado à coluna da página; o bloco só se abre um pouco
+ * além dela. Entram inteiros com o scroll (ver `data-anima="secao"`). */
+main > section:not(.abertura) {
+    --borda: clamp(1.25rem, 4vw, 4rem);
+    margin: 0 max(0.75rem, calc(var(--dentro) - var(--borda))) clamp(0.75rem, 1.5vw, 1.25rem);
+    padding: clamp(3.5rem, 7vw, 6.5rem) var(--borda);
+    border-radius: clamp(1.25rem, 2.5vw, 2.25rem);
+    background: var(--fundo-2);
 }
 
-.camada {
-    padding: 1.25rem 1.5rem;
-    border-radius: var(--raio);
+/* ---------- Fluxo: as fontes alimentando a IA ---------- */
+
+.fluxo { display: grid; gap: clamp(2rem, 4vw, 3rem); align-items: center; }
+.fluxo-texto p { margin-top: 1.5rem; max-width: 30rem; font-size: 1.1875rem; color: var(--texto-2); }
+.fluxo-figura { width: 100%; max-width: 40rem; justify-self: center; }
+.fluxo-figura svg { display: block; width: 100%; height: auto; overflow: visible; }
+@media (min-width: 64rem) { .fluxo { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); } }
+
+.fluxo-linhas path { stroke: var(--regua-forte); stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.fluxo-particulas circle { fill: var(--verde); }
+.fluxo-centro .nucleo { fill: var(--verde); }
+.fluxo-centro text { fill: #fff; font-size: 46px; font-weight: 500; letter-spacing: -0.03em; }
+.fluxo-centro .orbita { fill: none; stroke: var(--regua-forte); stroke-width: 1.25; transform-origin: 320px 250px; }
+.fluxo-centro .orbita-1 { stroke-dasharray: 3 9; }
+.fluxo-centro .orbita-2 { stroke-dasharray: 1 14; stroke-width: 2; }
+.fluxo-centro .pulso { fill: none; stroke: var(--verde); stroke-width: 1.5; opacity: 0; transform-origin: 320px 250px; }
+.fonte-cartao { fill: var(--fundo); stroke: var(--regua-forte); stroke-width: 1; }
+.fonte-icone { stroke: #fff; }
+.fonte text { fill: var(--texto); font-size: 14.5px; font-weight: 500; }
+/* No celular o SVG encolhe quase à metade: a letra cresce para continuar legível (~10px). */
+@media (max-width: 40rem) { .fonte text { font-size: 18.5px; } .fluxo-resultado text { font-size: 21px; } }
+.fluxo-resultado rect { fill: var(--fundo); stroke: var(--texto); stroke-width: 1.5; }
+.fluxo-resultado text { fill: var(--texto); font-size: 17px; font-weight: 500; }
+
+/* Movimento: órbitas giram, o núcleo pulsa a cada chegada. Fora da tela tudo para (script). */
+@media (prefers-reduced-motion: no-preference) {
+    .fluxo-centro .orbita-1 { animation: gira 24s linear infinite; }
+    .fluxo-centro .orbita-2 { animation: gira 40s linear infinite reverse; }
+    .fluxo-centro .pulso { animation: pulso 1.3s var(--sai) infinite; }
+    .fluxo-figura.parado * { animation-play-state: paused !important; }
+
+    /* Entrada ligada à rolagem: `--p` (0 a 1) vem do script conforme o diagrama sobe na tela.
+     * Cada fonte tem o seu trecho (`--i`), desliza de fora para o lugar e acende a linha dela;
+     * a IA cresce no centro, e por último saem as respostas e correm as partículas. */
+    .anima .fluxo-figura { --p: 0; }
+    .anima .fonte, .anima .fluxo-linhas path, .anima .fluxo-resultado { --pi: clamp(0, calc((var(--p) - var(--i) * 0.07) * 2.2), 1); }
+    .anima .fonte { opacity: var(--pi); translate: calc((1 - var(--pi)) * var(--lado, -1) * 90px) 0; }
+    .anima .fluxo-linhas path { stroke-dashoffset: calc(1 - var(--pi)); }
+    .anima .fluxo-centro { opacity: clamp(0, calc(var(--p) * 2.5), 1); scale: calc(0.55 + 0.45 * clamp(0, calc(var(--p) * 1.6), 1)); transform-origin: 320px 250px; }
+    .anima .fluxo-resultado { opacity: var(--pi); translate: 0 calc((1 - var(--pi)) * 40px); }
+    .anima .fluxo-particulas { opacity: clamp(0, calc((var(--p) - 0.85) * 7), 1); }
+}
+@media (prefers-reduced-motion: reduce) { .fluxo-particulas { display: none; } }
+@keyframes gira { to { transform: rotate(360deg); } }
+@keyframes pulso { from { opacity: 0.45; transform: scale(1); } to { opacity: 0; transform: scale(1.45); } }
+
+/* ---------- O que muda na operação ---------- */
+
+.resultados { padding: var(--secao) var(--dentro) 0; }
+.secao-cabeca { display: grid; gap: 1.5rem 4rem; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.secao-cabeca p { max-width: 36rem; font-size: 1.1875rem; color: var(--texto-2); }
+/* Onde a IA trabalha vem primeiro e maior: o assistente em destaque escuro, depois os outros usos
+ * de IA em cartões. A base de dados por área fecha a seção, menor e mais quieta. */
+.resultados-lista, .resultados-base { display: grid; gap: clamp(0.75rem, 1.5vw, 1rem); }
+.resultado { display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; padding: clamp(1.5rem, 2.5vw, 2.25rem); border-radius: clamp(1rem, 1.8vw, 1.5rem); background: var(--fundo); }
+.resultado-corpo { align-self: stretch; }
+.selo-ia { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; padding: 0.3rem 0.65rem; border-radius: 999px; background: var(--verde); color: #fff; }
+.resultado h3 { font-size: clamp(1.5rem, 2.3vw, 1.875rem); font-weight: 500; line-height: 1.12; letter-spacing: -0.025em; }
+.resultado-corpo p { margin-top: 0.75rem; color: var(--texto-2); }
+.resultado-meta { margin-top: auto; padding-top: 0.75rem; font-size: 0.875rem; color: var(--texto-3); }
+.resultado-destaque { background: var(--texto); color: var(--fundo); padding: clamp(2rem, 4.5vw, 3.75rem); gap: 1.25rem; }
+.resultado-destaque .selo-ia { background: var(--verde-claro); color: var(--texto); }
+.resultado-destaque h3 { font-size: clamp(2rem, 4.6vw, 3.75rem); font-weight: 400; line-height: 1.02; letter-spacing: -0.035em; max-width: 18ch; }
+.resultado-destaque .resultado-corpo p { margin-top: 1.25rem; max-width: 34rem; font-size: 1.1875rem; color: rgb(244 244 241 / 0.72); }
+.resultado-destaque .resultado-meta { color: rgb(244 244 241 / 0.6); }
+/* Subtítulo do grupo: um degrau abaixo do título da seção, acima dos cartões. */
+.resultados-grupo { display: grid; gap: 0.5rem 4rem; margin: clamp(3rem, 6vw, 5rem) 0 clamp(1.25rem, 2.5vw, 2rem); }
+.resultados-grupo h3 { font-size: clamp(1.75rem, 3.2vw, 2.5rem); font-weight: 400; line-height: 1.05; letter-spacing: -0.03em; }
+.resultados-grupo p { max-width: 30rem; font-size: 1.0625rem; color: var(--texto-2); }
+@media (min-width: 64rem) { .resultados-grupo { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; } }
+/* Cartões da base: área em rótulo pequeno, título com peso, texto curto. */
+.resultado-base { background: transparent; border: 1px solid var(--regua-forte); padding: clamp(1.25rem, 2vw, 1.75rem); gap: 1rem; }
+.resultado-area { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-3); }
+.resultado-base h3 { font-size: clamp(1.25rem, 1.7vw, 1.4375rem); font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+.resultado-base .resultado-corpo p { margin-top: 0.6rem; font-size: 0.9375rem; }
+@media (min-width: 40rem) {
+    .resultados-lista, .resultados-base { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .resultado-destaque { grid-column: 1 / -1; }
+}
+@media (min-width: 64rem) {
+    .secao-cabeca { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; }
 }
 
-.camada-nome {
-    font-weight: 650;
-    font-size: 1.125rem;
-    letter-spacing: -0.015em;
-}
+/* ---------- Método ---------- */
 
-.camada-desc {
-    margin-top: 0.25rem;
-    font-size: 0.9375rem;
-}
+.metodo { padding: var(--secao) var(--dentro) 0; }
+.metodo h2 { margin-bottom: clamp(2rem, 4vw, 3rem); }
+.metodo-itens { display: grid; gap: 2.5rem; }
+.metodo-itens > div { border-top: 1px solid var(--regua-forte); padding-top: 1.5rem; }
+.metodo-itens h3 { font-size: 1.375rem; font-weight: 500; letter-spacing: -0.015em; margin-bottom: 0.75rem; }
+.metodo-itens p { color: var(--texto-2); }
+@media (min-width: 56rem) { .metodo-itens { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; } }
 
-.camada-itens {
+/* ---------- Perguntas ---------- */
+
+.perguntas { padding: var(--secao) var(--dentro) 0; display: grid; gap: 2rem 4rem; }
+.perguntas-lista { border-top: 1px solid var(--regua-forte); }
+.perguntas details { border-bottom: 1px solid var(--regua); }
+.perguntas summary {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.875rem;
-    list-style: none;
-}
-
-.camada-itens li {
-    padding: 0.25rem 0.625rem;
-    border-radius: 999px;
-    font-size: 0.8125rem;
-    font-weight: 600;
-}
-
-.camada-ia {
-    border: 1.5px dashed var(--acento);
-    color: var(--tinta);
-}
-
-.camada-ia .camada-desc { color: var(--tinta-2); }
-/* Claude e ChatGPT em destaque; o "qualquer outra IA" diz que a lista não é fechada. */
-.camada-ia .camada-itens li.destaque { background: var(--acento); color: var(--papel); font-size: 0.875rem; padding: 0.3125rem 0.75rem; }
-.camada-ia .camada-itens li.outras { border: 1.5px dashed var(--acento); color: var(--acento); }
-
-.camada-portais {
-    background: var(--acento);
-    color: var(--papel);
-}
-
-.camada-portais .camada-desc { color: #d6e7e0; }
-.camada-portais .camada-itens li { background: rgba(250, 250, 249, 0.14); color: var(--papel); }
-
-.camada-erp {
-    background: var(--tinta);
-    color: var(--papel);
-}
-
-.camada-erp .camada-desc { color: #c3c8cd; }
-.camada-caso {
-    margin-top: 0.75rem;
-    padding-top: 0.625rem;
-    border-top: 1px solid #2c3238;
-    font-size: 0.8125rem;
-    color: #aab1b8;   /* 7,9:1 sobre a tinta */
-}
-
-/* A ligação entre camadas: uma linha vertical com o verbo da relação. */
-.camada-liga {
-    position: relative;
-    height: 3rem;
-    margin-left: 1.5rem;
-    border-left: 1.5px solid var(--tinta-3);
-    font-size: 0.8125rem;
-    font-weight: 550;
-    color: var(--tinta-2);
-    display: flex;
+    justify-content: space-between;
     align-items: center;
-}
-
-.camada-liga::after {
-    content: "";
-    position: absolute;
-    left: -5.5px;
-    top: -1px;
-    border: 5px solid transparent;
-    border-bottom: 7px solid var(--tinta-3);
-    border-top: 0;
-}
-
-.camada-liga span { padding-left: 0.875rem; }
-
-.caso-intro h2,
-.metodo h2,
-.contato h2 {
-    font-size: clamp(2.25rem, 4.4vw, 3.75rem);
-    letter-spacing: -0.03em;
-}
-
-.caso-intro-texto p {
-    margin-top: 1.25rem;
+    gap: 1.5rem;
+    padding: 1.3rem 0;
     font-size: 1.1875rem;
-    color: var(--tinta-2);
-}
-
-.sistema {
-    display: grid;
-    gap: 1.75rem;
-    padding: clamp(3rem, 6vw, 5.5rem) 0;
-    border-bottom: 1px solid var(--regua);
-}
-
-.sistema-texto h3 {
-    font-size: clamp(1.75rem, 2.6vw, 2.25rem);
-    letter-spacing: -0.025em;
-}
-
-.outros h3 {
-    font-size: 1.5rem;
-    letter-spacing: -0.02em;
-}
-
-/* A legenda das anotações: o número liga o texto ao marcador na tela. */
-.notas {
+    font-weight: 500;
+    cursor: pointer;
     list-style: none;
-    margin-top: 1.75rem;
-    border-top: 1px solid var(--regua);
+    transition: color 160ms ease;
 }
-
-.notas li {
-    display: grid;
-    grid-template-columns: 1.75rem minmax(0, 1fr);
-    gap: 0.75rem;
-    padding: 0.875rem 0;
-    border-bottom: 1px solid var(--regua);
-    font-size: 0.9375rem;
-    line-height: 1.5;
+.perguntas summary::-webkit-details-marker { display: none; }
+.perguntas summary::after {
+    content: '';
+    flex: none;
+    width: 0.8rem;
+    height: 0.8rem;
+    background:
+        linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat,
+        linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
+    transition: transform 300ms var(--sai);
 }
-
-.notas-n {
-    display: grid;
-    place-items: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 50%;
-    background: var(--acento-fundo);
-    color: var(--acento);
-    font-size: 0.8125rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-}
-
-.sistema-uso {
-    margin-top: 1rem;
-    color: var(--tinta-2);
-    max-width: 34rem;
-}
-
-.sistema-telas {
-    display: grid;
-    gap: 1.75rem;
-}
-
-/* Cada tela sobre um palco de superfície, com os marcadores por cima. */
-.sistema-telas figure {
-    padding: clamp(0.75rem, 3vw, 2.5rem);
-    background: var(--superficie);
-    border-radius: var(--raio-palco);
-}
-
-.tela { position: relative; }
-
-.tela img {
-    border: 1px solid var(--regua);
-    border-radius: var(--raio);
-    background: var(--papel);
-    box-shadow: var(--sombra-tela);
-}
-
-.marcador {
-    position: absolute;
-    display: grid;
-    place-items: center;
-    width: clamp(1.375rem, 2.2vw, 2rem);
-    height: clamp(1.375rem, 2.2vw, 2rem);
-    translate: -50% -50%;
-    border-radius: 50%;
-    background: var(--acento);
-    color: var(--papel);
-    font-size: clamp(0.6875rem, 1vw, 0.875rem);
-    font-weight: 700;
-    box-shadow: 0 0 0 3px var(--papel), 0 4px 10px -2px rgba(17, 20, 24, 0.35);
-    transition: scale 220ms var(--ease), opacity 420ms var(--ease);
-}
-
-/* Passar o olho na legenda acende o marcador correspondente. */
-.sistema:has(.notas li[data-n="1"]:hover) .marcador[data-n="1"],
-.sistema:has(.notas li[data-n="2"]:hover) .marcador[data-n="2"],
-.sistema:has(.notas li[data-n="3"]:hover) .marcador[data-n="3"],
-.sistema:has(.notas li[data-n="4"]:hover) .marcador[data-n="4"] {
-    scale: 1.3;
-}
-
-.notas li { transition: color 150ms var(--ease); }
-.notas li:hover { color: var(--acento); }
-
-.sistema-telas figcaption { margin-top: 1rem; }
-
+.perguntas details[open] summary::after { transform: rotate(135deg); }
+.perguntas summary:hover { color: var(--texto-2); }
+.perguntas details p { padding: 0 0 1.5rem; max-width: 44rem; color: var(--texto-2); }
+.perguntas details::details-content { block-size: 0; overflow: clip; transition: block-size 340ms var(--sai), content-visibility 340ms allow-discrete; }
+.perguntas details[open]::details-content { block-size: auto; }
+@supports (interpolate-size: allow-keywords) { :root { interpolate-size: allow-keywords; } }
 @media (min-width: 64rem) {
-    .sistema {
-        grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
-        gap: clamp(2.5rem, 5vw, 5rem);
-        align-items: start;
-    }
-
-    .sistema-texto {
-        position: sticky;
-        top: 6.5rem;   /* abaixo do topo fixo */
-    }
+    .perguntas { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: start; }
+    .perguntas h2 { position: sticky; top: 6rem; }
 }
 
-/* Situação: produção leva o acento; homologação fica na tinta, com o ponto vazado. */
-.situacao {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.625rem;
-    font-size: 0.875rem;
-    font-weight: 550;
-    white-space: nowrap;
+/* ---------- Contato ---------- */
+
+.contato { padding: var(--secao) var(--dentro); display: grid; gap: 3rem 4rem; }
+.contato > * { min-width: 0; }
+.contato h2 { font-size: clamp(2.75rem, 5.8vw, 5.75rem); line-height: 1; letter-spacing: -0.04em; }
+.contato-intro p { margin-top: 1.5rem; max-width: 30rem; font-size: 1.1875rem; color: var(--texto-2); }
+
+.formulario { display: grid; gap: 1.5rem; align-self: end; }
+.campo { display: grid; gap: 0.5rem; }
+.campo label { font-size: 0.9375rem; color: var(--texto-2); }
+.campo input, .campo textarea {
+    width: 100%;
+    font: inherit;
+    color: var(--texto);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--regua-forte);
+    border-radius: 0;
+    padding: 0.6rem 0;
+    transition: border-color 160ms ease;
 }
-
-.situacao::before {
-    content: "";
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
+.campo textarea { resize: vertical; min-height: 7rem; }
+.campo input:hover, .campo textarea:hover { border-bottom-color: var(--texto-2); }
+.campo input:focus-visible, .campo textarea:focus-visible { outline: none; border-bottom: 1px solid var(--texto); box-shadow: 0 1px 0 0 var(--texto); }
+.campo .invalid { border-bottom-color: var(--erro); }
+.field-error { display: none; color: var(--erro); font-size: 0.9375rem; }
+.field-error.visible { display: block; }
+.envio { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 0.5rem; }
+.form-message { padding: 0.9rem 1rem; border-radius: 8px; border: 1px solid var(--regua-forte); }
+.form-message.success { color: var(--texto); }
+.form-message.error { color: var(--erro); border-color: rgb(179 38 30 / 0.35); }
+@media (min-width: 40rem) {
+    .formulario { grid-template-columns: 1fr 1fr; }
+    .campo-largo, .envio, .form-message { grid-column: 1 / -1; }
 }
-
-.situacao-producao { color: var(--acento); }
-.situacao-producao::before { background: var(--acento); }
-.situacao-homologacao { color: var(--tinta-2); }
-.situacao-homologacao::before { border: 1.5px solid var(--tinta-2); }
-
-/* ---------- Também entregues ---------- */
-
-.outros {
-    padding: clamp(3rem, 6vw, 5rem) 0 clamp(4rem, 8vw, 7rem);
-}
-
-.outros ul {
-    list-style: none;
-    margin-top: 1.5rem;
-    border-top: 1px solid var(--regua);
-}
-
-.outros li {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.25rem 2rem;
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--regua);
-}
-
-.outros-nome { font-weight: 600; }
-.outros-uso { color: var(--tinta-2); }
-.outros li .situacao { margin-top: 0.25rem; }
-
-@media (min-width: 48rem) {
-    .outros li {
-        grid-template-columns: minmax(0, 14rem) minmax(0, 1fr) 9.5rem;
-        align-items: baseline;
-    }
-
-    .outros li .situacao { margin-top: 0; }
-}
+@media (min-width: 64rem) { .contato { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 
 /* ---------- Marca de origem ---------- */
 
 .origem-marca {
     display: inline-block;
-    margin-left: 0.625rem;
-    padding: 0.125rem 0.5rem;
-    border-radius: 999px;
-    background: var(--acento-fundo);
-    color: var(--acento);
+    margin-left: 0.75rem;
+    vertical-align: 0.35em;
+    padding: 0.3em 0.7em;
     font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0;
-    vertical-align: 0.2em;
-    white-space: nowrap;
+    line-height: 1;
+    background: var(--verde);
+    color: #fff;
+    border-radius: 999px;
 }
+.resultado.origem { box-shadow: 0 0 0 2px var(--verde); }
 
-.outros li.origem {
-    background: var(--acento-fundo);
-    margin: 0 calc(-1 * min(1rem, var(--gutter)));
-    padding-left: min(1rem, var(--gutter));
-    padding-right: min(1rem, var(--gutter));
-}
+/* ---------- Rodapé: a marca fecha a página ---------- */
 
-.outros li.origem .origem-marca { background: var(--papel); }
-
-/* ---------- Método ---------- */
-
-.metodo {
-    padding: clamp(4rem, 8vw, 7rem) var(--gutter);
-    background: var(--superficie);
-}
-
-.metodo > * {
-    max-width: calc(var(--largura) - 2 * var(--gutter));
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.metodo-itens {
-    display: grid;
-    gap: 2.5rem;
-    margin-top: 2.5rem;
-}
-
-.metodo-itens > div {
-    position: relative;
-    padding-top: 1.25rem;
-}
-
-.metodo-itens > div::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 2px;
-    background: var(--acento);
-    transform-origin: left;
-}
-
-.metodo-itens h3 { font-size: 1.375rem; }
-
-.metodo-itens p {
-    margin-top: 0.75rem;
-    color: var(--tinta-2);
-    max-width: 30rem;
-}
-
-@media (min-width: 56rem) {
-    .metodo-itens { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; }
-}
-
-/* ---------- Perguntas frequentes ---------- */
-
-.perguntas {
-    display: grid;
-    gap: 2rem;
-    max-width: var(--largura);
-    margin: 0 auto;
-    padding: clamp(4rem, 8vw, 7rem) var(--gutter);
-}
-
-.perguntas h2 { font-size: clamp(2.25rem, 4.4vw, 3.75rem); letter-spacing: -0.03em; }
-
-@media (min-width: 64rem) {
-    .perguntas {
-        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-        gap: clamp(2.5rem, 5vw, 5rem);
-        align-items: start;
-    }
-}
-
-.perguntas-lista { border-top: 1px solid var(--regua); }
-
-.perguntas details {
-    border-bottom: 1px solid var(--regua);
-    interpolate-size: allow-keywords;
-}
-
-.perguntas summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    padding: 1.375rem 0;
-    font-size: 1.1875rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    cursor: pointer;
-    list-style: none;
-    transition: color 150ms var(--ease);
-}
-
-.perguntas summary::-webkit-details-marker { display: none; }
-.perguntas summary:hover { color: var(--acento); }
-
-/* O "+" vira "−": gira meia volta enquanto a barra vertical encolhe. */
-.perguntas summary::after {
-    content: "";
-    flex: none;
-    width: 1rem;
-    height: 1rem;
-    background:
-        linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat,
-        linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat;
-    transition: transform 300ms var(--ease), background-size 300ms var(--ease);
-}
-
-.perguntas details[open] summary::after { transform: rotate(180deg); background-size: 100% 2px, 2px 0; }
-
-.perguntas details p {
-    padding: 0 3rem 1.5rem 0;
-    color: var(--tinta-2);
-    max-width: 44rem;
-}
-
-/* Abre e fecha com altura animada onde o navegador sabe (::details-content); nos outros, abre direto. */
-.perguntas details::details-content {
-    block-size: 0;
-    overflow: hidden;
-    transition: block-size 350ms var(--ease), content-visibility 350ms allow-discrete;
-}
-
-.perguntas details[open]::details-content { block-size: auto; }
-
-@media (prefers-reduced-motion: reduce) {
-    .perguntas details::details-content { transition: none; }
-}
-
-/* ---------- Contato: o fechamento ---------- */
-
-.contato {
-    max-width: none;
-    padding: clamp(4.5rem, 9vw, 8rem) var(--gutter);
-    background: var(--fechamento);
-    color: var(--papel);
-    scroll-margin-top: 0;
-}
-
-.contato-grade {
-    display: grid;
-    gap: 2.5rem;
-    max-width: calc(var(--largura) - 2 * var(--gutter));
-    margin: 0 auto;
-}
-
-.contato h2 { font-size: clamp(2.5rem, 5.2vw, 4.5rem); letter-spacing: -0.035em; }
-
-.contato-intro p {
-    margin-top: 1.25rem;
-    color: var(--fechamento-2);
-    max-width: 28rem;
-    font-size: 1.125rem;
-}
-
-.contato-alt a { color: var(--papel); font-weight: 550; }
-.contato-alt a:hover { color: #9fd3bf; }
-
-@media (min-width: 64rem) {
-    .contato-grade {
-        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-        gap: clamp(2.5rem, 5vw, 5rem);
-    }
-}
-
-.contato :focus-visible { outline-color: #9fd3bf; }
-
-.formulario {
-    display: grid;
-    gap: 1.25rem 1.5rem;
-}
-
-@media (min-width: 40rem) {
-    .formulario { grid-template-columns: 1fr 1fr; }
-    .campo-largo, .envio, .form-message { grid-column: 1 / -1; }
-}
-
-.campo label {
-    display: block;
-    margin-bottom: 0.375rem;
-    font-size: 0.9375rem;
-    font-weight: 550;
-}
-
-.campo input,
-.campo textarea {
-    width: 100%;
-    padding: 0.75rem 0.875rem;
-    border: 1px solid transparent;
-    border-radius: var(--raio);
-    background: #fff;
-    color: var(--tinta);
-    font: inherit;
-    transition: border-color 150ms var(--ease);
-}
-
-.campo textarea { resize: vertical; min-height: 8rem; }
-
-.campo input:hover,
-.campo textarea:hover { border-color: #9fd3bf; }
-
-.campo input:focus-visible,
-.campo textarea:focus-visible {
-    outline: 3px solid #9fd3bf;
-    outline-offset: 0;
-    border-color: var(--acento);
-}
-
-.campo .invalid { border-color: #ff9d8f; outline: 1px solid #ff9d8f; }
-
-.field-error {
-    display: none;
-    margin-top: 0.375rem;
-    font-size: 0.875rem;
-    color: #ffb8ad;   /* 8,4:1 sobre o fechamento */
-}
-
-.field-error.visible { display: block; }
-
-.envio {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.form-message {
-    padding: 0.75rem 1rem;
-    border-radius: var(--raio);
-    font-weight: 550;
-}
-
-.contato .botao { background: var(--papel); color: var(--fechamento); }
-.contato .botao:hover { background: #d9ece4; }
-.contato .botao:disabled { background: var(--fechamento-2); color: var(--fechamento); }
-
-.form-message.success { background: var(--acento-fundo); color: var(--acento); }
-.form-message.error { background: #f6e4e2; color: var(--erro); }
-
-/* ---------- Rodapé ---------- */
-
-.rodape {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    max-width: var(--largura);
-    margin: 0 auto;
-    padding: 2rem var(--gutter) 2.5rem;
-}
-
-.rodape-entidade {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-    max-width: 40rem;
-}
-
-.rodape-entidade p {
-    font-size: 0.875rem;
-    line-height: 1.55;
-    color: var(--tinta-3);
-}
-
-.rodape-marca { width: 4.5rem; flex: none; }
-
-.rodape nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.75rem;
-    font-size: 0.9375rem;
-}
-
-.rodape a {
-    color: var(--tinta-2);
-    text-decoration: none;
-    padding: 0.25rem 0;
-}
-
-.rodape a:hover { color: var(--acento); text-decoration: underline; }
+.rodape { padding: clamp(2.5rem, 5vw, 4rem) var(--dentro) clamp(1.5rem, 3vw, 2.25rem); border-top: 1px solid var(--regua); }
+.rodape-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem 3rem; }
+.rodape-marca { display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; font-size: 1.375rem; font-weight: 300; letter-spacing: -0.01em; color: var(--verde); }
+.rodape-marca svg { width: 2.75rem; height: auto; overflow: visible; }
+.rodape nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 0.9375rem; color: var(--texto-2); }
+.rodape nav a { text-decoration: none; }
+.rodape nav a:hover { color: var(--texto); }
+.rodape-base { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem 3rem; margin-top: clamp(1.75rem, 3vw, 2.5rem); padding-top: 1.25rem; border-top: 1px solid var(--regua); font-size: 0.8125rem; color: var(--texto-3); }
 
 /* ========================================
-   Movimento
-   Tudo aqui depende de `.anima` no <html>, que o script do <head> põe. Sem ele, nada some.
+   Movimento — condicionado a `.anima` (script do <head>); sem JS nada some.
+   O peixe se desenha uma vez na chegada; o resto entra quieto.
    ======================================== */
 
-/* ---- Chegada: o momento principal ---- */
+@keyframes desenha { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes aparece { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: none; } }
+@keyframes palavra { to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes sobe { from { opacity: 0; transform: translateY(1.25rem); } to { opacity: 1; transform: none; } }
 
-@keyframes sobe {
-    from { opacity: 0; transform: translateY(1.25rem); }
+@media (prefers-reduced-motion: no-preference) {
+    .anima .simbolo .traco { stroke-dasharray: 1; animation: desenha 1400ms cubic-bezier(0.65, 0, 0.35, 1) both; }
+    .anima .simbolo .traco:nth-of-type(2) { animation-delay: 250ms; }
+    .anima .simbolo .traco:nth-of-type(3) { animation-delay: 500ms; }
+    .anima .simbolo .cheio { transform-box: fill-box; transform-origin: center; animation: aparece 600ms var(--sai) both; animation-delay: 1100ms; }
+    .anima .simbolo .olho { animation-delay: 1300ms; }
+
+    /* Títulos: cada palavra sobe saindo do desfoque, em sequência curta. */
+    .anima .palavras .p { display: inline-block; opacity: 0; transform: translateY(0.45em) rotate(2deg); filter: blur(10px); transform-origin: 0 100%; }
+    .anima .abertura h1 .p { animation: palavra 1000ms var(--sai) both; animation-delay: calc(120ms + var(--i) * 70ms); }
+    .anima .palavras.visto .p { animation: palavra 1000ms var(--sai) both; animation-delay: calc(var(--i) * 60ms); }
+    .anima .abertura-apoio { animation: sobe 900ms var(--sai) 300ms both; }
+    .anima .abertura-acoes { animation: sobe 900ms var(--sai) 420ms both; }
+
+    .anima [data-anima="titulo"]:not(.palavras) { opacity: 0; transform: translateY(1.25rem); transition: opacity 800ms var(--sai), transform 800ms var(--sai); }
+    .anima [data-anima="titulo"]:not(.palavras).visto { opacity: 1; transform: none; }
+
+    /* Cada bloco entra inteiro, de uma vez: sobe, cresce de leve e ganha opacidade quando começa
+     * a aparecer na tela. Um de cada vez, conforme a página desce. */
+    .anima [data-anima="secao"] { opacity: 0; transform: translateY(7rem) scale(0.92); transform-origin: 50% 0; transition: opacity 900ms var(--sai), transform 1200ms var(--sai); }
+    .anima [data-anima="secao"].visto { opacity: 1; transform: none; }
+
+    /* Dentro do bloco, os itens entram em sequência logo depois dele. */
+    .anima [data-anima="lista"] > * { opacity: 0; transform: translateY(2.5rem) scale(0.96); filter: blur(6px); transition: opacity 800ms var(--sai), transform 900ms var(--sai), filter 800ms var(--sai); transition-delay: 200ms; }
+    .anima [data-anima="lista"].visto > * { opacity: 1; transform: none; filter: none; }
+    .anima [data-anima="lista"].visto > :nth-child(2) { transition-delay: 290ms; }
+    .anima [data-anima="lista"].visto > :nth-child(3) { transition-delay: 380ms; }
+    .anima [data-anima="lista"].visto > :nth-child(4) { transition-delay: 470ms; }
+    .anima [data-anima="lista"].visto > :nth-child(5) { transition-delay: 560ms; }
+    .anima [data-anima="lista"].visto > :nth-child(6) { transition-delay: 650ms; }
+    .anima [data-anima="lista"].visto > :nth-child(7) { transition-delay: 740ms; }
+    .anima [data-anima="lista"].visto > :nth-child(8) { transition-delay: 830ms; }
+
+    .form-message:not(.hidden) { animation: sobe 400ms var(--sai) both; }
 }
 
-@keyframes some-entra {
-    from { opacity: 0; }
-}
-
-@keyframes palco-abre {
-    from { clip-path: inset(0 0 0 100% round var(--raio-palco) 0 0 var(--raio-palco)); }
-    to { clip-path: inset(0 0 0 0 round var(--raio-palco) 0 0 var(--raio-palco)); }
-}
-
-@keyframes tela-foca {
-    from { opacity: 0; transform: perspective(1400px) rotateX(14deg) translateY(2.5rem) scale(0.96); transform-origin: 50% 100%; filter: blur(8px); }
-    to { opacity: 1; transform: none; filter: blur(0); }
-}
-
-@keyframes fundo-entra {
-    from { opacity: 0; transform: translate(1.5rem, -0.75rem); }
-}
-
-.anima .em-uso { animation: some-entra 600ms var(--ease) both; }
-.anima .abertura h1 { animation: sobe 800ms var(--ease) 60ms both; }
-.anima .abertura-apoio { animation: sobe 800ms var(--ease) 160ms both; }
-.anima .abertura-acoes { animation: sobe 800ms var(--ease) 240ms both; }
-.anima .palco-telas { animation: palco-abre 900ms var(--ease) 120ms both; }
-.anima .palco-fundo { animation: fundo-entra 900ms var(--ease) 520ms both; }
-.anima .palco-frente { animation: tela-foca 1100ms var(--ease) 320ms both; }
-.anima .palco figcaption { animation: some-entra 600ms var(--ease) 900ms both; }
-
-/* ---- Ao rolar ---- */
-
-[data-anima] { --t: 700ms; }
-
-/* Títulos de seção: sobem e ganham foco. Sem clip-path aqui: recorte zerado faz o
-   IntersectionObserver nunca ver o elemento, e o título ficaria invisível para sempre. */
-.anima [data-anima="titulo"] {
-    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease), filter var(--t) var(--ease);
-}
-
-.anima [data-anima="titulo"]:not(.visto) {
-    opacity: 0;
-    transform: translateY(0.5em);
-    filter: blur(6px);
-}
-
-/* Camadas: a arquitetura se monta de baixo para cima, do ERP à IA. */
-.anima .camadas > * {
-    transition: opacity 600ms var(--ease), transform 600ms var(--ease), clip-path 450ms var(--ease);
-}
-
-.anima .camadas:not(.visto) > .camada { opacity: 0; transform: translateY(1rem); }
-.anima .camadas:not(.visto) > .camada-liga { clip-path: inset(100% 0 0 0); }
-/* Estado final explícito: de um recorte para `none` a transição é discreta e salta. */
-.anima .camadas.visto > .camada-liga { clip-path: inset(0 0 0 0); }
-
-.anima .camadas.visto > .camada-erp { transition-delay: 0ms; }
-.anima .camadas.visto > .camada-liga:nth-of-type(2) { transition-delay: 380ms; }
-.anima .camadas.visto > .camada-portais { transition-delay: 620ms; }
-.anima .camadas.visto > .camada-liga:nth-of-type(1) { transition-delay: 1000ms; }
-.anima .camadas.visto > .camada-ia { transition-delay: 1240ms; }
-
-/* Texto do sistema e a legenda numerada, em sequência. */
-.anima [data-anima="texto"] > *,
-.anima [data-anima="texto"] .notas li {
-    transition: opacity 600ms var(--ease), transform 600ms var(--ease), color 150ms var(--ease);
-}
-
-.anima [data-anima="texto"]:not(.visto) > :not(.notas),
-.anima [data-anima="texto"]:not(.visto) .notas li {
-    opacity: 0;
-    transform: translateY(0.75rem);
-}
-
-.anima [data-anima="texto"].visto > :nth-child(2) { transition-delay: 80ms; }
-.anima [data-anima="texto"].visto > :nth-child(3) { transition-delay: 160ms; }
-.anima [data-anima="texto"].visto .notas li:nth-child(1) { transition-delay: 320ms; }
-.anima [data-anima="texto"].visto .notas li:nth-child(2) { transition-delay: 400ms; }
-.anima [data-anima="texto"].visto .notas li:nth-child(3) { transition-delay: 480ms; }
-.anima [data-anima="texto"].visto .notas li:nth-child(4) { transition-delay: 560ms; }
-
-/* Telas: cortina da esquerda para a direita; depois os marcadores. */
-.anima .tela img {
-    transition: clip-path 1000ms var(--ease), filter 1000ms var(--ease);
-}
-
-.anima .tela:not(.visto) img {
-    clip-path: inset(0 100% 0 0 round var(--raio));
-    filter: saturate(0.3);
-}
-
-.anima .tela.visto img { clip-path: inset(0 0 0 0 round var(--raio)); }
-
-.anima .tela:not(.visto) .marcador { opacity: 0; scale: 0.4; }
-.anima .tela.visto .marcador { transition-delay: calc(700ms + var(--ordem) * 140ms); }
-
-/* O marcador chega com uma onda, uma vez só. */
-.marcador::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 2px solid var(--acento);
-    opacity: 0;
-    pointer-events: none;
-}
-
-@keyframes onda {
-    from { opacity: 0.7; transform: scale(1); }
-    to { opacity: 0; transform: scale(2.4); }
-}
-
-.anima .tela.visto .marcador::after {
-    animation: onda 900ms var(--ease) both;
-    animation-delay: calc(900ms + var(--ordem) * 140ms);
-}
-
-/* Passar o olho na legenda repete a onda no marcador. */
-.sistema:has(.notas li[data-n="1"]:hover) .marcador[data-n="1"]::after,
-.sistema:has(.notas li[data-n="2"]:hover) .marcador[data-n="2"]::after,
-.sistema:has(.notas li[data-n="3"]:hover) .marcador[data-n="3"]::after,
-.sistema:has(.notas li[data-n="4"]:hover) .marcador[data-n="4"]::after {
-    animation: onda 800ms var(--ease) infinite;
-}
-
-/* Listas: entram como lista, com atraso total limitado. */
-.anima [data-anima="lista"] > * {
-    transition: opacity 600ms var(--ease), transform 600ms var(--ease), background-color 200ms var(--ease);
-}
-
-.anima [data-anima="lista"]:not(.visto) > * { opacity: 0; transform: translateY(1rem); }
-.anima [data-anima="lista"].visto > :nth-child(2) { transition-delay: 70ms; }
-.anima [data-anima="lista"].visto > :nth-child(3) { transition-delay: 140ms; }
-.anima [data-anima="lista"].visto > :nth-child(4) { transition-delay: 210ms; }
-.anima [data-anima="lista"].visto > :nth-child(5) { transition-delay: 280ms; }
-
-/* No método, a régua verde se desenha depois do texto. */
-.anima .metodo-itens > div::before { transition: transform 800ms var(--ease); }
-.anima .metodo-itens:not(.visto) > div::before { transform: scaleX(0); }
-.anima .metodo-itens.visto > :nth-child(1)::before { transition-delay: 200ms; }
-.anima .metodo-itens.visto > :nth-child(2)::before { transition-delay: 300ms; }
-.anima .metodo-itens.visto > :nth-child(3)::before { transition-delay: 400ms; }
-
-/* Linha de "Também entregues": destaque ao passar. */
-.outros li:not(.origem):hover { background: rgba(231, 236, 233, 0.6); }
-.outros li { transition: background-color 200ms var(--ease); }
-
-/* Resposta do formulário. */
-.form-message:not(.hidden) { animation: sobe 400ms var(--ease) both; }
-
-/* ---- Movimento reduzido: só esmaecimento, sem deslocamento, sem desfoque ---- */
 
 @media (prefers-reduced-motion: reduce) {
-    .anima .em-uso, .anima .abertura h1, .anima .abertura-apoio, .anima .abertura-acoes,
-    .anima .palco-telas, .anima .palco-fundo, .anima .palco-frente, .anima .palco figcaption,
-    .form-message:not(.hidden) {
-        animation: some-entra 300ms linear both;
-    }
-
-    .anima [data-anima] *, .anima [data-anima], .anima .tela img, .anima .marcador {
-        transform: none !important;
-        clip-path: none !important;
-        filter: none !important;
-        scale: none !important;
-        transition: opacity 300ms linear !important;
-        transition-delay: 0ms !important;
-    }
-
-    .marcador::after { animation: none !important; }
-    .anima .metodo-itens > div::before { transform: none !important; }
-    .seta, .botao { transition: none; }
+    .anima [data-anima], .anima [data-anima="lista"] > * { opacity: 0; transform: none; filter: none; transition: opacity 300ms ease; }
+    .anima [data-anima].visto, .anima [data-anima="lista"].visto > * { opacity: 1; }
+    .anima [data-anima="secao"], .anima [data-anima="secao"].visto { animation: none; transform: none; }
+    .peixe svg, .simbolo .olho { translate: none; transition: none; }
 }
-
-/* ========================================
-   Movimento ligado à rolagem
-   --p vem do script do <head> (0 → 1). O valor-padrão de cada var() é o estado final:
-   sem script ou com movimento reduzido, a página fica parada e inteira.
-   ======================================== */
-
-/* Barra de leitura no topo. */
-.topo::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -1px;
-    width: 100%;
-    height: 2px;
-    background: var(--acento);
-    transform-origin: left;
-    transform: scaleX(var(--rolado, 0));
-}
-
-/* A abertura sai de cena: o texto sobe e esmaece, o palco recua. */
-[data-rolagem="sai"] .abertura-texto {
-    transform: translateY(calc(var(--p, 0) * -5rem));
-    opacity: calc(1 - var(--p, 0) * 0.9);
-}
-
-[data-rolagem="sai"] .palco {
-    transform: translateY(calc(var(--p, 0) * -2.5rem)) scale(calc(1 - var(--p, 0) * 0.07));
-    transform-origin: 0 50%;
-    opacity: calc(1 - var(--p, 0) * 0.35);
-}
-
-/* Blocos que sobem enquanto entram. */
-[data-rolagem="sobe"] {
-    transform: translateY(calc((1 - var(--p, 1)) * 5rem));
-    opacity: calc(0.1 + var(--p, 1) * 0.9);
-}
-
-/* Telas: sobem e crescem até o tamanho real. */
-[data-rolagem="cresce"] {
-    transform: translateY(calc((1 - var(--p, 1)) * 7rem)) scale(calc(0.9 + var(--p, 1) * 0.1));
-    transform-origin: 50% 0;
-}
-
-/* Troca de seção: a faixa entra como cartão e se abre até a largura toda. */
-[data-rolagem="secao"] {
-    clip-path: inset(0 calc((1 - var(--p, 1)) * 6vw) round calc((1 - var(--p, 1)) * 3rem));
-}
-
-/* Faixa cinética: os sistemas deslizam num sentido, o lema no outro. */
-.faixa {
-    overflow: hidden;
-    padding: clamp(2rem, 5vw, 4rem) 0;
-    border-top: 1px solid var(--regua);
-    border-bottom: 1px solid var(--regua);
-    max-width: var(--largura);
-    margin: 0 auto;
-}
-
-@media (min-width: 90rem) {
-    .faixa { max-width: none; }
-}
-
-.faixa-linha {
-    display: flex;
-    gap: 0 clamp(1.25rem, 3vw, 2.5rem);
-    white-space: nowrap;
-    width: max-content;
-    line-height: 1.1;
-    letter-spacing: -0.035em;
-}
-
-.faixa-linha span { display: inline-flex; align-items: center; gap: clamp(1.25rem, 3vw, 2.5rem); }
-.faixa-linha span::after { content: ""; width: 0.28em; height: 0.28em; border-radius: 50%; background: currentColor; opacity: 0.35; }
-
-.faixa-sistemas {
-    font-size: clamp(2.25rem, 6vw, 5.5rem);
-    font-weight: 650;
-    color: var(--tinta);
-    transform: translateX(calc(var(--p, 0.5) * -38%));
-}
-
-.faixa-lema {
-    margin-top: 0.5rem;
-    font-size: clamp(1.5rem, 3.4vw, 3rem);
-    font-weight: 450;
-    color: var(--acento);
-    transform: translateX(calc(-30% + var(--p, 0.5) * 24%));
-}
-
-/* Quem anima por --p não pode ter transição: o valor já muda a cada quadro. */
-[data-rolagem], [data-rolagem] .abertura-texto, [data-rolagem] .palco, .faixa-linha { will-change: transform; }
