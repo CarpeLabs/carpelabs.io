@@ -1,6 +1,6 @@
 ---
 name: carpe labs
-description: A marca em primeiro plano num mundo monocromático claro (off-white e preto), com o peixe do logo grande e vivo; a única cor da página vem das telas reais da Nipo.
+description: A marca em primeiro plano num mundo claro (off-white e preto), com o peixe do logo grande e vivo; o verde de marca aparece só onde está a IA e nas ações.
 colors:
   fundo: "#f4f4f1"
   fundo-2: "#e9e9e4"
@@ -9,7 +9,9 @@ colors:
   texto-3: "#686d75"
   regua: "rgba(11, 12, 14, 0.1)"
   regua-forte: "rgba(11, 12, 14, 0.24)"
-  botao-hover: "#2a2d33"
+  verde: "#2e6b55"
+  verde-escuro: "#24563f"
+  verde-claro: "#7fc4a6"
   barra-rolagem: "#c4c7cc"
   erro: "#b3261e"
   erro-borda: "rgba(179, 38, 30, 0.35)"
@@ -32,6 +34,18 @@ typography:
     fontWeight: 300
     lineHeight: 1.02
     letterSpacing: "-0.035em"
+  resultado-destaque:
+    fontFamily: "Hanken Grotesk Variable, system-ui, sans-serif"
+    fontSize: "clamp(2rem, 4.6vw, 3.75rem)"
+    fontWeight: 400
+    lineHeight: 1.02
+    letterSpacing: "-0.035em"
+  card-title:
+    fontFamily: "Hanken Grotesk Variable, system-ui, sans-serif"
+    fontSize: "clamp(1.5rem, 2.3vw, 1.875rem)"
+    fontWeight: 500
+    lineHeight: 1.12
+    letterSpacing: "-0.025em"
   title:
     fontFamily: "Hanken Grotesk Variable, system-ui, sans-serif"
     fontSize: "1.375rem"
@@ -63,16 +77,17 @@ typography:
     fontSize: "0.875rem"
     fontWeight: 500
     lineHeight: 1.6
-  micro:
+  selo:
     fontFamily: "Hanken Grotesk Variable, system-ui, sans-serif"
-    fontSize: "0.8125rem"
+    fontSize: "0.75rem"
     fontWeight: 600
     lineHeight: 1
-    letterSpacing: "0.04em"
+    letterSpacing: "0.08em"
 rounded:
   foco: "2px"
   mensagem: "8px"
-  tela: "10px"
+  cartao: "clamp(1rem, 1.8vw, 1.5rem)"
+  bloco: "clamp(1.25rem, 2.5vw, 2.25rem)"
   pill: "999px"
 spacing:
   gutter: "clamp(1.25rem, 4vw, 3.5rem)"
@@ -81,35 +96,43 @@ spacing:
   largura: "90rem"
 components:
   button-primary:
-    backgroundColor: "{colors.texto}"
-    textColor: "{colors.fundo}"
+    backgroundColor: "{colors.verde}"
+    textColor: "#ffffff"
     typography: "{typography.button}"
     rounded: "{rounded.pill}"
     padding: "0 1.6rem"
     height: "3.25rem"
   button-primary-hover:
-    backgroundColor: "{colors.botao-hover}"
+    backgroundColor: "{colors.verde-escuro}"
   button-primary-disabled:
     backgroundColor: "{colors.texto-3}"
-  tela:
+  bloco:
     backgroundColor: "{colors.fundo-2}"
-    rounded: "{rounded.tela}"
-  camada-item:
-    textColor: "{colors.texto-2}"
-    typography: "{typography.caption}"
-    rounded: "{rounded.pill}"
-    padding: "0.25rem 0.75rem"
-  marcador:
+    rounded: "{rounded.bloco}"
+  cartao:
+    backgroundColor: "{colors.fundo}"
+    textColor: "{colors.texto}"
+    rounded: "{rounded.cartao}"
+  cartao-destaque:
     backgroundColor: "{colors.texto}"
     textColor: "{colors.fundo}"
+    typography: "{typography.resultado-destaque}"
+    rounded: "{rounded.cartao}"
+  cartao-base:
+    backgroundColor: "transparent"
+    textColor: "{colors.texto}"
+    rounded: "{rounded.cartao}"
+  selo-ia:
+    backgroundColor: "{colors.verde}"
+    textColor: "#ffffff"
+    typography: "{typography.selo}"
     rounded: "{rounded.pill}"
-    size: "1.75rem"
-  origem-marca:
-    backgroundColor: "{colors.texto}"
-    textColor: "{colors.fundo}"
-    typography: "{typography.micro}"
+    padding: "0.3rem 0.65rem"
+  selo-ia-destaque:
+    backgroundColor: "{colors.verde-claro}"
+    textColor: "{colors.texto}"
+    typography: "{typography.selo}"
     rounded: "{rounded.pill}"
-    padding: "0.3em 0.7em"
   campo:
     backgroundColor: "transparent"
     textColor: "{colors.texto}"
@@ -124,83 +147,82 @@ components:
 
 ## Overview
 
-A marca vem primeiro. O site é moderno e minimalista: um mundo monocromático **claro**, off-white e preto, o **peixe do logo** (a carpa, de "carpe") desenhado grande e vivo, tipografia fina que ecoa o wordmark e muito espaço entre réguas de 1px. **Não há cor de acento.** A única cor da página vem das telas reais da Nipo, que provam o trabalho. **Não há barra de topo**: o peixe já é a marca. Recusa o pátio de contêineres (rejeitado em 22/11/2026), o papel com verde-petróleo da versão anterior e o escuro de software house com neon.
+A marca vem primeiro, e a oferta é uma só: **implantar IA na operação**. O site é moderno e minimalista: um mundo **claro**, off-white e preto, o **peixe do logo** (a carpa, de "carpe") desenhado grande e vivo, tipografia fina que ecoa o wordmark e muito espaço. Cada seção depois da abertura é um **bloco arredondado** sobre o fundo. Há **uma só cor de destaque, o verde de marca**, reservada ao que é IA e às ações: o resto é escala de cinza. As telas reais da Nipo não aparecem mais; a prova é o texto do caso. Recusa o pátio de contêineres (rejeitado em 22/11/2026), o papel com verde-petróleo da versão anterior e o escuro de software house com neon.
 
 Contrato de direção: `.impeccable/surfaces/src-pages-index-astro.md`. Contexto de público e prova: `PRODUCT.md`.
 
-O símbolo é um **peixe**, nunca um gato. Está redesenhado como SVG inline (`src/layouts/Landing.astro`), em traço preto, para poder se animar.
+O símbolo é um **peixe**, nunca um gato. Está redesenhado como SVG inline (`src/layouts/Landing.astro`), em traço, para poder se animar e "voar" até o header.
 
 ## Colors
 
-Escala monocromática; todo o contraste sai da luminância, não do matiz.
+Escala neutra para estrutura e texto; o verde é o único matiz.
 
-- **Fundo `#f4f4f1`** é a página inteira: off-white, nunca branco puro. **Fundo 2 `#e9e9e4`** aparece atrás das telas (enquanto a imagem carrega) e na linha da marca de origem.
-- **Texto `#0b0c0e`** em títulos, ações e o que importa. **Texto 2 `#50545c`** no corpo secundário. **Texto 3 `#686d75`** em legenda, rodapé e estado desabilitado.
-- **Réguas:** preto a 10% (`rgba(11,12,14,.1)`) separa linhas e seções, e também é o halo de 3px do ponto de produção; preto a 24% (`.24`) marca o início de listas, bordas de campo e chips.
-- **Hover do botão `#2a2d33`**, um passo acima do preto.
+- **Fundo `#f4f4f1`** é a página: off-white, nunca branco puro, e também a superfície dos cartões. **Fundo 2 `#e9e9e4`** é a superfície de cada bloco de seção.
+- **Texto `#0b0c0e`** em títulos e no que importa; é também a superfície do cartão de destaque do Assistente de IA. **Texto 2 `#50545c`** no corpo secundário. **Texto 3 `#686d75`** em legenda, rodapé e botão desabilitado.
+- **Verde `#2e6b55`** é o verde de marca, com contraste de **5,8:1** sobre o fundo. **Verde escuro `#24563f`** é o hover do botão. **Verde claro `#7fc4a6`** vale sobre superfície escura (selo "IA" do cartão de destaque). Onde o verde aparece: botões (`.botao`, `.topo-link`), símbolo (peixe), nome "carpe labs" no header e no rodapé, selo "IA", a palavra "IA" do h1 (`.forte`) e o núcleo e as partículas do fluxo. Em nenhum outro lugar.
+- **Única exceção:** os seis blocos de ícone das fontes do fluxo (`#fluxo`) levam uma cor cada (verde, azul, laranja, roxo, ciano e vermelho, definidas em `Landing.astro`) só para distinguir Excel, Word, PowerPoint, sistema, e-mail e PDF, com símbolo genérico e sem logotipo de terceiros. Não viram cor da interface.
+- **Réguas:** preto a 10% (`rgba(11,12,14,.1)`) separa linhas; preto a 24% (`.24`) marca o início de listas, bordas de campo e de cartão da base, e as linhas do fluxo.
 - **Barra de rolagem `#c4c7cc`**, o único cinza fora da escala, para o `scrollbar-color`.
 - **Erro `#b3261e`** só em validação e falha de envio; a borda da mensagem de erro é o mesmo tom a 35%.
-- **Cor real:** as capturas da Nipo são o único lugar com cor. Nada na interface compete com elas.
+- **Selo e botão** levam texto branco sobre o verde; sobre o preto do destaque, o selo usa o verde claro com texto preto.
 
 ## Typography
 
-Uma família só: **Hanken Grotesk Variable** (auto-hospedada), com `font-feature-settings: 'ss01'`. Hierarquia por tamanho, não por peso: **títulos em 300** com tracking negativo de **-0,035 a -0,04em** (o mais apertado no h1 e no título do contato), `line-height` de 1 a 1,02, `text-wrap: balance`. Corpo em 400, 1,0625rem / 1,6, `text-wrap: pretty`. Texto corrido limitado a 30–44rem.
+Uma família só: **Hanken Grotesk Variable** (auto-hospedada), com `font-feature-settings: 'ss01'`. Hierarquia por tamanho e por **escala de peso**: **300** só nos títulos grandes (h1, h2, título do contato), que ecoam o wordmark, com tracking de **-0,035 a -0,04em**, `line-height` de 1 a 1,02 e `text-wrap: balance`; quanto menor o título, mais peso ganha, para não sumir: **400** no título do destaque e no subtítulo do grupo, **500** nos títulos de cartão, de etapa, de método e de pergunta. A palavra "IA" do h1 (`.forte`) vai em **500** e em verde. Corpo em 400, 1,0625rem / 1,6, `text-wrap: pretty`; botão e selo em 600. Texto corrido limitado a 26–44rem.
 
-Degraus em uso: `clamp(2.75rem, 5.8vw, 5.75rem)` (h1 e título do contato), `clamp(2.5rem, 5vw, 4.5rem)` (h2), `clamp(2rem, 3.4vw, 3rem)` (h3 de sistema), 1,375rem (nome de camada, de item e de método), 1,1875rem (apoio e resumo de pergunta), 1,0625rem (corpo), 1rem (botão, peso 600), 0,9875rem (notas), 0,9375rem (rótulo, legenda, link de idioma), 0,875rem (situação e chips, peso 500), 0,8125rem (marca de origem, ligação entre camadas, com tracking 0,04em). Botão e marcadores em 600; nome da camada do ERP em 500.
+Degraus em uso: `clamp(2.75rem, 5.8vw, 5.75rem)` (h1 e título do contato), `clamp(2.5rem, 5vw, 4.5rem)` (h2), `clamp(2rem, 4.6vw, 3.75rem)` (título do destaque), `clamp(1.75rem, 3.2vw, 2.5rem)` (subtítulo do grupo), `clamp(1.5rem, 2.3vw, 1.875rem)` (título de cartão), 1,625rem (etapa), 1,375rem (método), 1,1875rem (apoio e pergunta), 1,0625rem (corpo), 1rem (botão), 0,9375rem (rótulo, idioma, texto da base), 0,875rem (meta), 0,75rem (selo e área, com tracking 0,08em).
 
 ## Layout
 
-- Largura máxima 90rem; `--dentro` = `max(gutter, (100vw - 90rem) / 2)`. Gutter `clamp(1.25rem, 4vw, 3.5rem)`. **Sem cabeçalho fixo.**
-- **Abertura** ocupa `100svh`, com respiro superior `clamp(4.5rem, 8vw, 6rem)`. A partir de 64rem, duas colunas (1,05fr texto / 0,95fr peixe), peixe à direita em até 40rem. Abaixo disso, o peixe vai para cima (62% da largura, máx. 20rem) e o texto empilha. O **link de idioma** é pequeno e absoluto no canto superior direito da abertura; há outro no rodapé.
-- **Vitrine:** a primeira tela real, logo abaixo da abertura, em largura total.
-- **Caso:** introdução em duas colunas a partir de 64rem; camadas (IA, portais, ERP) como linhas separadas por régua, em três colunas (nome, descrição, itens) a partir de 64rem.
-- **Sistemas:** a partir de 64rem, texto em coluna de 22rem, fixo (`sticky`) enquanto as telas rolam ao lado; telas em coluna única.
-- **Também entregues:** linhas de régua; a partir de 56rem, três colunas (nome, uso, situação).
-- **Método:** três colunas a partir de 56rem. **Perguntas:** título fixo à esquerda a partir de 64rem. **Contato:** duas colunas a partir de 64rem; formulário em duas colunas a partir de 40rem.
-- Ritmo vertical `clamp(5rem, 11vw, 10rem)` entre seções; seções internas de sistema em `clamp(3rem, 6vw, 5rem)`.
-- Sem cartões: réguas finas e espaço fazem a separação.
+- Largura máxima 90rem; `--dentro` = `max(gutter, (100vw - 90rem) / 2)`. Gutter `clamp(1.25rem, 4vw, 3.5rem)`.
+- **Header fixo e discreto:** transparente no início; quando o peixe pousa nele, ganha fundo off-white translúcido com desfoque e régua inferior. Mostra o peixe, o nome "carpe labs" em verde, o link de idioma e o botão verde (que some enquanto o botão da abertura está à vista).
+- **Abertura** com respiro superior `clamp(6rem, 12vh, 9rem)`. A partir de 64rem, duas colunas (1,05fr texto / 0,95fr peixe, até 40rem). Abaixo disso o peixe vai para cima (48% da largura, máx. 15rem) e tudo centraliza. Fecha com as três etapas (mapear, dimensionar, configurar) em linhas de régua, três colunas a partir de 56rem.
+- **Blocos:** depois da abertura, cada seção (`#fluxo`, `#resultados`, método, perguntas, contato) é um painel `Fundo 2` com raio `clamp(1.25rem, 2.5vw, 2.25rem)`, margem lateral que o abre um pouco além da coluna e o mesmo respiro interno.
+- **`#fluxo`:** texto à esquerda e diagrama à direita (0,85fr / 1,15fr) a partir de 64rem.
+- **`#resultados`:** cabeça em duas colunas; cartão de destaque em largura total, cartões de IA em duas colunas a partir de 40rem, subtítulo do grupo e a "base por trás" em duas colunas.
+- **Método:** três colunas a partir de 56rem. **Perguntas:** título fixo (`sticky`) à esquerda a partir de 64rem. **Contato:** duas colunas a partir de 64rem; nome, e-mail e mensagem, com o formulário em duas colunas a partir de 40rem.
+- Ritmo vertical `clamp(5rem, 11vw, 10rem)` dentro das seções.
 
 ## Elevation & Depth
 
-**Sem sombras difusas, em lugar nenhum.** A profundidade vem de três coisas: o contorno de 1px (`outline` de 10%, com `outline-offset: -1px`) que desenha a borda de cada tela, o passo de `#f4f4f1` para `#e9e9e4`, e a régua. O marcador numerado leva um anel sólido de 3px na cor do fundo só para se separar da captura, e o ponto de produção um anel sólido de 3px a 10%: recortes, não sombra.
+**Sem sombras difusas.** A profundidade vem da troca de superfície (`#f4f4f1` para `#e9e9e4` para `#0b0c0e`), dos cantos arredondados e da régua. O único `box-shadow` é um anel sólido de 2px em verde na linha de origem (`.resultado.origem`): recorte, não sombra.
 
 ## Shapes
 
-- **Telas:** raio de **10px**, `overflow: hidden`, contorno de 1px na régua.
-- **Botões, chips, marcadores e marca de origem:** pílula de **999px**. Pontos de situação são círculos de 0,5rem.
-- **Mensagem de formulário:** 8px. **Foco visível:** anel sólido de 2px, offset 4px, raio 2px.
+- **Blocos de seção:** raio `clamp(1.25rem, 2.5vw, 2.25rem)`. **Cartões:** `clamp(1rem, 1.8vw, 1.5rem)`.
+- **Botões, selos e marca de origem:** pílula de **999px**.
+- **Mensagem de formulário:** 8px. **Foco visível:** anel sólido de 2px em preto, offset 4px, raio 2px.
 - **Campos** não têm caixa: só uma linha inferior de 1px (24% de preto).
-- Situação: ponto **cheio = em produção**, ponto **vazado = em homologação**.
 
 ## Components
 
-- **Símbolo (peixe):** SVG inline de traço preto (`stroke="currentColor"`, `viewBox="480 470 930 680"`), três traços, um corpo cheio e um olho. **Desenha-se uma vez na chegada** (`stroke-dashoffset`, 1400ms, traços escalonados 250ms; o corpo cheio aparece em 1100ms, o olho em 1300ms) e depois **acompanha de leve o cursor**: o conjunto desloca até 22px × 16px e o olho 14px × 10px a mais, via `--mx` e `--my`. Sem ponteiro fino ou com movimento reduzido, fica parado.
-- **Idioma:** link de texto 0,9375rem em `Texto 2`, posição absoluta no canto superior direito da abertura; sublinha no hover. Repetido na navegação do rodapé.
-- **Botão primário:** pílula preta (`#0b0c0e`) com texto off-white, 3,25rem de altura, peso 600. Hover vai a `#2a2d33` e a seta anda 4px; no clique comprime a 0,97; desabilitado vai a `#686d75` com `cursor: progress`.
+- **Símbolo (peixe):** SVG inline de traço (`stroke="currentColor"`, `viewBox="480 470 930 680"`), em verde, três traços, um corpo cheio e um olho. **Desenha-se uma vez na chegada** (`stroke-dashoffset`, 1400ms, traços escalonados 250ms; corpo cheio em 1100ms, olho em 1300ms) e depois **acompanha de leve o cursor** (até 22px × 16px; o olho 14px × 10px a mais). Conforme a página desce, o peixe **"voa" até o header** e pousa no encaixe do logo; sem JS, o header mostra o logo parado.
+- **Header:** peixe (encaixe `.topo-slot`), nome "carpe labs" em verde peso 300, link de idioma e `.topo-link` verde em pílula.
+- **Botão (`.botao`):** pílula verde (`#2e6b55`) com texto branco, 3,25rem de altura, peso 600. Hover vai a `#24563f` e a seta anda 4px; no clique comprime a 0,97; desabilitado vai a `#686d75`.
 - **Link:** `Texto 2`, sublinhado em 24%, que escurece no hover.
-- **Tela (figure):** imagem real, raio 10px, contorno de 1px, legenda abaixo em `Texto 3` dizendo o que é e o que foi tarjado. Toda captura é real, mascarada e conferida antes de publicar.
-- **Marcador e notas:** círculo preto de 1,75rem com número off-white, posicionado em % sobre a captura, no canto do elemento anotado (nunca em cima do dado). Entra em sequência depois da tela.
-- **Camadas:** três linhas separadas por régua (IA, portais, ERP) com chips em pílula de 24%; os de "outras" em contorno tracejado. O verbo da relação ("↓ consulta") fica na linha de ligação, em 0,8125rem. A IA leva um pequeno círculo vazado no nome (homologação).
-- **Situação:** texto 0,875rem peso 500, com ponto à esquerda (cheio com halo = produção; vazado = homologação).
+- **Etapas da abertura:** três itens com número, título em 500 e texto curto, entre réguas.
+- **Fluxo (`#fluxo`):** SVG com seis fontes (Excel, Word, PowerPoint, Sistema de gestão, E-mail, PDF) como cartões `Fundo` com ícone em bloco colorido genérico, ligadas por linhas à IA no centro (núcleo verde com "IA" em branco e órbitas tracejadas que giram) e, abaixo, a saída "Respostas e tarefas". **A montagem é ligada à rolagem:** `--p` (0 a 1) vem do script conforme o diagrama sobe; cada fonte tem o seu trecho, desliza de fora e acende a linha dela, a IA cresce no centro e por último saem as respostas e correm as partículas verdes. O núcleo pulsa; fora da tela as animações param.
+- **Cartão de destaque (Assistente de IA):** superfície preta, texto off-white, título grande em 400 e selo "IA" em verde claro; ocupa a largura toda.
+- **Cartão de resultado com selo "IA":** superfície `Fundo`, selo verde, título em 500, texto em `Texto 2` e meta em `Texto 3`.
+- **Base por trás (Logística e Rastreio):** subtítulo de grupo e cartões transparentes com borda de 24%, rótulo de área em caixa alta pequena, texto curto. Sem selo: não é IA, é a base de dados.
 - **Perguntas:** `details`/`summary` nativos entre réguas, "+" desenhado com dois gradientes que gira 135° ao abrir, altura animada por `::details-content` onde há suporte. O texto é o mesmo do `FAQPage` do JSON-LD.
-- **Formulário:** campos só com linha inferior (hover em `Texto 2`, foco em preto com 2px), erro por campo em `#b3261e` abaixo do input, mensagem geral em 8px com borda de 24% (sucesso) ou de erro a 35%. Turnstile em tema claro.
-- **Marca de origem:** pílula preta com texto off-white, inserida por script quando a visita vem de `/de/<ferramenta>`; na lista, a linha ganha o `Fundo 2`.
-- **Rodapé:** régua superior, parágrafo de entidade em `Texto 3` ao lado da navegação (com o link de idioma) e, por fim, **o logo completo em tamanho de cartaz** (até 64rem de largura), exibido como é, sem filtro, fechando a página.
-- **Movimento:** tudo condicionado a `.anima`, posta pelo script inline do `<head>` quando há `IntersectionObserver`; sem JS nada some. Chegada: h1, apoio e ações sobem 1,25rem em 900ms com atrasos de 150/300/420ms. Ao rolar: títulos (`titulo`) sobem 1,25rem, telas (`tela`) sobem 3rem com escala de 0,97, listas (`lista`) entram com 70ms entre itens. Curva `cubic-bezier(0.22, 1, 0.36, 1)`. **Movimento reduzido: só opacidade em 300ms**, sem desenho do peixe, deslocamento nem rastreio do cursor.
+- **Formulário:** nome, e-mail e mensagem, só com linha inferior (hover em `Texto 2`, foco em preto), erro por campo em `#b3261e` abaixo do input, mensagem geral em 8px com borda de 24% (sucesso) ou de erro a 35%. Turnstile em tema claro.
+- **Marca de origem:** pílula verde com texto branco, inserida por script quando a visita vem de `/de/<ferramenta>`; o cartão da ferramenta ganha anel verde de 2px.
+- **Rodapé:** régua superior, símbolo e nome "carpe labs" em verde, navegação (com o link de idioma) e linha de entidade em `Texto 3`.
+- **Movimento:** tudo condicionado a `.anima`, posta pelo script inline do `<head>` quando há `IntersectionObserver`; sem JS nada some. **Cada bloco é um painel com `data-anima="secao"` e entra inteiro, uma única vez**, ao começar a aparecer: sobe 7rem, cresce de 0,92 a 1 e ganha opacidade (900/1200ms). **Depois, as listas (`data-anima="lista"`) entram em sequência**, com 90ms entre itens, sobem 2,5rem saindo do desfoque. Títulos (`data-anima="titulo"`) entram palavra por palavra. Na chegada, h1, apoio e ações sobem 1,25rem. Curva `cubic-bezier(0.22, 1, 0.36, 1)`. **Movimento reduzido: só opacidade em 300ms**, sem desenho do peixe, deslocamento, rastreio do cursor nem partículas.
 
 ## Do's and Don'ts
 
 - **Faça** o peixe grande e vivo: é a marca. Chame-o de peixe (carpa), nunca de gato.
-- **Faça** a cor vir só das telas reais; a interface fica em escala de cinza.
-- **Faça** títulos finos (300) e apertados; quem dá peso é o tamanho.
-- **Faça** cada afirmação apontar para uma tela ou sistema no ar na Nipo, e a legenda declarar o que foi tarjado.
-- **Não** crie cor de acento, gradiente nem brilho. Não use branco puro de fundo: é off-white.
-- **Não** volte com a barra de topo fixa.
-- **Não** use sombra. Profundidade é contorno de 1px e troca de tom.
-- **Não** use cartões; use régua e espaço.
-- **Não** arredonde a tela além de 10px, nem quadre o botão: pílula é botão, 10px é tela.
-- **Não** publique captura sem máscara conferida (clientes, vendedores, pessoas, fornecedores, valores em R$, parceiros).
-- **Não** ponha marcador em cima do dado que ele anota.
+- **Faça** o verde `#2e6b55` ser a cor de destaque, **só ligado à IA e às ações** (botão, símbolo, nome da marca, selo "IA", palavra "IA", fluxo). O resto fica em escala de cinza (a única exceção são os blocos de ícone das seis fontes do fluxo).
+- **Faça** títulos finos (300) nos grandes e mais pesos (400 a 500) conforme o título diminui.
+- **Faça** cada seção um bloco arredondado, que entra inteiro uma vez.
+- **Faça** cada afirmação apontar para algo que está no ar na Nipo, sem citar o Sankhya nem a estrutura interna.
+- **Não** use verde em decoração, em texto corrido nem em algo que não seja IA ou ação. Sem segunda cor de destaque, gradiente nem brilho.
+- **Não** use branco puro de fundo: é off-white.
+- **Não** use sombra difusa. Profundidade é troca de superfície, canto arredondado e régua.
+- **Não** crie cartões fora da seção de resultados; as demais seções usam régua e espaço dentro do bloco.
+- **Não** quadre o botão: pílula é botão e selo.
 - **Não** ponha rótulo acima de título (eyebrow) nem numere seções.
 - **Não** invente métrica, depoimento ou logo de cliente.
 - **Não** anime fora de `.anima`; com movimento reduzido, só opacidade.

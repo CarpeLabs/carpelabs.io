@@ -9,7 +9,7 @@ web
 ## Users
 
 **Comprador principal:** dono ou diretor de empresa média com operação física real (atacado,
-importação, distribuição) que roda sobre um ERP legado. Chega ao site avaliando se pode confiar
+importação, distribuição) que roda sobre um ERP ou sistema de gestão que já usa. Chega ao site avaliando se pode confiar
 dados e processos de produção a um fornecedor. Decide por confiança e por prova de entrega, não
 por stack técnica.
 
@@ -23,10 +23,13 @@ formulário (ou pelo e-mail) de alguém com operação e ERP parecidos com os da
 
 ## Positioning
 
-A CarpeLabs constrói as duas camadas juntas: **portais e integrações sobre o ERP que a empresa já
-tem** (sem trocá-lo e sem arriscar produção) e **IA aplicada à operação em cima desses dados**. A
-base de dados e portais é o que torna a IA útil; uma sem a outra não é a oferta. O que sustenta a
-afirmação é um cliente com vários sistemas em produção, entregues de forma contínua.
+A carpe labs **implanta IA na operação**: dimensiona e configura ferramentas agênticas, assistentes
+de IA que consultam os dados da empresa e cuidam de tarefas da rotina, em cima do ERP ou sistema de
+gestão que ela já usa, **qualquer que seja ele**. Nada é migrado, e nada é gravado no sistema sem
+autorização; cada agente tem limite de acesso e registro de cada ação. Os dados organizados por área
+(logística, rastreio) são a **base** que faz a IA funcionar, não uma segunda oferta. A oferta é uma
+só: implantar IA. O que sustenta a afirmação é um cliente com IA já trabalhando na rotina, a Nipo
+Center. A IA pode ser Claude, ChatGPT ou outra; a escolha faz parte do dimensionamento.
 
 ## Operating Context
 
@@ -43,8 +46,8 @@ afirmação é um cliente com vários sistemas em produção, entregues de forma
   lista espelha o `origemAssinatura` de `nipo-ui/consumers.json` do repositório `nipo_projects`.
 - Páginas legais (`/privacidade`, `/termos`, `/exclusao-de-dados`) existem para o app da Meta e
   precisam continuar publicadas.
-- **Idiomas: pt-BR e inglês.** Hoje só existe pt-BR; a estrutura da versão em inglês (rotas,
-  seletor, o que é traduzido) está **em aberto**.
+- **Idiomas: pt-BR (`/`) e inglês (`/en/`)**, o mesmo layout com o texto em `src/i18n/landing.ts`.
+  As rotas `/de/<ferramenta>` e as páginas legais ficam só em português.
 - **Em aberto:** preço, modelo de contratação e prazo típico — nada disso pode aparecer até ser
   decidido.
 
@@ -57,24 +60,46 @@ afirmação é um cliente com vários sistemas em produção, entregues de forma
 
 ## Evidence on Hand
 
-**Cliente âncora, citável com nome e telas: Nipo Center** (importadora em São Paulo; o grupo
-inclui a PARI). Tudo lê o ERP Sankhya em modo somente leitura. Sistemas entregues (fonte: o
-monorepo `nipo_projects`):
+**Cliente âncora, citável com nome: Nipo Center** (importadora em São Paulo; o grupo inclui a
+PARI). Contexto interno: tudo lê o ERP Sankhya em modo somente leitura, e os sistemas vêm do
+monorepo `nipo_projects`. **A página pública não cita o Sankhya nem a estrutura interna da Nipo**
+(PARI, "Loja", contagens, matriz e filial); para o visitante é "sistema", e "ERP" só aparece no
+JSON-LD.
 
-- Em produção: portal de Compras, painel de Logística (matriz e filial, com TVs operacionais),
-  portal de Fotos de produto e Rastreio de pedido para o cliente final (público).
-- Em homologação: o gateway Nipo Dados, que deixa Claude e ChatGPT consultarem os dados da Nipo e
-  da PARI (homologação aceita); painel do vendedor; autoatendimento no WhatsApp com console do
-  atendente; e o broker de WhatsApp.
+**Usos de IA que a página cita** (cada um aponta para algo que existe na Nipo):
 
-Capturas de tela podem ir a público **com dados de clientes, parceiros e pessoas mascarados**.
+- **Assistente de IA** para a gestão: pergunta em português sobre os dados do dia e recebe a
+  resposta na hora, com limite e registro de cada pergunta (o gateway Nipo Dados, que deixa Claude e
+  ChatGPT consultarem os dados; homologação aceita).
+- **Atendimento no WhatsApp:** a IA resolve o que é simples e passa para uma pessoa o que precisa de
+  atenção.
+- **Revisão de fotos de produto:** a IA aponta a foto com problema e prepara a correção; uma pessoa
+  aprova antes de publicar.
+- **Compras:** a IA recomenda o que comprar e o que deixar de comprar, valida cada oportunidade
+  antes do pedido e apoia as importações, do fornecedor à chegada.
+- **Vendedor:** a IA mostra a melhor oferta personalizada para cada cliente, com produto, preço e
+  estoque escolhidos pelo histórico de quem compra.
+
+**A base por trás** (dados por área, sem selo de IA): painel de Logística (cada pedido, do
+faturamento à saída, com a prioridade à vista) e Rastreio de pedido para o cliente final, por link,
+sem login.
+
+Estado interno (não vai à página como situação): Compras, Logística, Fotos e Rastreio em produção;
+Nipo Dados, painel do vendedor e autoatendimento no WhatsApp (com o broker) em homologação. A página
+não declara essa situação.
+
+A página também descreve o método (o sistema continua o mesmo; cada agente tem limite; testado com
+uma cópia dos dados reais antes de entrar na rotina) e quatro perguntas frequentes. Ver
+`src/i18n/landing.ts`.
 
 **Não existe e não pode ser inventado:** depoimento, métrica de resultado, logos de outros
-clientes, prêmios, imprensa. Só a Nipo é caso publicável por enquanto.
+clientes, prêmios, imprensa, **preço, prazo e modelo de contratação**. Só a Nipo é caso publicável
+por enquanto. Capturas de tela não são mais usadas na página; se voltarem, com dados de clientes,
+parceiros e pessoas mascarados.
 
 ## Product Principles
 
 1. Prova antes de promessa: cada afirmação aponta para algo que está no ar na Nipo.
-2. Falar a língua da operação (pedido, expedição, estoque, ERP), não a de agência de IA.
-3. Um caso profundo vale mais que uma vitrine rasa.
+2. Falar a língua da operação (pedido, expedição, estoque, compra), não a de agência de IA.
+3. Um caso profundo vale mais que uma vitrine rasa; uma oferta só, implantar IA.
 4. Quem chega de um portal já é qualificado; a página não o trata como visitante frio.

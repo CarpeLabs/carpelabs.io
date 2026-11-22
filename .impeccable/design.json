@@ -11,12 +11,12 @@
       },
       "fundo-2": {
         "role": "neutral",
-        "displayName": "Fundo 2 (atrás das telas)",
+        "displayName": "Fundo 2 (blocos de seção)",
         "canonical": "#e9e9e4"
       },
       "texto": {
-        "role": "primary",
-        "displayName": "Texto (também o botão)",
+        "role": "neutral",
+        "displayName": "Texto (também o destaque escuro)",
         "canonical": "#0b0c0e"
       },
       "texto-2": {
@@ -39,15 +39,25 @@
         "displayName": "Régua forte (24%)",
         "canonical": "rgba(11, 12, 14, 0.24)"
       },
-      "botao-hover": {
-        "role": "neutral",
-        "displayName": "Hover do botão",
-        "canonical": "#2a2d33"
-      },
       "barra-rolagem": {
         "role": "neutral",
         "displayName": "Barra de rolagem",
         "canonical": "#c4c7cc"
+      },
+      "verde": {
+        "role": "primary",
+        "displayName": "Verde de marca (botões, peixe, selo IA)",
+        "canonical": "#2e6b55"
+      },
+      "verde-escuro": {
+        "role": "secondary",
+        "displayName": "Verde escuro (hover do botão)",
+        "canonical": "#24563f"
+      },
+      "verde-claro": {
+        "role": "secondary",
+        "displayName": "Verde claro (selo IA sobre o escuro)",
+        "canonical": "#7fc4a6"
       },
       "erro": {
         "role": "error",
@@ -62,7 +72,7 @@
     },
     "motion": {
       "ease": "cubic-bezier(0.22, 1, 0.36, 1)",
-      "note": "Tudo condicionado a .anima. O peixe se desenha uma vez na chegada (1400ms) e segue o cursor de leve; títulos, telas e listas sobem ao entrar na janela. Movimento reduzido: só opacidade em 300ms."
+      "note": "Tudo condicionado a .anima. O peixe se desenha uma vez na chegada (1400ms), segue o cursor de leve e voa até o header conforme a página desce. Cada bloco (data-anima=secao) entra inteiro uma vez: sobe, cresce de 0,92 a 1 e ganha opacidade; depois as listas entram em sequência. O fluxo monta ligado à rolagem (--p). Movimento reduzido: só opacidade em 300ms."
     },
     "breakpoints": {
       "formulario": "40rem",
@@ -72,23 +82,28 @@
     "components": [
       {
         "name": "button-primary",
-        "html": "<a class=\"botao\" href=\"#contato\">Iniciar um projeto</a>",
-        "css": "body{background:#f4f4f1;font-family:system-ui,sans-serif}.botao{display:inline-flex;align-items:center;justify-content:center;height:3.25rem;padding:0 1.6rem;border-radius:999px;background:#0b0c0e;color:#f4f4f1;font-weight:600;font-size:1rem;text-decoration:none}.botao:hover{background:#2a2d33}"
+        "html": "<a class=\"botao\" href=\"#contato\">Implantar IA</a>",
+        "css": "body{background:#f4f4f1;font-family:system-ui,sans-serif}.botao{display:inline-flex;align-items:center;justify-content:center;height:3.25rem;padding:0 1.6rem;border-radius:999px;background:#2e6b55;color:#fff;font-weight:600;font-size:1rem;text-decoration:none}.botao:hover{background:#24563f}"
       },
       {
-        "name": "situacao",
-        "html": "<p class=\"s p\">Em produção</p><p class=\"s h\">Em homologação</p>",
-        "css": "body{background:#f4f4f1;font-family:system-ui,sans-serif}.s{display:inline-flex;align-items:center;gap:.55em;font-size:.875rem;font-weight:500;margin-right:1rem;color:#50545c}.s::before{content:'';width:.5rem;height:.5rem;border-radius:50%}.p{color:#0b0c0e}.p::before{background:#0b0c0e;box-shadow:0 0 0 3px rgba(11,12,14,.1)}.h::before{border:1.5px solid currentColor}"
+        "name": "selo-ia",
+        "html": "<span class=\"s\">IA</span>",
+        "css": "body{background:#f4f4f1;font-family:system-ui,sans-serif}.s{font-size:.75rem;font-weight:600;letter-spacing:.08em;padding:.3rem .65rem;border-radius:999px;background:#2e6b55;color:#fff}"
       },
       {
-        "name": "tela",
-        "html": "<div class=\"tela\" style=\"width:240px;height:140px\"></div>",
-        "css": "body{background:#f4f4f1}.tela{border-radius:10px;background:#e9e9e4;outline:1px solid rgba(11,12,14,.1);outline-offset:-1px}"
+        "name": "cartao-destaque",
+        "html": "<div class=\"d\"><span class=\"s\">IA</span><h3>A gestão pergunta à IA e tem a resposta na hora.</h3></div>",
+        "css": "body{background:#e9e9e4;font-family:system-ui,sans-serif}.d{max-width:28rem;padding:2rem;border-radius:1.5rem;background:#0b0c0e;color:#f4f4f1}.s{font-size:.75rem;font-weight:600;letter-spacing:.08em;padding:.3rem .65rem;border-radius:999px;background:#7fc4a6;color:#0b0c0e}h3{margin:1rem 0 0;font-size:1.75rem;font-weight:400;line-height:1.05;letter-spacing:-.03em}"
       },
       {
-        "name": "chip",
-        "html": "<ul class=\"c\"><li>Compras</li><li>Logística</li></ul>",
-        "css": "body{background:#f4f4f1;font-family:system-ui,sans-serif}.c{display:flex;gap:.5rem;list-style:none;margin:0;padding:0}.c li{font-size:.875rem;padding:.25rem .75rem;border:1px solid rgba(11,12,14,.24);border-radius:999px;color:#50545c}"
+        "name": "cartao",
+        "html": "<div class=\"c\"><h3>A IA revisa cada foto do catálogo.</h3><p>Uma pessoa aprova antes de publicar.</p></div>",
+        "css": "body{background:#e9e9e4;font-family:system-ui,sans-serif}.c{max-width:22rem;padding:1.75rem;border-radius:1.25rem;background:#f4f4f1;color:#0b0c0e}h3{margin:0;font-size:1.5rem;font-weight:500;line-height:1.12;letter-spacing:-.025em}p{margin:.75rem 0 0;color:#50545c}"
+      },
+      {
+        "name": "bloco",
+        "html": "<section class=\"b\">Bloco de seção</section>",
+        "css": "body{background:#f4f4f1;font-family:system-ui,sans-serif}.b{padding:3.5rem 2rem;border-radius:2rem;background:#e9e9e4;color:#0b0c0e}"
       }
     ]
   }
