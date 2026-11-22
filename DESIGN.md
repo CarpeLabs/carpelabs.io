@@ -77,12 +77,6 @@ typography:
     fontSize: "0.875rem"
     fontWeight: 500
     lineHeight: 1.6
-  selo:
-    fontFamily: "Hanken Grotesk Variable, system-ui, sans-serif"
-    fontSize: "0.75rem"
-    fontWeight: 600
-    lineHeight: 1
-    letterSpacing: "0.08em"
 rounded:
   foco: "2px"
   mensagem: "8px"
@@ -122,17 +116,6 @@ components:
     backgroundColor: "transparent"
     textColor: "{colors.texto}"
     rounded: "{rounded.cartao}"
-  selo-ia:
-    backgroundColor: "{colors.verde}"
-    textColor: "#ffffff"
-    typography: "{typography.selo}"
-    rounded: "{rounded.pill}"
-    padding: "0.3rem 0.65rem"
-  selo-ia-destaque:
-    backgroundColor: "{colors.verde-claro}"
-    textColor: "{colors.texto}"
-    typography: "{typography.selo}"
-    rounded: "{rounded.pill}"
   campo:
     backgroundColor: "transparent"
     textColor: "{colors.texto}"
@@ -159,18 +142,18 @@ Escala neutra para estrutura e texto; o verde é o único matiz.
 
 - **Fundo `#f4f4f1`** é a página: off-white, nunca branco puro, e também a superfície dos cartões. **Fundo 2 `#e9e9e4`** é a superfície de cada bloco de seção.
 - **Texto `#0b0c0e`** em títulos e no que importa; é também a superfície do cartão de destaque do Assistente de IA. **Texto 2 `#50545c`** no corpo secundário. **Texto 3 `#686d75`** em legenda, rodapé e botão desabilitado.
-- **Verde `#2e6b55`** é o verde de marca, com contraste de **5,8:1** sobre o fundo. **Verde escuro `#24563f`** é o hover do botão. **Verde claro `#7fc4a6`** vale sobre superfície escura (selo "IA" do cartão de destaque). Onde o verde aparece: botões (`.botao`, `.topo-link`), símbolo (peixe), nome "carpe labs" no header e no rodapé, selo "IA", a palavra "IA" do h1 (`.forte`) e o núcleo e as partículas do fluxo. Em nenhum outro lugar.
+- **Verde `#2e6b55`** é o verde de marca, com contraste de **5,8:1** sobre o fundo. **Verde escuro `#24563f`** é o hover do botão. Onde o verde aparece: botões (`.botao`, `.topo-link`), símbolo (peixe), nome "carpe labs" no header e no rodapé, a palavra "IA" do h1 (`.forte`) e o núcleo e as partículas do fluxo. Em nenhum outro lugar.
 - **Única exceção:** os seis blocos de ícone das fontes do fluxo (`#fluxo`) levam uma cor cada (verde, azul, laranja, roxo, ciano e vermelho, definidas em `Landing.astro`) só para distinguir Excel, Word, PowerPoint, sistema, e-mail e PDF, com símbolo genérico e sem logotipo de terceiros. Não viram cor da interface.
 - **Réguas:** preto a 10% (`rgba(11,12,14,.1)`) separa linhas; preto a 24% (`.24`) marca o início de listas, bordas de campo e de cartão da base, e as linhas do fluxo.
 - **Barra de rolagem `#c4c7cc`**, o único cinza fora da escala, para o `scrollbar-color`.
 - **Erro `#b3261e`** só em validação e falha de envio; a borda da mensagem de erro é o mesmo tom a 35%.
-- **Selo e botão** levam texto branco sobre o verde; sobre o preto do destaque, o selo usa o verde claro com texto preto.
+- **O botão** leva texto branco sobre o verde.
 
 ## Typography
 
-Uma família só: **Hanken Grotesk Variable** (auto-hospedada), com `font-feature-settings: 'ss01'`. Hierarquia por tamanho e por **escala de peso**: **300** só nos títulos grandes (h1, h2, título do contato), que ecoam o wordmark, com tracking de **-0,035 a -0,04em**, `line-height` de 1 a 1,02 e `text-wrap: balance`; quanto menor o título, mais peso ganha, para não sumir: **400** no título do destaque e no subtítulo do grupo, **500** nos títulos de cartão, de etapa, de método e de pergunta. A palavra "IA" do h1 (`.forte`) vai em **500** e em verde. Corpo em 400, 1,0625rem / 1,6, `text-wrap: pretty`; botão e selo em 600. Texto corrido limitado a 26–44rem.
+Uma família só: **Hanken Grotesk Variable** (auto-hospedada), com `font-feature-settings: 'ss01'`. Hierarquia por tamanho e por **escala de peso**: **300** só nos títulos grandes (h1, h2, título do contato), que ecoam o wordmark, com tracking de **-0,035 a -0,04em**, `line-height` de 1 a 1,02 e `text-wrap: balance`; quanto menor o título, mais peso ganha, para não sumir: **400** no título do destaque e no subtítulo do grupo, **500** nos títulos de cartão, de etapa, de método e de pergunta. A palavra "IA" do h1 (`.forte`) vai em **500** e em verde. Corpo em 400, 1,0625rem / 1,6, `text-wrap: pretty`; botão em 600. Texto corrido limitado a 26–44rem.
 
-Degraus em uso: `clamp(2.75rem, 5.8vw, 5.75rem)` (h1 e título do contato), `clamp(2.5rem, 5vw, 4.5rem)` (h2), `clamp(2rem, 4.6vw, 3.75rem)` (título do destaque), `clamp(1.75rem, 3.2vw, 2.5rem)` (subtítulo do grupo), `clamp(1.5rem, 2.3vw, 1.875rem)` (título de cartão), 1,625rem (etapa), 1,375rem (método), 1,1875rem (apoio e pergunta), 1,0625rem (corpo), 1rem (botão), 0,9375rem (rótulo, idioma, texto da base), 0,875rem (meta), 0,75rem (selo e área, com tracking 0,08em).
+Degraus em uso: `clamp(2.75rem, 5.8vw, 5.75rem)` (h1 e título do contato), `clamp(2.5rem, 5vw, 4.5rem)` (h2), `clamp(2rem, 4.6vw, 3.75rem)` (título do destaque), `clamp(1.75rem, 3.2vw, 2.5rem)` (subtítulo do grupo), `clamp(1.5rem, 2.3vw, 1.875rem)` (título de cartão), 1,625rem (etapa), 1,375rem (método), 1,1875rem (apoio e pergunta), 1,0625rem (corpo), 1rem (botão), 0,9375rem (rótulo, idioma, texto da base), 0,875rem (meta), 0,75rem (área, com tracking 0,08em).
 
 ## Layout
 
@@ -190,7 +173,7 @@ Degraus em uso: `clamp(2.75rem, 5.8vw, 5.75rem)` (h1 e título do contato), `cla
 ## Shapes
 
 - **Blocos de seção:** raio `clamp(1.25rem, 2.5vw, 2.25rem)`. **Cartões:** `clamp(1rem, 1.8vw, 1.5rem)`.
-- **Botões, selos e marca de origem:** pílula de **999px**.
+- **Botões e marca de origem:** pílula de **999px**.
 - **Mensagem de formulário:** 8px. **Foco visível:** anel sólido de 2px em preto, offset 4px, raio 2px.
 - **Campos** não têm caixa: só uma linha inferior de 1px (24% de preto).
 
@@ -202,9 +185,9 @@ Degraus em uso: `clamp(2.75rem, 5.8vw, 5.75rem)` (h1 e título do contato), `cla
 - **Link:** `Texto 2`, sublinhado em 24%, que escurece no hover.
 - **Etapas da abertura:** três itens com número, título em 500 e texto curto, entre réguas.
 - **Fluxo (`#fluxo`):** SVG com seis fontes (Excel, Word, PowerPoint, Sistema de gestão, E-mail, PDF) como cartões `Fundo` com ícone em bloco colorido genérico, ligadas por linhas à IA no centro (núcleo verde com "IA" em branco e órbitas tracejadas que giram) e, abaixo, a saída "Respostas e tarefas". **A montagem é ligada à rolagem:** `--p` (0 a 1) vem do script conforme o diagrama sobe; cada fonte tem o seu trecho, desliza de fora e acende a linha dela, a IA cresce no centro e por último saem as respostas e correm as partículas verdes. O núcleo pulsa; fora da tela as animações param.
-- **Cartão de destaque (Assistente de IA):** superfície preta, texto off-white, título grande em 400 e selo "IA" em verde claro; ocupa a largura toda.
-- **Cartão de resultado com selo "IA":** superfície `Fundo`, selo verde, título em 500, texto em `Texto 2` e meta em `Texto 3`.
-- **Base por trás (Logística e Rastreio):** subtítulo de grupo e cartões transparentes com borda de 24%, rótulo de área em caixa alta pequena, texto curto. Sem selo: não é IA, é a base de dados.
+- **Cartão de destaque (Assistente de IA):** superfície preta, texto off-white, título grande em 400; ocupa a largura toda.
+- **Cartão de resultado com IA:** superfície `Fundo`, sem selo (a introdução da seção já diz que ali a IA trabalha), título em 500, texto em `Texto 2` e meta em `Texto 3`.
+- **Base por trás (Logística e Rastreio):** subtítulo de grupo e cartões transparentes com borda de 24%, rótulo de área em caixa alta pequena, texto curto: não é IA, é a base de dados.
 - **Perguntas:** `details`/`summary` nativos entre réguas, "+" desenhado com dois gradientes que gira 135° ao abrir, altura animada por `::details-content` onde há suporte. O texto é o mesmo do `FAQPage` do JSON-LD.
 - **Formulário:** nome, e-mail e mensagem, só com linha inferior (hover em `Texto 2`, foco em preto), erro por campo em `#b3261e` abaixo do input, mensagem geral em 8px com borda de 24% (sucesso) ou de erro a 35%. Turnstile em tema claro.
 - **Marca de origem:** pílula verde com texto branco, inserida por script quando a visita vem de `/de/<ferramenta>`; o cartão da ferramenta ganha anel verde de 2px.
@@ -214,7 +197,7 @@ Degraus em uso: `clamp(2.75rem, 5.8vw, 5.75rem)` (h1 e título do contato), `cla
 ## Do's and Don'ts
 
 - **Faça** o peixe grande e vivo: é a marca. Chame-o de peixe (carpa), nunca de gato.
-- **Faça** o verde `#2e6b55` ser a cor de destaque, **só ligado à IA e às ações** (botão, símbolo, nome da marca, selo "IA", palavra "IA", fluxo). O resto fica em escala de cinza (a única exceção são os blocos de ícone das seis fontes do fluxo).
+- **Faça** o verde `#2e6b55` ser a cor de destaque, **só ligado à IA e às ações** (botão, símbolo, nome da marca, palavra "IA", fluxo). O resto fica em escala de cinza (a única exceção são os blocos de ícone das seis fontes do fluxo).
 - **Faça** títulos finos (300) nos grandes e mais pesos (400 a 500) conforme o título diminui.
 - **Faça** cada seção um bloco arredondado, que entra inteiro uma vez.
 - **Faça** cada afirmação apontar para algo que está no ar na Nipo, sem citar o Sankhya nem a estrutura interna.
@@ -222,7 +205,7 @@ Degraus em uso: `clamp(2.75rem, 5.8vw, 5.75rem)` (h1 e título do contato), `cla
 - **Não** use branco puro de fundo: é off-white.
 - **Não** use sombra difusa. Profundidade é troca de superfície, canto arredondado e régua.
 - **Não** crie cartões fora da seção de resultados; as demais seções usam régua e espaço dentro do bloco.
-- **Não** quadre o botão: pílula é botão e selo.
+- **Não** quadre o botão: botão é pílula.
 - **Não** ponha rótulo acima de título (eyebrow) nem numere seções.
 - **Não** invente métrica, depoimento ou logo de cliente.
 - **Não** anime fora de `.anima`; com movimento reduzido, só opacidade.
