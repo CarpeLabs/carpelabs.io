@@ -15,6 +15,8 @@
  * A página não mostra capturas de tela: o caso Nipo é contado pelo que muda na operação.
  */
 import '@fontsource-variable/hanken-grotesk';
+// A fonte latina é pedida já no HTML, sem esperar o CSS descobri-la.
+import fonteLatina from '@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url';
 import '../styles/global.css';
 import { textos, type Idioma } from '../i18n/landing';
 
@@ -124,6 +126,7 @@ const palavras = (texto: string) => texto.split(' ').map((w, i) => ({ w, i }));
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{t.titulo}</title>
     <meta name="description" content={descricao}>
+    <link rel="preload" href={fonteLatina} as="font" type="font/woff2" crossorigin>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
