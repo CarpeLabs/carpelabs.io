@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="440 320 1000 1000">
+  <!-- Ícone de aba: o peixe em branco, traço mais grosso que o do site, sobre o verde da marca.
+       O desenho de traço fino do logo some em 16px; aqui ele ocupa o quadrado inteiro. -->
+  <rect x="440" y="320" width="1000" height="1000" rx="220" fill="#2e6b55"/>
+  <g fill="none" stroke="#fff" stroke-width="80" stroke-linecap="round">
+    <path d="M512 848 C650 702 955 628 1165 765"/>
+    <path d="M1325 668 C1290 820 1150 960 958 985"/>
+    <path d="M828 962 C860 1050 920 1100 1000 1108"/>
+  </g>
+  <g fill="#fff">
+    <path d="M826 648 C880 568 955 520 1045 497 C1028 570 1035 635 1080 688 L826 648 Z"/>
+    <circle cx="1320" cy="928" r="78"/>
+  </g>
+  <g fill="#fff">
+    <circle cx="700" cy="868" r="44"/>
+  </g>
+</svg>
